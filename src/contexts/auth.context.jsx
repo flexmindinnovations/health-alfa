@@ -1,6 +1,5 @@
 import {createContext, useContext, useState} from "react";
 import toast from "react-hot-toast";
-import {useApiConfig} from "./api-config.context.jsx";
 
 const AuthContext = createContext(null);
 
@@ -43,6 +42,10 @@ export const AuthProvider = ({children}) => {
         }
     };
 
+    const getToken = async () => {
+        return localStorage.getItem("token");
+    }
+
     const isAuthenticated = async () => {
         const _user = JSON.parse(localStorage.getItem("user") || "{}");
         const hasUserObj = _user && typeof _user === "object" && Object.keys(_user).length > 0;
@@ -50,7 +53,7 @@ export const AuthProvider = ({children}) => {
     };
 
     return (
-        <AuthContext.Provider value={{user, fetchUserDetails, logoutUser, loginUser}}>
+        <AuthContext.Provider value={{user, getToken, fetchUserDetails, logoutUser, loginUser}}>
             {children}
         </AuthContext.Provider>
     )

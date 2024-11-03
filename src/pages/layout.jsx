@@ -20,16 +20,18 @@ export function Layout() {
     //     }
     // }, [isAuthenticated]);
 
-    return <div className="layout h-full w-full grid grid-rows-[64px_1fr]"
+    return <div className="layout h-full w-full grid grid-rows-[64px_1fr] gap-1"
                 style={{gridTemplateColumns: `minmax(100px, ${sidebarWidth}) 1fr`}}>
         <div className="header-wrapper row-start-1 w-full h-16 col-span-2">
             <HeaderWrapper onSidebarStateChange={(state) => toggleSidebar(state)}/>
         </div>
-        <div className="left border border-solid border-0 bg-white border-r row-start-2 col-start-1">
+        <div className="left row-start-2 col-start-1">
             <Sidebar/>
         </div>
-        <div className="right bg-white col-start-2 p-4">
-            <Outlet/>
+        <div className="right col-start-2 p-4 bg-white">
+            <div className="routes h-full w-full max-h-full overflow-auto">
+                <Outlet/>
+            </div>
         </div>
     </div>
 }
