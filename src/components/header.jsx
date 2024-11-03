@@ -12,9 +12,9 @@ export function Header({onSidebarStateChange}) {
     return <header className="header w-full h-full bg-[var(--bgColor)]">
         <Navbar className="bg-[var(--bgColor)]" onMenuOpenChange={(event) => handleSidebarToggle(event)}>
             <NavbarContent>
-                {/*<NavbarMenuToggle*/}
-                {/*    aria-label={isMenuOpen ? "Close menu" : "Open menu"}*/}
-                {/*/>*/}
+                <NavbarMenuToggle className="lg:hidden xl:hidden 2xl:hidden"
+                    aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                />
                 <NavbarBrand>
                     <p className="font-bold text-inherit">Health Alfa</p>
                 </NavbarBrand>

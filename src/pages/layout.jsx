@@ -20,7 +20,8 @@ export function Layout() {
     //     }
     // }, [isAuthenticated]);
 
-    return <div className="layout h-full w-full grid grid-rows-[64px_1fr]" style={{gridTemplateColumns: `${sidebarWidth} 1fr`}}>
+    return <div className="layout h-full w-full grid grid-rows-[64px_1fr]"
+                style={{gridTemplateColumns: `minmax(100px, ${sidebarWidth}) 1fr`}}>
         <div className="header-wrapper row-start-1 w-full h-16 col-span-2">
             <HeaderWrapper onSidebarStateChange={(state) => toggleSidebar(state)}/>
         </div>
