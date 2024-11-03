@@ -5,12 +5,14 @@ import {Home} from "./pages/home.jsx";
 import PageNotFound from "./pages/page-not-found.jsx";
 import {Login} from "./pages/login.jsx";
 import {Register} from "./pages/register.jsx";
+import {UserOrders} from "./pages/orders.jsx";
 
 function App() {
     return (
         <Routes>
             <Route path="/" element={<Layout/>}>
                 <Route index element={<Home/>}/>
+                <Route path="/orders" element={<UserOrders/>}/>
             </Route>
 
             <Route path="/login" element={<Login/>}/>

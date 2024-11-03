@@ -2,13 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+
 :root {
+    --bgColor: #f4f4f4;
     font-family: "Poppins", sans-serif;
     line-height: 1.5;
     font-weight: 400;
 
     color-scheme: light dark;
-    background-color: #f4f4f4;
+    background-color: var(--bgColor);
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
