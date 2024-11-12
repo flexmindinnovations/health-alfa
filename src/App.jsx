@@ -1,10 +1,10 @@
 import './App.css';
 import { Route, Routes, Navigate } from "react-router-dom";
 import { Layout } from "./pages/layout.jsx";
-import { Home } from "./pages/dashboard/home.jsx";
 import PageNotFound from "./pages/page-not-found.jsx";
 import { Login } from "./pages/login.jsx";
 import { Register } from "./pages/register.jsx";
+import { Home } from "@pages/dashboard/home";
 
 function App() {
     return (
