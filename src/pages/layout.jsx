@@ -52,6 +52,7 @@ export function Layout() {
             footer={{ height: 60 }}
             navbar={{ width: 250, breakpoint: 'sm', collapsed: { mobile: !opened } }}
             padding="md"
+            layout="alt"
             pl={0}
         >
             { showSettingsModel &&
