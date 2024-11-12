@@ -95,7 +95,7 @@ export function Layout() {
                                 key={item.key}
                                 onClick={() => handleNavClick(item)}
                                 className={`${item.active ? '!bg-cPrimaryFilled text-white active:text-white focus:text-white' : 'hover:bg-cDefault hover:text-cTextPrimary'}
-                             max-w-[40%] lg:max-w-[85%] xl:max-w-[85%] 2xl:max-w-[85%] mr-auto rounded-r-full w-full m-0`}
+                             max-w-[40%] md:max-w-[90%] lg:max-w-[85%] xl:max-w-[85%] 2xl:max-w-[85%] mr-auto rounded-r-full w-full m-0`}
                             >
                                 <Link to={`/app${item.route}`}
                                     className={`flex items-center py-2 px-6 text-sm gap-2 lg:gap-4 xl:gap-4 2xl:gap-4 !font-medium ${item.active ? 'text-white' : 'text-cTextPrimary'}`}>
