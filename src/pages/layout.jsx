@@ -70,12 +70,7 @@ export function Layout() {
                                         <p className="font-semibold">zoey@example.com</p>
                                     </DropdownItem>
                                     <DropdownItem key="settings">
-                                        My Settings
-                                    </DropdownItem>
-                                    <DropdownItem key="team_settings" textValue={"Team Settings"}>Team
-                                        Settings</DropdownItem>
-                                    <DropdownItem key="analytics" textValue={"Analytics"}>
-                                        Analytics
+                                        Settings
                                     </DropdownItem>
                                     <DropdownItem key="logout" color="danger" textValue={"Log Out"}>
                                         Log Out

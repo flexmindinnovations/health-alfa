@@ -75,13 +75,13 @@ import {
       route: '/immunizations',
       active: false,
     },
-    {
-      id: 9,
-      key: 'ORDERS',
-      title: 'Orders',
-      icon: ShoppingCart,
-      route: '/orders',
-      active: false,
-    }
+    // {
+    //   id: 9,
+    //   key: 'ORDERS',
+    //   title: 'Orders',
+    //   icon: ShoppingCart,
+    //   route: '/orders',
+    //   active: false,
+    // }
   ];
   
