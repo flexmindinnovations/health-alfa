@@ -1,7 +1,8 @@
+import { Container } from "@mantine/core";
 export function Users() {
     return (
-        <div>
+        <Container m={0}>
             <h1>Users Page</h1>
-        </div>
+        </Container>
     )
 }

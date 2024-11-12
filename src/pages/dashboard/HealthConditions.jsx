@@ -1,7 +1,8 @@
+import { Container } from "@mantine/core";
 export function HealthConditions() {
     return (
-        <div>
+        <Container m={0}>
             <h1>Health Conditions Page</h1>
-        </div>
+        </Container>
     )
 }

@@ -12,6 +12,8 @@ import { MedicalTests } from '@pages/dashboard/MedicalTests';
 import { HealthConditions } from '@pages/dashboard/HealthConditions';
 import { Medications } from '@pages/dashboard/Medications';
 import { Immunizations } from '@pages/dashboard/Immunizations';
+import { AboutUs } from '@pages/AboutUs';
+import { ContactUs } from '@pages/ContactUs';
 
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
                 <Route path="medications" element={<Medications />} />
                 <Route path="allergies" element={<Allergies />} />
                 <Route path="immunizations" element={<Immunizations />} />
+                <Route path="about-us" element={<AboutUs />} />
+                <Route path="contact-us" element={<ContactUs />} />
                 {/* <Route path="orders" element={<Home />} /> */}
             </Route>
 

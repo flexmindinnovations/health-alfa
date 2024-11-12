@@ -1,20 +1,12 @@
-import { useDisclosure } from '@mantine/hooks';
-import { Modal } from '@mantine/core';
+import ModalWrapper from '@components/Modal';
 
 function Settings({ isOpen, toggle }) {
-    const [opened, { open, close }] = useDisclosure(isOpen);
-
-    const handleModalClose = () => {
-        close();
-        toggle();
-    }
-
     return (
-        <>
-            <Modal radius={'lg'} centered opened={opened} onClose={handleModalClose} title="Settings">
-                {/* Modal content */}
-            </Modal>
-        </>
+        <ModalWrapper title="Settings" isOpen={isOpen} toggle={toggle}>
+            <p>
+                Settings Modal Content
+            </p>
+        </ModalWrapper>
     );
 }
 

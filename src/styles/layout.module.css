@@ -13,3 +13,11 @@
   align-items: center;
   justify-content: center;
 }
+
+.activeItem {
+  @apply !bg-cPrimaryFilled text-white active:text-white focus:text-white;
+}
+
+.inactiveItem {
+  @apply hover:bg-cDefault hover:text-cTextPrimary;
+}

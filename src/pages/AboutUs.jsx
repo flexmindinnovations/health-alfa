@@ -1,8 +1,10 @@
-export function AboutUS() {
-
+import { Container } from "@mantine/core";
+export function AboutUs() {
     return (
-        <div className="about-page">
-            <p>AboutUS Page</p>
-        </div>
+        <Container m={0}>
+            <h1>
+                About Us Page
+            </h1>
+        </Container>
     )
 }
