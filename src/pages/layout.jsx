@@ -7,7 +7,8 @@ import classes from "@styles/shell.module.css";
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, } from "@nextui-org/react"
 import { createElement, useEffect, useState } from "react";
 import { MENU_ITEMS } from "../config/menu-items.js";
-import { Sidebar } from "@components/sidebar.jsx"
+import { Sidebar } from "@components/sidebar.jsx";
+import Settings from "@components/Settings.jsx";
 
 
 export function Layout() {
@@ -16,6 +17,7 @@ export function Layout() {
     const navigate = useNavigate();
     const [opened, { toggle }] = useDisclosure();
     const { pathname } = useLocation();
+    const [showSettingsModel, setShowSettingsModel] = useState(false);
 
     useEffect(() => {
         const updatedMenuItems = MENU_ITEMS.map(item => ({
@@ -40,6 +42,10 @@ export function Layout() {
         toggle();
     }
 
+    const showHideSettingsModel = () => {
+        setShowSettingsModel(prev => !prev);
+    }
+
     return (
         <AppShell
             header={{ height: 60 }}
@@ -48,6 +54,9 @@ export function Layout() {
             padding="md"
             pl={0}
         >
+            { showSettingsModel &&
+                <Settings isOpen={showSettingsModel} toggle={() => showHideSettingsModel()} />
+            }
             <AppShell.Header>
                 <Group h="100%" px="10" className={"lg:!px-28"}>
                     <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="md" />
@@ -70,7 +79,7 @@ export function Layout() {
                                         <p className="font-semibold">Signed in as</p>
                                         <p className="font-semibold">zoey@example.com</p>
                                     </DropdownItem>
-                                    <DropdownItem key="settings">
+                                    <DropdownItem key="settings" onClick={showHideSettingsModel}>
                                         Settings
                                     </DropdownItem>
                                     <DropdownItem key="logout" color="danger" textValue={"Log Out"}>
