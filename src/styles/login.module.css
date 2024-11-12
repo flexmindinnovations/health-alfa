@@ -1,0 +1,7 @@
+.loginPage {
+  @apply bg-gradient-to-r from-indigo-600 to-violet-600 h-dvh w-dvw;
+}
+
+.overlay {
+  @apply h-full w-full flex items-center justify-center;
+}

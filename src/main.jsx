@@ -7,18 +7,30 @@ import {ApiConfigProvider} from "./contexts/api-config.context.jsx";
 import {AuthProvider} from "./contexts/auth.context.jsx";
 import {ErrorBoundary} from "./components/error-boundary.jsx";
 import {NextUIProvider} from "@nextui-org/react";
+import {DeviceProvider} from "./hooks/device-detector.jsx";
+import {createTheme, MantineProvider} from "@mantine/core";
+import '@mantine/core/styles.css'
+
+const theme = createTheme({
+    fontFamily: `${"Poppins"}, 'sans-serif'`,
+    headings: {fontFamily: `${"Poppins"}, 'sans-serif'`}
+})
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
         <BrowserRouter>
             <NextUIProvider className="!h-full">
-                <ErrorBoundary>
-                    <ApiConfigProvider>
-                        <AuthProvider>
-                            <App/>
-                        </AuthProvider>
-                    </ApiConfigProvider>
-                </ErrorBoundary>
+                <MantineProvider theme={theme}>
+                    <ErrorBoundary>
+                        <ApiConfigProvider>
+                            <AuthProvider>
+                                <DeviceProvider>
+                                    <App/>
+                                </DeviceProvider>
+                            </AuthProvider>
+                        </ApiConfigProvider>
+                    </ErrorBoundary>
+                </MantineProvider>
             </NextUIProvider>
         </BrowserRouter>
     </StrictMode>,

@@ -1,0 +1,11 @@
+.icon {
+  transition: transform 0.3s ease;
+}
+
+.icon.open {
+  transform: rotate(90deg); /* Adjust rotation as desired */
+}
+
+.icon.closed {
+  transform: rotate(0deg);
+}
