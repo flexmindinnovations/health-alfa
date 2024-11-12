@@ -1,9 +1,9 @@
 import { Container } from "@mantine/core";
-export function AboutUs() {
+export function ContactUs() {
     return (
         <Container m={0}>
             <h1>
-                About Us Page
+                Contact Us Page
             </h1>
         </Container>
     )
