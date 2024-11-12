@@ -5,7 +5,6 @@ import { Home } from "./pages/dashboard/home.jsx";
 import PageNotFound from "./pages/page-not-found.jsx";
 import { Login } from "./pages/login.jsx";
 import { Register } from "./pages/register.jsx";
-import { AboutUS } from 'pages/AboutUs';
 
 function App() {
     return (
