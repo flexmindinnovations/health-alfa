@@ -1,4 +1,7 @@
 {
-    "welcomeNote": "Health Alfa",
+    "healthAlfa": "Health Alfa",
+    "home": "Home",
+    "aboutUs": "About Us",
+    "contactUs": "Contact Us",
     "welcomeToReact": "Welcome to React and react-i18next"
 }

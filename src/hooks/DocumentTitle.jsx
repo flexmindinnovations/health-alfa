@@ -1,6 +1,9 @@
-import { useEffect } from "react"
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 export function useDocumentTitle(title) {
+    const { t } = useTranslation();
     useEffect(() => {
-        document.title = title;
+        const pageTitle = `${t("healthAlfa")} | ${title}`;
+        document.title = pageTitle;
     }, [title])
 }
