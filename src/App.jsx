@@ -1,4 +1,5 @@
 import './App.css';
+import { useState } from 'react';
 import { Route, Routes, Navigate } from "react-router-dom";
 import { Layout } from "@pages/Layout.jsx";
 import PageNotFound from "./pages/PageNotFound.jsx";
@@ -14,9 +15,14 @@ import { Medications } from '@pages/dashboard/Medications';
 import { Immunizations } from '@pages/dashboard/Immunizations';
 import { AboutUs } from '@pages/AboutUs';
 import { ContactUs } from '@pages/ContactUs';
+import { useDocumentTitle } from '@hooks/DocumentTitle';
+import { useTranslation } from 'react-i18next';
 
 
 function App() {
+    const { t } = useTranslation();
+    const [pageTitle, setPageTitle] = useState(t("welcomeNote"));
+    useDocumentTitle(pageTitle);
     return (
         <Routes>
             <Route path="/app" element={<Layout />}>
