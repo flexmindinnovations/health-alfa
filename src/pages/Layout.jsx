@@ -10,9 +10,12 @@ import { MENU_ITEMS } from "../config/menu-items.js";
 import { Sidebar } from "@components/sidebar.jsx";
 import Settings from "@components/Settings.jsx";
 import { X } from "lucide-react";
+import { useDocumentTitle } from "@hooks/DocumentTitle";
+import { useTranslation } from "react-i18next";
 
 
 export function Layout() {
+    const { t } = useTranslation();    
     const [menuItems, setMenuItems] = useState([]);
     const [publicItems, setPublicItems] = useState([]);
     const { isAuthenticated } = useAuth();
@@ -118,7 +121,7 @@ export function Layout() {
                                         <span>
                                             {createElement(item.icon, { size: 16 })}
                                         </span>
-                                        <span>{item.title}</span>
+                                        <span>{t(item.key)}</span>
                                     </Link>
                                 </UnstyledButton>
                             ))
@@ -146,7 +149,7 @@ export function Layout() {
                                                 <span>
                                                     {createElement(item.icon, { size: 16 })}
                                                 </span>
-                                                <span>{item.title}</span>
+                                                <span>{t(item.key)}</span>
                                             </Link>
                                         </UnstyledButton>
                                     ))

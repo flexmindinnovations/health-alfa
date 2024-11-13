@@ -1,3 +1,14 @@
 {
-    "welcomeToReact": "حبا بكم في React و react-i18next"
-}
+    "healthAlfa": "الصحة ألفا",
+    "home": "الرئيسية",
+    "aboutUs": "من نحن",
+    "contactUs": "اتصل بنا",
+    "users": "المستخدمون",
+    "documents": "المستندات",
+    "medicalTests": "الفحوصات الطبية",
+    "healthConditions": "الحالات الصحية",
+    "medications": "الأدوية",
+    "allergies": "الحساسيات",
+    "immunizations": "التطعيمات",
+    "welcomeToReact": "مرحبًا بكم في React"
+  }

@@ -15,7 +15,7 @@ import {
 export const MENU_ITEMS = [
   {
     id: 1,
-    key: 'HOME',
+    key: 'home',
     title: 'Home',
     icon: Home,
     route: '',
@@ -23,7 +23,7 @@ export const MENU_ITEMS = [
   },
   {
     id: 2,
-    key: 'USERS',
+    key: 'users',
     title: 'Users',
     icon: Users,
     route: '/users',
@@ -31,7 +31,7 @@ export const MENU_ITEMS = [
   },
   {
     id: 3,
-    key: 'DOCUMENTS',
+    key: 'documents',
     title: 'Documents',
     icon: FileText,
     route: '/documents',
@@ -39,7 +39,7 @@ export const MENU_ITEMS = [
   },
   {
     id: 4,
-    key: 'MEDICAL_TESTS',
+    key: 'medicalTests',
     title: 'Medical Tests',
     icon: Activity, // Using "Activity" for medical tests
     route: '/medical-tests',
@@ -47,7 +47,7 @@ export const MENU_ITEMS = [
   },
   {
     id: 5,
-    key: 'HEALTH_CONDITIONS',
+    key: 'healthConditions',
     title: 'Health Conditions',
     icon: Heart, // Using "Heart" for health conditions
     route: '/health-conditions',
@@ -55,7 +55,7 @@ export const MENU_ITEMS = [
   },
   {
     id: 6,
-    key: 'MEDICATIONS',
+    key: 'medications',
     title: 'Medications',
     icon: Pill, // Using "Pill" for medications
     route: '/medications',
@@ -63,7 +63,7 @@ export const MENU_ITEMS = [
   },
   {
     id: 7,
-    key: 'ALLERGIES',
+    key: 'allergies',
     title: 'Allergies',
     icon: AlertCircle, // Using "AlertCircle" for allergies
     route: '/allergies',
@@ -71,7 +71,7 @@ export const MENU_ITEMS = [
   },
   {
     id: 8,
-    key: 'IMMUNIZATIONS',
+    key: 'immunizations',
     title: 'Immunizations',
     icon: ShieldCheck, // Using "ShieldCheck" for immunizations
     route: '/immunizations',
@@ -87,7 +87,7 @@ export const MENU_ITEMS = [
   // }
   {
     id: 10,
-    key: 'CONTACT',
+    key: 'contactUs',
     title: 'Contact Us',
     icon: Headset,
     route: '/contact-us',
@@ -95,7 +95,7 @@ export const MENU_ITEMS = [
   },
   {
     id: 11,
-    key: 'ABOUT',
+    key: 'aboutUs',
     title: 'About Us',
     icon: Info,
     route: '/about-us',
