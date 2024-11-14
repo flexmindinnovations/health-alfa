@@ -7,7 +7,7 @@ import { Layout } from "@pages/Layout.jsx";
 import PageNotFound from "./pages/PageNotFound.jsx";
 import { Login } from "@pages/Login.jsx";
 import { Register } from "@pages/Register.jsx";
-import { Home } from "@pages/dashboard/Home";
+import { Home } from "@pages/Home";
 import { Allergies } from '@pages/dashboard/Allergies';
 import { Users } from '@pages/dashboard/Users';
 import { Documents } from '@pages/dashboard/Documents';

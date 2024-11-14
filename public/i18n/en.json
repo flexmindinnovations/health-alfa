@@ -3,5 +3,12 @@
     "home": "Home",
     "aboutUs": "About Us",
     "contactUs": "Contact Us",
+    "users":"Users",
+    "documents":"Documents",
+    "medicalTests":"Medical Tests",
+    "healthConditions":"Health Conditions",
+    "medications":"Medications",
+    "allergies":"Allergies",
+    "immunizations":"Immunizations",
     "welcomeToReact": "Welcome to React and react-i18next"
 }

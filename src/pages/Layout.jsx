@@ -1,18 +1,18 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/auth.context.jsx";
-import { AppShell, Burger, Group, UnstyledButton } from "@mantine/core";
+import { AppShell, Burger, Grid, Group, UnstyledButton, ActionIcon, Image, AspectRatio } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { MantineLogo } from '@mantinex/mantine-logo';
 import styles from "@styles/layout.module.css";
-import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, } from "@nextui-org/react"
 import { createElement, useEffect, useState } from "react";
 import { MENU_ITEMS } from "../config/menu-items.js";
 import Settings from "@components/Settings.jsx";
-
+import { useTranslation } from "react-i18next";
 import { UserMenu } from "@components/UserMenu.jsx";
-
+import logo from "/images/logo.png";
 
 export function Layout() {
+    const { t } = useTranslation();
     const [menuItems, setMenuItems] = useState([]);
     const [publicItems, setPublicItems] = useState([]);
     const { isAuthenticated } = useAuth();
@@ -80,6 +80,13 @@ export function Layout() {
                 <AppShell.Navbar className="px-0" >
                     <Group className="flex !flex-col !items-start !justify-start !gap-2">
                         <div className="header w-full relative h-24 flex items-center justify-center bg-cDefault/50">
+                            <AspectRatio ratio={900 / 720} maw={100} mx="auto" >
+                                <Image
+                                    src={logo}
+                                    alt="logo"
+                                    width="100%"
+                                />
+                            </AspectRatio>
                             <Burger opened={opened} className="absolute top-4 right-4" onClick={toggle} hiddenFrom="sm" size="md" />
                         </div>
                         {
@@ -95,7 +102,7 @@ export function Layout() {
                                         <span>
                                             {createElement(item.icon, { size: 16 })}
                                         </span>
-                                        <span>{item.title}</span>
+                                        <span>{t(item.key)}</span>
                                     </Link>
                                 </UnstyledButton>
                             ))
@@ -123,7 +130,7 @@ export function Layout() {
                                                 <span>
                                                     {createElement(item.icon, { size: 16 })}
                                                 </span>
-                                                <span>{item.title}</span>
+                                                <span>{t(item.key)}</span>
                                             </Link>
                                         </UnstyledButton>
                                     ))

@@ -15,6 +15,7 @@ export default {
                 cDefault: "var(--mantine-primary-color-0)",
                 'cPrimaryFilled': "var(--mantine-primary-color-filled)",
                 'cTextPrimary': "var(--mantine-primary-color-filled)",
+                'custom-blue': '#143345',
             }
         },
     },

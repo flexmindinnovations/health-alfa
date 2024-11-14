@@ -2,7 +2,6 @@ import {MENU_ITEMS} from "../config/menu-items.js";
 import {createElement, useEffect, useState} from "react";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {Tooltip} from "@nextui-org/react";
-
 export function Sidebar() {
     const [menuItems, setMenuItems] = useState(MENU_ITEMS);
     const {pathname} = useLocation();
