@@ -1,5 +1,7 @@
 import './App.css';
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useDirection } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 import { Route, Routes, Navigate } from "react-router-dom";
 import { Layout } from "@pages/Layout.jsx";
 import PageNotFound from "./pages/PageNotFound.jsx";
@@ -18,6 +20,16 @@ import { ContactUs } from '@pages/ContactUs';
 
 
 function App() {
+    const { setDirection } = useDirection();
+    const { i18n } = useTranslation();
+
+    useEffect(() => {
+        const dir = localStorage.getItem("dir") || "ltr";
+        const lng = localStorage.getItem("lng") || "en";
+        setDirection(dir);
+        i18n.changeLanguage(lng);
+    }, [])
+
     return (
         <Routes>
             <Route path="/app" element={<Layout />}>

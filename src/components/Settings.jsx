@@ -27,7 +27,6 @@ function Settings({ isOpen, toggle }) {
                     value={activeTab}
                     orientation="vertical"
                     onChange={setActiveTab}
-
                 >
                     <Tabs.List>
                         {settingOptions.map((item) => (

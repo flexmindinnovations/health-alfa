@@ -1,6 +1,6 @@
 import { Container, Group, Text, Select, useDirection } from "@mantine/core";
 import { useTranslation } from 'react-i18next';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const providedLanguages = [
     { id: 1, label: "English", value: "en" },
@@ -10,15 +10,22 @@ const providedLanguages = [
 const rtlLanguages = ["ar"];
 
 export function PreferenceComponent() {
-    const [preference, setPreference] = useState("en");
+    const [preference, setPreference] = useState(localStorage.getItem("lng"));
     const [languages, setLanguages] = useState(providedLanguages);
     const { dir, setDirection } = useDirection();
     const { i18n } = useTranslation();
 
+    useEffect(() => {
+        const lng = localStorage.getItem("lng") || "en";
+        setPreference(lng);
+    }, [])
+
     const changeLanguage = (lng) => {
         i18n.changeLanguage(lng);
-        if (rtlLanguages.includes(lng)) setDirection("rtl");
-        else setDirection("ltr");
+        const direction = rtlLanguages.includes(lng) ? "rtl" : "ltr";
+        setDirection(direction);
+        localStorage.setItem("dir", direction);
+        localStorage.setItem("lng", lng);
     }
 
     const handleLanguageChange = (option) => {
