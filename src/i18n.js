@@ -2,8 +2,14 @@ import i18n from "i18next";
 import HttpApi from "i18next-http-backend"
 import { initReactI18next } from "react-i18next";
 
+const availableLanguages = [
+    "en",
+    "ar"
+];
+
 const browserLanguage = navigator.language;
-const defaultLanguage = browserLanguage.split("-")[0];
+let defaultLanguage = browserLanguage.split("-")[0];
+if (!availableLanguages.includes(defaultLanguage)) defaultLanguage = "en";
 i18n
     .use(HttpApi)
     .use(initReactI18next)

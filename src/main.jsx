@@ -9,7 +9,7 @@ import { ErrorBoundary } from "./components/error-boundary.jsx";
 import { NextUIProvider } from "@nextui-org/react";
 import { DeviceProvider } from "./hooks/device-detector.jsx";
 import './i18n';
-import { createTheme, MantineProvider } from "@mantine/core";
+import { createTheme, MantineProvider, DirectionProvider } from "@mantine/core";
 import '@mantine/core/styles.css'
 
 const theme = createTheme({
@@ -20,19 +20,21 @@ const theme = createTheme({
 createRoot(document.getElementById('root')).render(
     <StrictMode>
         <BrowserRouter>
-            <NextUIProvider className="!h-full">
-                <MantineProvider theme={theme}>
-                    <ErrorBoundary>
-                        <ApiConfigProvider>
-                            <AuthProvider>
-                                <DeviceProvider>
-                                    <App />
-                                </DeviceProvider>
-                            </AuthProvider>
-                        </ApiConfigProvider>
-                    </ErrorBoundary>
-                </MantineProvider>
-            </NextUIProvider>
+            <DirectionProvider>
+                <NextUIProvider className="!h-full">
+                    <MantineProvider theme={theme}>
+                        <ErrorBoundary>
+                            <ApiConfigProvider>
+                                <AuthProvider>
+                                    <DeviceProvider>
+                                        <App />
+                                    </DeviceProvider>
+                                </AuthProvider>
+                            </ApiConfigProvider>
+                        </ErrorBoundary>
+                    </MantineProvider>
+                </NextUIProvider>
+            </DirectionProvider>
         </BrowserRouter>
     </StrictMode>,
 )

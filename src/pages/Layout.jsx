@@ -1,15 +1,15 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/auth.context.jsx";
-import { AppShell, Burger, Grid, Group, UnstyledButton, ActionIcon } from "@mantine/core";
+import { AppShell, Burger, Group, UnstyledButton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { MantineLogo } from '@mantinex/mantine-logo';
 import styles from "@styles/layout.module.css";
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, } from "@nextui-org/react"
 import { createElement, useEffect, useState } from "react";
 import { MENU_ITEMS } from "../config/menu-items.js";
-import { Sidebar } from "@components/sidebar.jsx";
 import Settings from "@components/Settings.jsx";
-import { X } from "lucide-react";
+
+import { UserMenu } from "@components/UserMenu.jsx";
 
 
 export function Layout() {
@@ -70,31 +70,8 @@ export function Layout() {
                         <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="md" />
                         <Group justify="space-between" style={{ flex: 1 }}>
                             <MantineLogo size={30} />
-                            <Group>
-                                <Dropdown as="button" placement="bottom-end">
-                                    <DropdownTrigger>
-                                        <Avatar
-                                            isBordered
-                                            size={"sm"}
-                                            as="button"
-                                            className="ml-8 transition-transform"
-                                            src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                                        />
-                                    </DropdownTrigger>
-                                    <DropdownMenu aria-label="Profile Actions" variant="flat">
-                                        <DropdownItem key="profile" className=" pointer-events-none h-14 gap-2"
-                                            textValue={"info"}>
-                                            <p className="font-semibold">Signed in as</p>
-                                            <p className="font-semibold">zoey@example.com</p>
-                                        </DropdownItem>
-                                        <DropdownItem key="settings" onClick={showHideSettingsModel}>
-                                            Settings
-                                        </DropdownItem>
-                                        <DropdownItem key="logout" color="danger" textValue={"Log Out"}>
-                                            Log Out
-                                        </DropdownItem>
-                                    </DropdownMenu>
-                                </Dropdown>
+                            <Group pos={"right"}>
+                                <UserMenu showHideSettingsModel={() => showHideSettingsModel} />
                             </Group>
                         </Group>
                     </Group>

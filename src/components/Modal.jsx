@@ -10,7 +10,15 @@ export default function ModalWrapper({ children, isOpen, toggle, title }) {
     }
 
     return (
-        <Modal radius={'lg'} centered opened={opened} onClose={handleModalClose} title={title}>
+        <Modal
+            transitionProps={{ transition: 'fade', duration: 200 }}
+            radius={'lg'}
+            size="60%"
+            centered
+            opened={opened}
+            onClose={handleModalClose}
+            title={title}
+        >
             {children}
         </Modal>
     )
