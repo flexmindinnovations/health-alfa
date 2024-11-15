@@ -1,62 +1,63 @@
-import {useEffect, useState} from "react";
-import {Navbar, NavbarContent, NavbarMenuToggle} from "@nextui-org/react";
-import {XIcon, Tally2Icon} from 'lucide-react';
-import {motion} from "framer-motion";
+import { AppShell, Burger, Group, UnstyledButton } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import classes from './MobileNavbar.module.css';
+import { Link } from 'react-router-dom';
 
-export function Header({onSidebarStateChange, isExpanded}) {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+const links = [
+    { link: '/', label: 'Home', key: 'Home' },
+    { link: '/about-us', label: 'About', key: 'About' },
+    { link: '/contact-us', label: 'Contact', key: "Contact" },
+    { link: '/login', label: 'Login', key: 'login' },
+];
 
-    useEffect(() => {
-        setIsMenuOpen(isExpanded);
-    }, [isExpanded]);
-    const handleSidebarToggle = (sidebarState) => {
-        setIsMenuOpen(sidebarState);
-        onSidebarStateChange(sidebarState);
-    }
+export default function Header() {
+    const [opened, { toggle }] = useDisclosure();
 
-    const onMenuToggle = () => {
-        if (isExpanded) setIsMenuOpen(true);
-        else setIsMenuOpen(false);
-    }
-
-    return <header className="header w-full h-full bg-[var(--bgColor)]">
-        <Navbar className="bg-[var(--bgColor)]" onMenuOpenChange={(event) => handleSidebarToggle(event)}>
-            <NavbarContent>
-                <NavbarMenuToggle
-                    icon={
-                        <motion.div
-                            animate={{rotate: isMenuOpen ? 90 : 0}}
-                            transition={{duration: 0.3, ease: "easeInOut"}}
+    return (
+        <AppShell
+            header={{ height: 60 }}
+            navbar={{ width: 300, breakpoint: 'sm', collapsed: { desktop: true, mobile: !opened } }}
+            padding="md"
+        >
+            <AppShell.Header>
+                <Group h="100%" px="md">
+                    <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+                    <Group justify="space-between" style={{ flex: 1 }}>
+                        <div></div>
+                        <Group
+                            ml="xl"
+                            gap={20}
+                            visibleFrom="sm"
+                            sx={{
+                                '.control': {
+                                    display: 'block',
+                                    padding: 'var(--mantine-spacing-xs) var(--mantine-spacing-md)',
+                                    borderRadius: 'var(--mantine-radius-md)',
+                                    fontWeight: 500,
+                                    '&:hover': {
+                                        backgroundColor: 'var(--mantine-color-dark-6)', // Adjust colors as needed
+                                    },
+                                },
+                            }}
                         >
-                            {isMenuOpen ? <XIcon/> : <Tally2Icon className="flex mt-auto -translate-y-1 -rotate-90"/>}
-                        </motion.div>
-                    }
-                    onClick={onMenuToggle}
-                    className="lg:hidden xl:hidden 2xl:hidden"
-                    aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-                />
-                {/*<NavbarBrand>*/}
-                {/*    <p className="font-bold text-inherit">Health Alfa</p>*/}
-                {/*</NavbarBrand>*/}
-            </NavbarContent>
+                            {links.map((link) => (
+                                <Link to={link.link} key={link.key} className="control">
+                                    {link.label}
+                                </Link>
+                            ))}
+                        </Group>
 
-            <NavbarContent className="hidden sm:flex gap-4" justify="center">
-                {/*<NavbarItem>*/}
-                {/*    <Link color="foreground" href="#">*/}
-                {/*        Features*/}
-                {/*    </Link>*/}
-                {/*</NavbarItem>*/}
-            </NavbarContent>
-            <NavbarContent justify="end">
-                {/*<NavbarItem className="hidden lg:flex">*/}
-                {/*    <Link href="#">Login</Link>*/}
-                {/*</NavbarItem>*/}
-                {/*<NavbarItem>*/}
-                {/*    <Button as={Link} color="primary" href="#" variant="flat">*/}
-                {/*        Sign Up*/}
-                {/*    </Button>*/}
-                {/*</NavbarItem>*/}
-            </NavbarContent>
-        </Navbar>
-    </header>
+                    </Group>
+                </Group>
+            </AppShell.Header>
+
+            <AppShell.Navbar py="md" px={4}>
+                {links.map((link) => (
+                    <Link to={link.link} key={link.key} className="control">
+                        {link.label}
+                    </Link>
+                ))}
+            </AppShell.Navbar>
+        </AppShell>
+    )
 }
