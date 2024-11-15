@@ -107,7 +107,7 @@ export function Layout () {
           <Group className='flex !flex-col !items-start !justify-start !gap-2'>
             <div className='header w-full relative h-24 flex items-center justify-center bg-cDefault/50'>
               <AspectRatio ratio={900 / 720} maw={100} mx='auto'>
-                <Image src={logo} alt='logo' className='object-fill' width='100%' />
+                <Image src={logo} alt='logo' className='!object-fill' width='100%' />
               </AspectRatio>
               <Burger
                 opened={opened}
