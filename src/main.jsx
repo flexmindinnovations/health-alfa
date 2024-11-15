@@ -10,7 +10,8 @@ import { NextUIProvider } from '@nextui-org/react'
 import { DeviceProvider } from './hooks/device-detector.jsx'
 import './i18n'
 import { createTheme, MantineProvider, DirectionProvider } from '@mantine/core'
-import '@mantine/core/styles.css'
+import '@mantine/core/styles.css';
+import 'mantine-datatable/styles.layer.css';
 
 const theme = createTheme({
   fontFamily: `${'Poppins'}, 'sans-serif'`,
