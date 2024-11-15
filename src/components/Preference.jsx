@@ -1,4 +1,4 @@
-import { Container, Group, Text, Select, useDirection } from "@mantine/core";
+import { Container, Grid, Text, Select, useDirection } from "@mantine/core";
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from "react";
 
@@ -33,18 +33,22 @@ export function PreferenceComponent() {
     }
 
     return (
-        <Container m={0} p={0} px={20}>
-            <Group m={0} p={0} justify="space-between">
-                <Text size="sm">Language</Text>
-                <Select
-                    size="sm"
-                    placeholder="Select System Language"
-                    data={languages}
-                    defaultValue={preference}
-                    allowDeselect={false}
-                    onChange={(_value, option) => handleLanguageChange(option)}
-                />
-            </Group>
+        <Container m={0} p={0} px={10}>
+            <Grid align="center" m={0} p={0}>
+                <Grid.Col span={{ base: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
+                    <Text size="sm">Language</Text>
+                </Grid.Col>
+                <Grid.Col span={{ base: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
+                    <Select
+                        size="sm"
+                        placeholder="Select System Language"
+                        data={languages}
+                        defaultValue={preference}
+                        allowDeselect={false}
+                        onChange={(_value, option) => handleLanguageChange(option)}
+                    />
+                </Grid.Col>
+            </Grid>
         </Container>
     )
 }

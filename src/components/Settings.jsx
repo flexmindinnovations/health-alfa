@@ -1,19 +1,20 @@
 import ModalWrapper from '@components/Modal';
 import { useState, useEffect, createElement } from 'react';
-import { Tabs, Container } from '@mantine/core';
+import { Tabs, Container, useMantineTheme } from '@mantine/core';
 import { ProfileComponent } from './Profile';
 import { PreferenceComponent } from './Preference';
-import { IconUserCog, IconSettings } from '@tabler/icons-react';
+import { IconUserCog, IconAdjustmentsHorizontal } from '@tabler/icons-react';
 
 const SETTING_ITEMS = [
     { id: 1, key: "profile", title: "Profile", icon: IconUserCog, component: ProfileComponent, active: false },
-    { id: 2, key: "preference", title: "Preference", icon: IconSettings, component: PreferenceComponent, active: false }
+    { id: 2, key: "preference", title: "Preference", icon: IconAdjustmentsHorizontal, component: PreferenceComponent, active: false }
 ];
 
 
 function Settings({ isOpen, toggle }) {
     const [settingOptions, setSettingOptions] = useState([]);
     const [activeTab, setActiveTab] = useState('profile');
+    const theme = useMantineTheme();
 
     useEffect(() => {
         setSettingOptions(SETTING_ITEMS);
@@ -25,7 +26,7 @@ function Settings({ isOpen, toggle }) {
                 <Tabs
                     style={{ height: '100%' }}
                     value={activeTab}
-                    orientation="vertical"
+                    orientation={"horizontal"}
                     onChange={setActiveTab}
                 >
                     <Tabs.List>
@@ -33,7 +34,15 @@ function Settings({ isOpen, toggle }) {
                             <Tabs.Tab
                                 key={item.id}
                                 leftSection={createElement(item.icon, { size: 16 })}
-                                value={item.key}>
+                                value={item.key}
+                                active={activeTab.key}
+                                sx={{
+                                    backgroundColor: activeTab === item.key ? 'blue' : 'transparent',
+                                    '&:hover': {
+                                        backgroundColor: 'lightblue',
+                                    },
+                                }}
+                            >
                                 {item.title}
                             </Tabs.Tab>
                         ))}

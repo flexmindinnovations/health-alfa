@@ -1,17 +1,9 @@
-.glassContainer {
-  background: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
-  backdrop-filter: blur(10px); /* Frosted glass effect */
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  border-radius: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+.navbarItem {
+  @apply max-w-[60%] md:max-w-[90%] lg:max-w-[85%] xl:max-w-[85%] 2xl:max-w-[85%] mr-auto rounded-r-full w-full m-0;
 }
 
-.gradientBackground {
-  background: linear-gradient(135deg, #a1c4fd, #c2e9fb); /* Gradient background */
-  height: 100vh; /* Full viewport height */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+:root[dir='rtl'] .navbarItem {
+  @apply rounded-l-full rounded-r-none m-0 ml-auto w-full;
 }
 
 .activeItem {
