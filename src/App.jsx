@@ -48,8 +48,8 @@ function App () {
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
 
-      <Route path='/' element={<Navigate to='/app' />} />
-      {/* <Route path='/' element={<Home />} /> */}
+      {/* <Route path='/' element={<Navigate to='/app' />} /> */}
+      <Route path='/' element={<Home />} />
 
       <Route path='*' element={<PageNotFound />} />
     </Routes>
