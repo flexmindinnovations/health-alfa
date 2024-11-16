@@ -50,7 +50,7 @@ export function Home() {
   
   return (
     <div className="bg-gray-50 text-gray-900 font-sans min-h-screen">
-     <Header />
+     {/* <Header /> */}
       {/* Hero Section */}
       <div
         className="relative w-full h-[600px] md:h-[500px] bg-cover bg-center"

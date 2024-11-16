@@ -18,16 +18,16 @@ import { Medications } from '@pages/dashboard/Medications'
 import { Immunizations } from '@pages/dashboard/Immunizations'
 import { AboutUs } from '@pages/AboutUs'
 import { ContactUs } from '@pages/ContactUs'
+import { useApiConfig } from '@contexts/api-config.context'
+import { PublicLayout } from '@pages/PublicLayout'
 
 function App () {
   const { setDirection } = useDirection()
   const { i18n } = useTranslation()
+  const { setPrefrences } = useApiConfig()
 
   useEffect(() => {
-    const dir = localStorage.getItem('dir') || 'ltr'
-    const lng = localStorage.getItem('lng') || 'en'
-    setDirection(dir)
-    i18n.changeLanguage(lng)
+    setPrefrences()
   }, [])
 
   return (
@@ -48,8 +48,11 @@ function App () {
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
 
-      {/* <Route path='/' element={<Navigate to='/app' />} /> */}
-      <Route path='/' element={<Home />} />
+      <Route path='/' element={<PublicLayout />}>
+        <Route index element={<Home />} />
+        <Route path='about-us' element={<AboutUs />} />
+        <Route path='contact-us' element={<ContactUs />} />
+      </Route>
 
       <Route path='*' element={<PageNotFound />} />
     </Routes>

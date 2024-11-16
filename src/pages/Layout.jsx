@@ -107,7 +107,12 @@ export function Layout () {
           <Group className='flex !flex-col !items-start !justify-start !gap-2'>
             <div className='header w-full relative h-24 flex items-center justify-center bg-cDefault/50'>
               <AspectRatio ratio={900 / 720} maw={100} mx='auto'>
-                <Image src={logo} alt='logo' className='!object-fill' width='100%' />
+                <Image
+                  src={logo}
+                  alt='logo'
+                  className='!object-fill'
+                  width='100%'
+                />
               </AspectRatio>
               <Burger
                 opened={opened}
@@ -127,9 +132,7 @@ export function Layout () {
               >
                 <Link
                   to={`/app${item.route}`}
-                  className={`flex items-center py-2 px-6 text-sm gap-2 lg:gap-4 xl:gap-4 2xl:gap-4 !font-medium ${
-                    item.active ? 'text-white' : 'text-cTextPrimary'
-                  }`}
+                  className={`flex items-center py-2 px-6 text-sm gap-2 lg:gap-4 xl:gap-4 2xl:gap-4 !font-medium`}
                 >
                   <span>{createElement(item.icon, { size: 16 })}</span>
                   <span>{t(item.key)}</span>
@@ -153,15 +156,13 @@ export function Layout () {
                     onClick={() => handleNavClick(item)}
                     className={`${
                       item.active
-                        ? '!bg-cPrimaryFilled text-white active:text-white focus:text-white'
-                        : 'hover:bg-cDefault hover:text-cTextPrimary'
+                        ? styles.footerActiveItem
+                        : styles.footerInactiveItem
                     } rounded-full`}
                   >
                     <Link
                       to={`/app${item.route}`}
-                      className={`flex items-center py-1.5 px-4 text-sm gap-1 !font-medium ${
-                        item.active ? 'text-white' : 'text-cTextPrimary'
-                      }`}
+                      className={`flex items-center py-1.5 px-4 text-sm gap-1 !font-medium `}
                     >
                       <span>{createElement(item.icon, { size: 16 })}</span>
                       <span>{t(item.key)}</span>
