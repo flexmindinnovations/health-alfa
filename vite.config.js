@@ -16,6 +16,7 @@ export default defineConfig({
       "@pages": path.resolve(__dirname, 'src/pages'),
       "@dashboard": path.resolve(__dirname, 'src/pages/dashboard'),
       "@styles": path.resolve(__dirname, 'src/styles'),
+      "@modals": path.resolve(__dirname, 'src/modals'),
     }
   },
   build: {

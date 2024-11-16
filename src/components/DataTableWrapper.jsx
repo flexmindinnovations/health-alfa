@@ -11,6 +11,7 @@ export function DataTableWrapper ({
   showAddButton = false,
   showFilter = false,
   addTitle = '',
+  id,
   handleOnAdd,
   handleOnEdit,
   handleOnDelete
@@ -32,20 +33,23 @@ export function DataTableWrapper ({
   return (
     <div className='h-full w-full flex flex-col items-start justify-start gap-2'>
       <div className='toolbar w-full flex items-center justify-between'>
-        <div className='search-filter'></div>
-        <div className='action-items flex-1'>
+        <div className='search-filter flex-1 flex items-center justify-end gap-2'></div>
+        <div className='action-items flex-1 flex items-center justify-end gap-2'>
           {showAddButton && (
-            <Button leftSection={<IconPlus size={16} />}>{addTitle}</Button>
+            <Button leftSection={<IconPlus size={16} />} onClick={handleOnAdd}>
+              {addTitle}
+            </Button>
           )}
         </div>
       </div>
       <DataTable
         style={{ minHeight: 500, width: '100%' }}
-        idAccessor={'documentId'}
+        idAccessor={id}
         width='100%'
         borderRadius=''
         withTableBorder
         withColumnBorders
+        withRowBorders
         striped
         highlightOnHover
         minHeight={150}

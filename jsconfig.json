@@ -11,6 +11,9 @@
       "@contexts/*": [
         "contexts/*"
       ],
+      "@modals/*": [
+        "modals/*"
+      ],
       "@pages/*": [
         "pages/*"
       ],
