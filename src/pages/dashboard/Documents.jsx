@@ -11,7 +11,6 @@ export function Documents () {
   useDocumentTitle(t('documents'))
   const [columns, setColumns] = useState([])
   const [dataSource, setDataSource] = useState([])
-  const theme = useMantineTheme()
   const [popupMode, setPopupMode] = useState('add')
   const [showPopup, setShowPopup] = useState(false)
   const [popupData, setPopupData] = useState()
@@ -52,29 +51,6 @@ export function Documents () {
         title: 'Document Name',
         width: 'auto',
         style: { padding: '10px', flex: 1 }
-      },
-      {
-        accessor: 'actions',
-        title: 'Actions',
-        width: 100,
-        render: record => (
-          <div style={{ display: 'flex', gap: '10px' }}>
-            {' '}
-            <IconEditCircle
-              size={16}
-              className={`h-7 p-1.5 w-7 rounded-full hover:bg-cPrimaryFilled hover:text-cDefault`}
-              style={{ cursor: 'pointer', color: theme.primaryColor }}
-              onClick={() => handleEdit(record)}
-            />{' '}
-            <IconTrash
-              size={16}
-              color='red'
-              className='h-8 p-1.5 w-8 rounded-full hover:bg-red-100'
-              style={{ cursor: 'pointer' }}
-              onClick={() => handleDelete(record)}
-            />{' '}
-          </div>
-        )
       }
     ]
 
@@ -94,14 +70,16 @@ export function Documents () {
   }
 
   const handleDelete = record => {
-    console.log('handleDelete: ', record)
-    const itemIndex = dataSource.findIndex((item) => item.documentId === record.documentId);
-    if(itemIndex > -1) {
-      const deleteItem = dataSource.splice(itemIndex, 1);
-      console.log("deleteItem: ", deleteItem);
-      const updatedData = dataSource.filter(item => item.documentId !== record.documentId);
-      console.log("updatedData: ", updatedData);
-      setDataSource(updatedData);
+    const itemIndex = dataSource.findIndex(
+      item => item.documentId === record.documentId
+    )
+
+    if (itemIndex > -1) {
+      const deleteItem = dataSource.splice(itemIndex, 1)
+      const updatedData = dataSource.filter(
+        item => item.documentId !== record.documentId
+      )
+      setDataSource(updatedData)
     }
   }
 
@@ -110,7 +88,7 @@ export function Documents () {
   }
 
   return (
-    <Container m={0} p={0} size='lg' w='100%' maw='100%'>
+    <Container m={0} p={0} size='lg' w='100%' maw='100%' h='100%'>
       {showPopup && (
         <AddEditDocument
           open={showPopup}
@@ -129,6 +107,8 @@ export function Documents () {
         columns={columns}
         dataSource={dataSource}
         handleOnAdd={() => handleOnAdd()}
+        handleOnDelete={data => handleDelete(data)}
+        handleOnEdit={data => handleEdit(data)}
       />
     </Container>
   )

@@ -1,8 +1,7 @@
 import { DataTable } from 'mantine-datatable'
-import { Button } from '@mantine/core'
-import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
-import { IconPlus } from '@tabler/icons-react'
+import { Button, Container, Loader, useMantineTheme } from '@mantine/core'
+import { useState, useEffect } from 'react'
+import { IconPlus, IconEdit, IconTrash } from '@tabler/icons-react'
 
 export function DataTableWrapper ({
   children,
@@ -16,22 +15,49 @@ export function DataTableWrapper ({
   handleOnEdit,
   handleOnDelete
 }) {
-  const [page, setPage] = useState(1)
-  const PAGE_SIZE = 15
-  const PAGE_SIZES = [10, 15, 20]
-  const [pageSize, setPageSize] = useState(PAGE_SIZES[1])
-  const [sortStatus, setSortStatus] = useState({
-    columnAccessor: 'name',
-    direction: 'asc'
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pageSize: 15,
+    sortStatus: { columnAccessor: 'name', direction: 'asc' }
   })
+  const [loading, setLoading] = useState(true)
+
+  const PAGE_SIZES = [10, 15, 20]
+  const theme = useMantineTheme()
 
   useEffect(() => {
-    const from = (page - 1) * PAGE_SIZE
-    const to = from + PAGE_SIZE
-  }, [page])
+    setLoading(true)
+    const timer = setTimeout(() => setLoading(false), 300)
+    return () => clearTimeout(timer)
+  }, [dataSource, columns])
+
+  const handleEdit = record => handleOnEdit(record)
+  const handleDelete = record => handleOnDelete(record)
+
+  const actionColumn = {
+    accessor: 'actions',
+    title: 'Actions',
+    width: 100,
+    render: record => (
+      <div style={{ display: 'flex', gap: '10px' }}>
+        <IconEdit
+          size={16}
+          style={{ cursor: 'pointer', color: theme.primaryColor }}
+          onClick={() => handleEdit(record)}
+        />
+        <IconTrash
+          size={16}
+          style={{ cursor: 'pointer', color: 'red' }}
+          onClick={() => handleDelete(record)}
+        />
+      </div>
+    )
+  }
+
+  const enhancedColumns = [...columns, actionColumn]
 
   return (
-    <div className='h-full w-full flex flex-col items-start justify-start gap-2'>
+    <div className='h-[calc(100%_-_50px)] w-full flex flex-col items-start justify-start gap-4'>
       <div className='toolbar w-full flex items-center justify-between'>
         <div className='search-filter flex-1 flex items-center justify-end gap-2'></div>
         <div className='action-items flex-1 flex items-center justify-end gap-2'>
@@ -42,35 +68,59 @@ export function DataTableWrapper ({
           )}
         </div>
       </div>
-      <DataTable
-        style={{ minHeight: 500, width: '100%' }}
-        idAccessor={id}
-        width='100%'
-        borderRadius=''
-        withTableBorder
-        withColumnBorders
-        withRowBorders
-        striped
-        highlightOnHover
-        minHeight={150}
-        records={dataSource}
-        noRecordsText='No records to show'
-        columns={columns}
-        totalRecords={dataSource.length}
-        paginationActiveBackgroundColor='grape'
-        recordsPerPage={PAGE_SIZE}
-        page={page}
-        onPageChange={p => setPage(p)}
-        recordsPerPageOptions={PAGE_SIZES}
-        onRecordsPerPageChange={setPageSize}
-        sortStatus={sortStatus}
-        onSortStatusChange={setSortStatus}
-        paginationSize='md'
-        loadingText='Loading...'
-        paginationText={({ from, to, totalRecords }) =>
-          `Records ${from} - ${to} of ${totalRecords}`
-        }
-      />
+      {loading ? (
+        <Container
+          m={0}
+          p={0}
+          px={10}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: 'calc(100% - 3rem)'
+          }}
+        >
+          <Loader />
+        </Container>
+      ) : (
+        <DataTable
+          style={{
+            height: 'calc(100% - 3rem)',
+            maxHeight: 550,
+            width: '100%'
+          }}
+          idAccessor={id}
+          width='100%'
+          withTableBorder
+          withColumnBorders
+          withRowBorders
+          striped
+          highlightOnHover
+          minHeight={150}
+          records={dataSource}
+          noRecordsText='No records to show'
+          columns={enhancedColumns}
+          totalRecords={dataSource.length}
+          paginationActiveBackgroundColor='grape'
+          recordsPerPage={pagination.pageSize}
+          page={pagination.page}
+          onPageChange={page => setPagination(prev => ({ ...prev, page }))}
+          recordsPerPageOptions={PAGE_SIZES}
+          onRecordsPerPageChange={pageSize =>
+            setPagination(prev => ({ ...prev, pageSize }))
+          }
+          sortStatus={pagination.sortStatus}
+          onSortStatusChange={sortStatus =>
+            setPagination(prev => ({ ...prev, sortStatus }))
+          }
+          paginationSize='md'
+          loadingText='Loading...'
+          paginationText={({ from, to, totalRecords }) =>
+            `Records ${from} - ${to} of ${totalRecords}`
+          }
+        />
+      )}
     </div>
   )
 }

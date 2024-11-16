@@ -82,6 +82,7 @@ export function Layout () {
           breakpoint: 'sm',
           collapsed: { mobile: !opened }
         }}
+        styles={{main: {height: '100vh', display: 'flex', flexDirection: 'column'}}}
         padding='md'
         layout='alt'
         pl={0}
@@ -143,7 +144,9 @@ export function Layout () {
         </AppShell.Navbar>
 
         <AppShell.Main>
-          <Outlet />
+          <div className='w-full h-full flex flex-col flex-1'>
+            <Outlet />
+          </div>
         </AppShell.Main>
         <AppShell.Footer p='md'>
           <div className='container w-full h-full flex items-center justify-end'>
