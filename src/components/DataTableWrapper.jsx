@@ -70,15 +70,16 @@ export function DataTableWrapper ({
       </div>
       {loading ? (
         <Container
-          m={0}
           p={0}
           px={10}
+          className='!flex-1'
           style={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
-            height: 'calc(100% - 3rem)'
+            height: 'calc(100% - 3rem)',
+            margin: '0 auto'
           }}
         >
           <Loader />
