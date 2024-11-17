@@ -3,11 +3,11 @@ import { useState, useEffect, createElement } from 'react';
 import { Tabs, Container, useMantineTheme } from '@mantine/core';
 import { ProfileComponent } from './Profile';
 import { PreferenceComponent } from './Preference';
-import { IconUserCog, IconAdjustmentsHorizontal } from '@tabler/icons-react';
+import { UserCog2Icon, SlidersHorizontal } from 'lucide-react';
 
 const SETTING_ITEMS = [
-    { id: 1, key: "profile", title: "Profile", icon: IconUserCog, component: ProfileComponent, active: false },
-    { id: 2, key: "preference", title: "Preference", icon: IconAdjustmentsHorizontal, component: PreferenceComponent, active: false }
+    { id: 1, key: "profile", title: "Profile", icon: UserCog2Icon, component: ProfileComponent, active: false },
+    { id: 2, key: "preference", title: "Preference", icon: SlidersHorizontal, component: PreferenceComponent, active: false }
 ];
 
 

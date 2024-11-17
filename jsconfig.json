@@ -2,27 +2,14 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "@components/*": [
-        "components/*"
-      ],
-      "@hooks/*": [
-        "hooks/*"
-      ],
-      "@contexts/*": [
-        "contexts/*"
-      ],
-      "@modals/*": [
-        "modals/*"
-      ],
-      "@pages/*": [
-        "pages/*"
-      ],
-      "@dashboard/*": [
-        "pages/dashboard/*"
-      ]
+      "@components/*": ["components/*"],
+      "@hooks/*": ["hooks/*"],
+      "@config/*": ["config/*"],
+      "@contexts/*": ["contexts/*"],
+      "@modals/*": ["modals/*"],
+      "@pages/*": ["pages/*"],
+      "@dashboard/*": ["pages/dashboard/*"]
     }
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src/**/*"]
 }
