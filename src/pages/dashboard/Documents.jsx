@@ -1,21 +1,22 @@
-import {useEffect, useState} from 'react'
-import {Container} from '@mantine/core'
-import {useDocumentTitle} from '@hooks/DocumentTitle'
-import {useTranslation} from 'react-i18next'
-import {DataTableWrapper} from '@components/DataTableWrapper'
-import {AddEditDocument} from '@modals/AddEditDocument'
-import {useApiConfig} from '@contexts/api-config.context'
+import { useEffect, useState } from 'react'
+import { Container } from '@mantine/core'
+import { useDocumentTitle } from '@hooks/DocumentTitle'
+import { useTranslation } from 'react-i18next'
+import { DataTableWrapper } from '@components/DataTableWrapper'
+import { AddEditDocument } from '@modals/AddEditDocument'
+import { useApiConfig } from '@contexts/api-config.context'
 import useHttp from '@hooks/axios-instance'
 
 export function Documents() {
-    const {t} = useTranslation()
+    const { t } = useTranslation()
     useDocumentTitle(t('documents'))
     const [columns, setColumns] = useState([])
     const [dataSource, setDataSource] = useState([])
     const [popupMode, setPopupMode] = useState('add')
     const [showPopup, setShowPopup] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [popupData, setPopupData] = useState()
-    const {apiConfig} = useApiConfig()
+    const { apiConfig } = useApiConfig()
     const http = useHttp()
 
     useEffect(() => {
@@ -24,34 +25,33 @@ export function Documents() {
                 accessor: 'documentTypeId',
                 title: 'Document ID',
                 width: 350,
-                style: {padding: '10px'}
+                style: { padding: '10px' }
             },
             {
                 accessor: 'documentTypeEnglish',
                 title: 'Document Name',
                 width: 'auto',
-                style: {padding: '10px', flex: 1}
+                style: { padding: '10px', flex: 1 }
             }
         ]
         setColumns(cols)
-    }, [])
 
-    useEffect(()=>{
-      const getDocumentList = async () => {
-        try{
-          const response = await http.get(apiConfig.document.getList)
-          console.log('response: ', response);
-          if(response?.status === 200){
-            setDataSource(response?.data)
-          }
+        const getDocumentList = async () => {
+            try {
+                const response = await http.get(apiConfig.document.getList)
+                if (response?.status === 200) {
+                    setDataSource(response?.data)
+                    setLoading(false)
+                }
+            }
+            catch (err) {
+                setLoading(false)
+                console.log(err)
+            }
+
         }
-         catch(err){
-          console.log(err)
-         }
-
-      }
-      getDocumentList()
-    },[])
+        getDocumentList()
+    }, [])
 
     const handleOnAdd = () => {
         setPopupMode('add')
@@ -96,6 +96,7 @@ export function Documents() {
             <h1 className='mb-4'>Documents Page</h1>
 
             <DataTableWrapper
+                loading={loading}
                 showAddButton={true}
                 id={'documentId'}
                 addTitle='Document'

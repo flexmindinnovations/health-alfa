@@ -4,6 +4,7 @@ import {useEffect, useState} from 'react'
 import {FilePenLine, Plus, Trash2} from 'lucide-react'
 
 export function DataTableWrapper({
+                                     loading,
                                      columns = [],
                                      dataSource = [],
                                      showAddButton = false,
@@ -19,16 +20,9 @@ export function DataTableWrapper({
         pageSize: 15,
         sortStatus: {columnAccessor: 'name', direction: 'asc'}
     })
-    const [loading, setLoading] = useState(true)
 
     const PAGE_SIZES = [10, 15, 20]
     const theme = useMantineTheme()
-
-    useEffect(() => {
-        setLoading(true)
-        const timer = setTimeout(() => setLoading(false), 300)
-        return () => clearTimeout(timer)
-    }, [dataSource, columns])
 
     const handleEdit = record => handleOnEdit(record)
     const handleDelete = record => handleOnDelete(record)
