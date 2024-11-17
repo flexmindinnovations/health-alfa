@@ -4,6 +4,10 @@ const ApiConfigContext = createContext(null)
 
 export const ApiConfigProvider = ({ children }) => {
   const apiConfig = {
+    documents:{
+      getDocumentList:`/DocumentType/GetDocumentTypeList`,
+      saveDocument:`/DocumentType/saveDocumentType`,
+    },
     user: {
       login: ``,
       register: ``,

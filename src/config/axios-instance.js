@@ -2,20 +2,20 @@ import axios from "axios";
 import {useAuth} from "../contexts/auth.context.jsx";
 
 const http = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: 'https://webapi.healthalpha.ae/api',
 })
 
-http.interceptors.request.use(async (config) => {
-    const {isAuthenticated, getToken} = useAuth();
+// http.interceptors.request.use(async (config) => {
+//     const {isAuthenticated, getToken} = useAuth();
 
-    const isLoggedIn = await isAuthenticated();
-    if (isLoggedIn) {
-        const token = await getToken();
-        config.headers.Authorization = `Bearer ${token}`;
-    }
+//     const isLoggedIn = await isAuthenticated();
+//     if (isLoggedIn) {
+//         const token = await getToken();
+//         config.headers.Authorization = `Bearer ${token}`;
+//     }
 
-    return config;
-})
+//     return config;
+// })
 
 http.interceptors.response.use(
     (response) => response,
