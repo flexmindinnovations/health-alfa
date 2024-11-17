@@ -66,7 +66,6 @@ export function PreferenceComponent() {
             setTheme(_theme);
             setColorScheme(_theme);
             localStorage.setItem('mantine-color-scheme-value', _theme);
-            return;
         }
     }
 
@@ -100,6 +99,7 @@ export function PreferenceComponent() {
                         data={themeList.map(item => ({...item, component: SelectItem}))}
                         onChange={handleColorSchemeChange}
                         defaultValue={theme}
+                        allowDeselect={false}
                         styles={{
                             item: {
                                 display: 'flex',
