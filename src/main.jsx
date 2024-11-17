@@ -9,8 +9,13 @@ import { ErrorBoundary } from './components/error-boundary.jsx'
 import { NextUIProvider } from '@nextui-org/react'
 import { DeviceProvider } from './hooks/device-detector.jsx'
 import './i18n'
-import { createTheme, MantineProvider, DirectionProvider } from '@mantine/core'
-import { useState } from 'react'
+import {
+  createTheme,
+  MantineProvider,
+  DirectionProvider,
+  Loader
+} from '@mantine/core'
+import RingLoader from '@components/RingLoader'
 import '@mantine/core/styles.css'
 import 'mantine-datatable/styles.layer.css'
 
@@ -59,7 +64,15 @@ function AppWrapper () {
       ]
     },
     primaryColor: 'brand',
-    primaryShade: 9
+    primaryShade: 9,
+    components: {
+      Loader: Loader.extend({
+        defaultProps: {
+          loaders: { ...Loader.defaultLoaders, ring: RingLoader },
+          type: 'ring'
+        }
+      })
+    }
   })
 
   return (
