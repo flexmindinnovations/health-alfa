@@ -10,11 +10,13 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      "@contexts": path.resolve(__dirname, 'src/contexts'),
       "@components": path.resolve(__dirname, 'src/components'),
       "@hooks": path.resolve(__dirname, 'src/hooks'),
       "@pages": path.resolve(__dirname, 'src/pages'),
       "@dashboard": path.resolve(__dirname, 'src/pages/dashboard'),
       "@styles": path.resolve(__dirname, 'src/styles'),
+      "@modals": path.resolve(__dirname, 'src/modals'),
     }
   },
   build: {
