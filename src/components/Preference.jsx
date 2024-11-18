@@ -14,6 +14,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { forwardRef, useEffect, useState, createElement } from 'react'
 import { MonitorDot, MoonIcon, Sun } from 'lucide-react'
+import { ComboBoxComponent } from '@components/ComboBox'
 
 const providedLanguages = [
   { id: 1, label: 'English', value: 'en' },
@@ -73,8 +74,9 @@ export function PreferenceComponent () {
     localStorage.setItem('lng', lng)
   }
 
-  const handleLanguageChange = option => {
-    changeLanguage(option.value)
+  const handleLanguageChange = item => {
+    const { value } = item
+    changeLanguage(value)
   }
 
   const handleColorSchemeChange = option => {
@@ -138,14 +140,12 @@ export function PreferenceComponent () {
           <Text size='sm'>Language</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
-          <Select
-            size='sm'
-            placeholder='Select System Language'
-            data={languages}
+          <ComboBoxComponent
+            loading={loading}
+            onValueChange={data => handleLanguageChange(data)}
+            label={''}
+            dataSource={languages}
             defaultValue={preference}
-            checkIconPosition='right'
-            allowDeselect={false}
-            onChange={(_value, option) => handleLanguageChange(option)}
           />
         </Grid.Col>
       </Grid>

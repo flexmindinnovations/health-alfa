@@ -10,5 +10,6 @@
     "medications":"Medications",
     "allergies":"Allergies",
     "immunizations":"Immunizations",
-    "welcomeToReact": "Welcome to React and react-i18next"
+    "nothingFound": "Nothing found",
+    "selectOrTypePlaceholder": "Select value or type anything"
 }
