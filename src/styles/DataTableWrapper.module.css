@@ -1,0 +1,15 @@
+.toolbar {
+    @apply w-full flex items-center justify-between;
+}
+
+:root[dir='rtl'] .toolbar {
+    @apply w-full flex flex-row-reverse items-center justify-between;
+}
+
+.dataTableWrapper {
+  @apply flex-1 flex items-center justify-end gap-2;
+}
+
+:root[dir='rtl']  .dataTableWrapper {
+  @apply flex-1 flex flex-row items-center justify-start gap-2;
+}

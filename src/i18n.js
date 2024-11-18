@@ -18,10 +18,10 @@ i18n
     lng: defaultLanguage,
     fallbackLng: "en",
     interpolation: {
-      escapeValue: false,
+      escapeValue: false
     },
     react: {
-      useSuspense: false,
+      useSuspense: true
     },
     cache: {
       enabled: true,

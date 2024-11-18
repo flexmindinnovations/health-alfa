@@ -4,6 +4,7 @@
     "aboutUs": "About Us",
     "contactUs": "Contact Us",
     "users":"Users",
+    "document":"Document",
     "documents":"Documents",
     "documentId": "Document ID",
     "action": "Action",
@@ -16,5 +17,10 @@
     "nothingFound": "Nothing found",
     "selectOrTypePlaceholder": "Search list",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "records": "Records",
+    "of": "of",
+    "loading": "Loading",
+    "noRecordsToShow": "No records to show",
+    "recordsPerPage": "Records per page"
 }

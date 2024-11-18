@@ -9,8 +9,9 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { SquarePen, Plus, Trash2 } from 'lucide-react'
+import styles from '@styles/DataTableWrapper.module.css'
 
-export function DataTableWrapper({
+export function DataTableWrapper ({
   loading,
   columns = [],
   dataSource = [],
@@ -30,7 +31,7 @@ export function DataTableWrapper({
 
   const PAGE_SIZES = [10, 15, 20]
   const theme = useMantineTheme()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const handleEdit = record => handleOnEdit(record)
   const handleDelete = record => handleOnDelete(record)
@@ -58,14 +59,13 @@ export function DataTableWrapper({
       </div>
     )
   }
-
   const enhancedColumns = [...columns, actionColumn]
 
   return (
     <div className='h-[calc(100%_-_50px)] w-full flex flex-col items-start justify-start gap-4'>
-      <div className='toolbar w-full flex items-center justify-between'>
+      <div className={`${styles.toolbar}`}>
         <div className='search-filter flex-1 flex items-center justify-end gap-2'></div>
-        <div className='action-items flex-1 flex items-center justify-end gap-2'>
+        <div className={`${styles.dataTableWrapper}`}>
           {showAddButton && (
             <Button leftSection={<Plus size={16} />} onClick={handleOnAdd}>
               {addTitle}
@@ -73,7 +73,7 @@ export function DataTableWrapper({
           )}
         </div>
       </div>
-      {loading ? (
+      {loading && !enhancedColumns.length ? (
         <Container
           p={0}
           px={10}
@@ -105,7 +105,8 @@ export function DataTableWrapper({
           highlightOnHover
           minHeight={150}
           records={dataSource}
-          noRecordsText='No records to show'
+          noRecordsText={t('noRecordsToShow')}
+          recordsPerPageLabel={t('recordsPerPage')}
           columns={enhancedColumns}
           totalRecords={dataSource.length}
           paginationActiveBackgroundColor='grape'
@@ -121,9 +122,9 @@ export function DataTableWrapper({
             setPagination(prev => ({ ...prev, sortStatus }))
           }
           paginationSize='md'
-          loadingText='Loading...'
+          loadingText={`${t('loading')}...`}
           paginationText={({ from, to, totalRecords }) =>
-            `Records ${from} - ${to} of ${totalRecords}`
+            `${t('records')} ${from} - ${to} ${t('of')} ${totalRecords}`
           }
         />
       )}
