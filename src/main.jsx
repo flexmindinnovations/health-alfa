@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
@@ -77,7 +77,9 @@ function AppWrapper () {
 
   return (
     <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
-      <App />
+      <Suspense>
+        <App />
+      </Suspense>
     </MantineProvider>
   )
 }

@@ -3,7 +3,6 @@ import { Container } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { useDocumentTitle } from "@hooks/DocumentTitle";
 import image from '/images/banner.jpg'
-import Header from '@components/header'
 
 export function Home() {
   const { t } = useTranslation();
@@ -49,7 +48,7 @@ export function Home() {
   ];
 
   return (
-    <div className="bg-gray-50 text-gray-900 font-sans min-h-screen">
+    <Container m={0} p={0} size='lg' w='100%' maw='100%' h='100%' className="min-h-screen">
      {/* <Header /> */}
       {/* Hero Section */}
       <div
@@ -60,14 +59,14 @@ export function Home() {
         <div className="absolute inset-0 bg-black opacity-60" />
 
         <section className="relative z-10 flex flex-col items-center justify-center text-center h-full py-16 px-6 lg:px-10">
-          <h1 className="text-3xl md:4xl lg:5xl font-extrabold leading-tight text-white">
+          <h1 className="text-3xl text-white md:4xl lg:5xl font-extrabold leading-tigh">
             Simplify Your Health Management
           </h1>
           <p className="mt-6 text-md lg:text-xl text-white">
             In today’s fast-paced world, managing your health and wellness can be a challenge. At Health Alpha, we aim to simplify this process with a platform designed to give you seamless access to your health information and care resources. From tracking medical documents to scheduling appointments with top-rated doctors, Health Alpha is committed to making your healthcare journey smooth, accessible, and stress-free.
           </p>
           <div className="mt-10">
-            <Button className="px-10 py-4 bg-white !bg-cPrimaryFilled  hover:bg-gray-100 rounded-full text-lg shadow-lg transition-all duration-300">
+            <Button className="px-10 py-4 !bg-cPrimaryFilled rounded-full text-lg shadow-lg transition-all duration-300">
               Get Started
             </Button>
           </div>
@@ -75,11 +74,11 @@ export function Home() {
       </div>
 
       {/* Services Section */}
-      <section className="py-16 bg-gray-100">
+      <section className="py-16">
         <Container size="lg">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-800">Our Services</h2>
-            <p className="mt-4 text-gray-600">
+            <p className="mt-4">
               Discover how Health Alpha empowers you to take control of your health and well-being.
             </p>
           </div>
@@ -87,13 +86,13 @@ export function Home() {
             {services.map((service, index) => (
               <div
                 key={index}
-                className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition duration-300"
+                className=" shadow-lg rounded-lg p-6 hover:shadow-xl transition duration-300"
               >
                 <div className="flex gap-2">
                   <div className="text-3xl">{service.icon} </div>
                   <h3 className="text-base font-semibold !text-cPrimaryFilled">{service.title}</h3>
                 </div>
-                <p className="mt-3 text-gray-700">{service.description}</p>
+                <p className="mt-3">{service.description}</p>
               </div>
             ))}
           </div>
@@ -101,13 +100,13 @@ export function Home() {
       </section>
 
       {/* Call to Action Section */}
-      <section className="bg-gradient-to-r !bg-cPrimaryFilled text-white py-12 text-center">
+      <section className="bg-gradient-to-r text-white !bg-cPrimaryFilled py-12 text-center">
         <h2 className="text-3xl font-bold">Join Our Health Community</h2>
         <p className="mt-4 text-lg">
           Experience a higher level of control and assurance in managing your health.
         </p>
       </section>
-    </div>
+    </Container>
   );
 }
 

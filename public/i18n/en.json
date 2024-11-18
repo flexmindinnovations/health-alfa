@@ -4,12 +4,18 @@
     "aboutUs": "About Us",
     "contactUs": "Contact Us",
     "users":"Users",
+    "document":"Document",
     "documents":"Documents",
+    "documentId": "Document ID",
+    "action": "Action",
+    "documentName": "Document Name",
     "medicalTests":"Medical Tests",
     "healthConditions":"Health Conditions",
     "medications":"Medications",
     "allergies":"Allergies",
     "immunizations":"Immunizations",
     "nothingFound": "Nothing found",
-    "selectOrTypePlaceholder": "Search list"
+    "selectOrTypePlaceholder": "Search list",
+    "edit": "Edit",
+    "delete": "Delete"
 }
