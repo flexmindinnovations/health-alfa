@@ -17,7 +17,8 @@ export function ComboBoxComponent ({
   label,
   dataSource = [],
   defaultValue,
-  onValueChange
+  onValueChange,
+  props
 }) {
   const { t } = useTranslation()
   const [animating, setAnimating] = useState(false)
@@ -55,9 +56,9 @@ export function ComboBoxComponent ({
   const options = filteredOptions.map((item, index) => (
     <Combobox.Option
       value={item.value}
-      key={item.id}
+      key={item.value}
       className={cx({ [classes.animateOption]: animating })}
-      style={{ animationDelay: `${index * 30}ms` }}
+      style={{ animationDelay: `${index * 50}ms` }}
     >
       <Group flex justify='space-between'>
         <span> {item.label}</span>
@@ -70,6 +71,7 @@ export function ComboBoxComponent ({
 
   return (
     <Combobox
+      {...props}
       store={combobox}
       withinPortal={false}
       onOptionSubmit={val => {
