@@ -17,5 +17,10 @@
     "nothingFound": "Nothing found",
     "selectOrTypePlaceholder": "Search list",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "records": "Records",
+    "of": "of",
+    "loading": "Loading",
+    "noRecordsToShow": "No records to show",
+    "recordsPerPage": "Records per page"
 }

@@ -11,30 +11,30 @@ import { useEffect, useState } from 'react'
 import { SquarePen, Plus, Trash2 } from 'lucide-react'
 import styles from '@styles/DataTableWrapper.module.css'
 
-export function DataTableWrapper({
-                                     loading,
-                                     columns = [],
-                                     dataSource = [],
-                                     showAddButton = false,
-                                     showFilter = false,
-                                     addTitle = '',
-                                     id,
-                                     handleOnAdd,
-                                     handleOnEdit,
-                                     handleOnDelete
-                                 }) {
-    const [pagination, setPagination] = useState({
-        page: 1,
-        pageSize: 15,
-        sortStatus: {columnAccessor: 'name', direction: 'asc'}
-    })
+export function DataTableWrapper ({
+  loading,
+  columns = [],
+  dataSource = [],
+  showAddButton = false,
+  showFilter = false,
+  addTitle = '',
+  id,
+  handleOnAdd,
+  handleOnEdit,
+  handleOnDelete
+}) {
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pageSize: 15,
+    sortStatus: { columnAccessor: 'name', direction: 'asc' }
+  })
 
   const PAGE_SIZES = [10, 15, 20]
   const theme = useMantineTheme()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
-    const handleEdit = record => handleOnEdit(record)
-    const handleDelete = record => handleOnDelete(record)
+  const handleEdit = record => handleOnEdit(record)
+  const handleDelete = record => handleOnDelete(record)
 
   const actionColumn = {
     accessor: 'actions',
@@ -59,7 +59,6 @@ export function DataTableWrapper({
       </div>
     )
   }
-
   const enhancedColumns = [...columns, actionColumn]
 
   return (
@@ -74,7 +73,7 @@ export function DataTableWrapper({
           )}
         </div>
       </div>
-      {loading ? (
+      {loading && !enhancedColumns.length ? (
         <Container
           p={0}
           px={10}
@@ -106,7 +105,8 @@ export function DataTableWrapper({
           highlightOnHover
           minHeight={150}
           records={dataSource}
-          noRecordsText='No records to show'
+          noRecordsText={t('noRecordsToShow')}
+          recordsPerPageLabel={t('recordsPerPage')}
           columns={enhancedColumns}
           totalRecords={dataSource.length}
           paginationActiveBackgroundColor='grape'
@@ -122,9 +122,9 @@ export function DataTableWrapper({
             setPagination(prev => ({ ...prev, sortStatus }))
           }
           paginationSize='md'
-          loadingText='Loading...'
+          loadingText={`${t('loading')}...`}
           paginationText={({ from, to, totalRecords }) =>
-            `Records ${from} - ${to} of ${totalRecords}`
+            `${t('records')} ${from} - ${to} ${t('of')} ${totalRecords}`
           }
         />
       )}
