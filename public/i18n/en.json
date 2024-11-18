@@ -5,10 +5,16 @@
     "contactUs": "Contact Us",
     "users":"Users",
     "documents":"Documents",
+    "documentId": "Document ID",
+    "action": "Action",
+    "documentName": "Document Name",
     "medicalTests":"Medical Tests",
     "healthConditions":"Health Conditions",
     "medications":"Medications",
     "allergies":"Allergies",
     "immunizations":"Immunizations",
-    "welcomeToReact": "Welcome to React and react-i18next"
+    "nothingFound": "Nothing found",
+    "selectOrTypePlaceholder": "Search list",
+    "edit": "Edit",
+    "delete": "Delete"
 }

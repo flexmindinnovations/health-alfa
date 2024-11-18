@@ -1,14 +1,20 @@
 {
-    "healthAlfa": "الصحة ألفا",
-    "home": "الرئيسية",
-    "aboutUs": "من نحن",
-    "contactUs": "اتصل بنا",
-    "users": "المستخدمون",
-    "documents": "المستندات",
-    "medicalTests": "الفحوصات الطبية",
-    "healthConditions": "الحالات الصحية",
-    "medications": "الأدوية",
-    "allergies": "الحساسيات",
-    "immunizations": "التطعيمات",
-    "welcomeToReact": "مرحبًا بكم في React"
-  }
+  "healthAlfa": "الصحة ألفا",
+  "home": "الرئيسية",
+  "aboutUs": "معلومات عنا",
+  "contactUs": "اتصل بنا",
+  "users": "المستخدمين",
+  "documents": "الوثائق",
+  "documentId": "معرف الوثيقة",
+  "action": "إجراء",
+  "documentName": "اسم الوثيقة",
+  "medicalTests": "الاختبارات الطبية",
+  "healthConditions": "الحالات الصحية",
+  "medications": "الأدوية",
+  "allergies": "الحساسية",
+  "immunizations": "التطعيمات",
+  "nothingFound": "لم يتم العثور على شيء",
+  "selectOrTypePlaceholder": "ابحث في القائمة",
+  "edit": "تعديل",
+  "delete": "حذف"
+}
