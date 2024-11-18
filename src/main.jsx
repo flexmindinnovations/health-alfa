@@ -3,11 +3,11 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
-import { ApiConfigProvider } from './contexts/api-config.context.jsx'
-import { AuthProvider } from './contexts/auth.context.jsx'
-import { ErrorBoundary } from './components/error-boundary.jsx'
+import { ApiConfigProvider } from '@contexts/api-config.context'
+import { AuthProvider } from '@contexts/auth.context'
+import { ErrorBoundary } from '@components/error-boundary'
 import { NextUIProvider } from '@nextui-org/react'
-import { DeviceProvider } from './hooks/device-detector.jsx'
+import { DeviceProvider } from '@hooks/device-detector'
 import './i18n'
 import {
   createTheme,
@@ -84,7 +84,12 @@ function AppWrapper () {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true
+      }}
+    >
       <DirectionProvider>
         <NextUIProvider className='!h-full'>
           <ErrorBoundary>

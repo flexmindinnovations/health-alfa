@@ -24,10 +24,10 @@ import { PublicLayout } from '@pages/PublicLayout'
 function App () {
   const { setDirection } = useDirection()
   const { i18n } = useTranslation()
-  const { setPrefrences } = useApiConfig()
+  const { setPreferences } = useApiConfig()
 
   useEffect(() => {
-    setPrefrences()
+    setPreferences()
   }, [])
 
   return (

@@ -1,15 +1,20 @@
 import {
   Container,
   Grid,
-  Text,
+  Group,
+  Loader,
   Select,
+  Text,
   useDirection,
   useMantineColorScheme,
-  Loader
+  Center,
+  SegmentedControl,
+  rem
 } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
-import { useState, useEffect, forwardRef, createElement } from 'react'
-import { IconDeviceDesktop, IconSun, IconMoon } from '@tabler/icons-react'
+import { forwardRef, useEffect, useState, createElement } from 'react'
+import { MonitorDot, MoonIcon, Sun } from 'lucide-react'
+import { ComboBoxComponent } from '@components/ComboBox'
 
 const providedLanguages = [
   { id: 1, label: 'English', value: 'en' },
@@ -17,11 +22,16 @@ const providedLanguages = [
 ]
 
 const themeData = [
-  { value: 'auto', label: 'Auto', icon: IconDeviceDesktop },
-  { value: 'light', label: 'Light', icon: IconSun },
-  { value: 'dark', label: 'Dark', icon: IconMoon }
+  { value: 'auto', label: 'Auto', icon: MonitorDot },
+  {
+    value: 'light',
+    label: 'Light',
+    icon: Sun
+  },
+  { value: 'dark', label: 'Dark', icon: MoonIcon }
 ]
 
+// eslint-disable-next-line react/display-name
 const SelectItem = forwardRef(({ label, icon, ...others }, ref) => (
   <div ref={ref} {...others}>
     {' '}
@@ -36,11 +46,11 @@ const rtlLanguages = ['ar']
 
 export function PreferenceComponent () {
   const [preference, setPreference] = useState(localStorage.getItem('lng'))
-  const [languages, setLanguages] = useState(providedLanguages)
+  const [languages] = useState(providedLanguages)
   const [theme, setTheme] = useState('auto')
-  const { dir, setDirection } = useDirection()
+  const { setDirection } = useDirection()
   const { i18n } = useTranslation()
-  const [themeList, setThemeList] = useState()
+  const [themeList, setThemeList] = useState([])
   const { setColorScheme } = useMantineColorScheme({
     keepTransitions: true
   })
@@ -64,12 +74,20 @@ export function PreferenceComponent () {
     localStorage.setItem('lng', lng)
   }
 
-  const handleLanguageChange = option => {
-    changeLanguage(option.value)
+  const handleLanguageChange = item => {
+    const { value } = item
+    changeLanguage(value)
   }
 
   const handleColorSchemeChange = option => {
-    setColorScheme(option)
+    const _theme = option
+      ? option
+      : localStorage.getItem('mantine-color-scheme-value') || 'auto'
+    if (_theme && _theme !== theme) {
+      setTheme(_theme)
+      setColorScheme(_theme)
+      localStorage.setItem('mantine-color-scheme-value', _theme)
+    }
   }
 
   if (loading) {
@@ -98,11 +116,23 @@ export function PreferenceComponent () {
           <Text size='sm'>Theme</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
-          <Select
-            data={themeList.map(item => ({ ...item, component: SelectItem }))}
+          <SegmentedControl
+            data={themeData.map(item => ({
+              value: item.value,
+              label: (
+                <div className='flex items-center justify-center gap-2'>
+                  {createElement(item.icon, { size: 14 })}
+                  {item.label}
+                </div>
+              )
+            }))}
+            withItemsBorders
             onChange={handleColorSchemeChange}
-            defaultValue={theme}
-            styles={{ item: { display: 'flex', alignItems: 'center' } }}
+            value={theme}
+            fullWidth
+            radius={'sm'}
+            transitionDuration={300}
+            transitionTimingFunction='linear'
           />
         </Grid.Col>
 
@@ -110,13 +140,12 @@ export function PreferenceComponent () {
           <Text size='sm'>Language</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
-          <Select
-            size='sm'
-            placeholder='Select System Language'
-            data={languages}
+          <ComboBoxComponent
+            loading={loading}
+            onValueChange={data => handleLanguageChange(data)}
+            label={''}
+            dataSource={languages}
             defaultValue={preference}
-            allowDeselect={false}
-            onChange={(_value, option) => handleLanguageChange(option)}
           />
         </Grid.Col>
       </Grid>

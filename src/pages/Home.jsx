@@ -47,16 +47,16 @@ export function Home() {
       icon: "🐾",
     },
   ];
-  
+
   return (
     <div className="bg-gray-50 text-gray-900 font-sans min-h-screen">
      {/* <Header /> */}
       {/* Hero Section */}
       <div
-        className="relative w-full h-[600px] md:h-[500px] bg-cover bg-center"
+        className="relative w-full h-[600px] bg-cover bg-center"
         style={{ backgroundImage: `url(${image})` }}
       >
-     
+
         <div className="absolute inset-0 bg-black opacity-60" />
 
         <section className="relative z-10 flex flex-col items-center justify-center text-center h-full py-16 px-6 lg:px-10">
@@ -67,7 +67,7 @@ export function Home() {
             In today’s fast-paced world, managing your health and wellness can be a challenge. At Health Alpha, we aim to simplify this process with a platform designed to give you seamless access to your health information and care resources. From tracking medical documents to scheduling appointments with top-rated doctors, Health Alpha is committed to making your healthcare journey smooth, accessible, and stress-free.
           </p>
           <div className="mt-10">
-            <Button className="px-10 py-4 bg-white text-blue-600 hover:bg-gray-100 rounded-full text-lg shadow-lg transition-all duration-300">
+            <Button className="px-10 py-4 bg-white !bg-cPrimaryFilled  hover:bg-gray-100 rounded-full text-lg shadow-lg transition-all duration-300">
               Get Started
             </Button>
           </div>
@@ -91,7 +91,7 @@ export function Home() {
               >
                 <div className="flex gap-2">
                   <div className="text-3xl">{service.icon} </div>
-                  <h3 className="text-base font-semibold text-blue-600">{service.title}</h3>
+                  <h3 className="text-base font-semibold !text-cPrimaryFilled">{service.title}</h3>
                 </div>
                 <p className="mt-3 text-gray-700">{service.description}</p>
               </div>
@@ -101,7 +101,7 @@ export function Home() {
       </section>
 
       {/* Call to Action Section */}
-      <section className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-12 text-center">
+      <section className="bg-gradient-to-r !bg-cPrimaryFilled text-white py-12 text-center">
         <h2 className="text-3xl font-bold">Join Our Health Community</h2>
         <p className="mt-4 text-lg">
           Experience a higher level of control and assurance in managing your health.

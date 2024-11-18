@@ -17,6 +17,7 @@ export default defineConfig({
       "@dashboard": path.resolve(__dirname, 'src/pages/dashboard'),
       "@styles": path.resolve(__dirname, 'src/styles'),
       "@modals": path.resolve(__dirname, 'src/modals'),
+      "@config": path.resolve(__dirname, 'src/config'),
     }
   },
   build: {
