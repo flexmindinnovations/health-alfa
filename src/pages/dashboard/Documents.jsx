@@ -20,7 +20,6 @@ export function Documents () {
   const http = useHttp()
 
   useEffect(() => {
-    console.log('i18n: ', i18n.isInitialized)
     if (i18n.isInitialized) {
       setColumns([
         {
@@ -72,13 +71,13 @@ export function Documents () {
 
   const handleDelete = record => {
     const itemIndex = dataSource.findIndex(
-      item => item.documentId === record.documentId
+      item => item.documentTypeId === record.documentTypeId
     )
 
     if (itemIndex > -1) {
       const deleteItem = dataSource.splice(itemIndex, 1)
       const updatedData = dataSource.filter(
-        item => item.documentId !== record.documentId
+        item => item.documentTypeId !== record.documentTypeId
       )
       setDataSource(updatedData)
     }
