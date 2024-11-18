@@ -11,7 +11,7 @@
 }
 
 :root[dir='rtl'] .publicNavbarItem {
-  @apply rounded-l-full m-0 ml-auto w-full;
+  @apply rounded-l-full m-0 ml-auto;
 }
 
 .activeItem {

@@ -26,7 +26,7 @@ const themeData = [
   {
     value: 'light',
     label: 'Light',
-    icon: Sun
+    icon: Sun,
   },
   { value: 'dark', label: 'Dark', icon: MoonIcon }
 ]
@@ -49,7 +49,7 @@ export function PreferenceComponent () {
   const [languages] = useState(providedLanguages)
   const [theme, setTheme] = useState('auto')
   const { setDirection } = useDirection()
-  const { i18n } = useTranslation()
+  const { i18n,t } = useTranslation()
   const [themeList, setThemeList] = useState([])
   const { setColorScheme } = useMantineColorScheme({
     keepTransitions: true
@@ -114,7 +114,7 @@ export function PreferenceComponent () {
     <Container m={0} p={0} className='px-0 md:px-4 lg:px-4 xl:px-4 2xl:px-4'>
       <Grid align='center' m={0} p={0}>
         <Grid.Col span={{ base: 4, sm: 4, md: 6, lg: 6, xl: 6 }}>
-          <Text size='sm'>Theme</Text>
+          <Text size='sm'>{t('theme')}</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 8, sm: 8, md: 6, lg: 6, xl: 6 }}>
           <SegmentedControl
@@ -123,7 +123,7 @@ export function PreferenceComponent () {
               label: (
                 <div className='flex items-center justify-center gap-2 text-xs md:text-sm lg:text-sm xl:text-sm'>
                   {createElement(item.icon, { size: 14 })}
-                  {item.label}
+                  {t(item.value)}
                 </div>
               )
             }))}
@@ -138,7 +138,7 @@ export function PreferenceComponent () {
         </Grid.Col>
 
         <Grid.Col span={{ base: 4, sm: 4, md: 6, lg: 6, xl: 6 }}>
-          <Text size='sm'>Language</Text>
+          <Text size='sm'>{t("language")}</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 8, sm: 8, md: 6, lg: 6, xl: 6 }}>
           <ComboBoxComponent
