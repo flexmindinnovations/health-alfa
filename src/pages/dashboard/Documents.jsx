@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Container } from '@mantine/core'
+import { useEffect, useState, Suspense } from 'react'
+import { Container, Loader } from '@mantine/core'
 import { useDocumentTitle } from '@hooks/DocumentTitle'
 import { useTranslation } from 'react-i18next'
 import { DataTableWrapper } from '@components/DataTableWrapper'
@@ -8,65 +8,56 @@ import { useApiConfig } from '@contexts/api-config.context'
 import useHttp from '@hooks/axios-instance'
 
 export function Documents () {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   useDocumentTitle(t('documents'))
-  const [columns, setColumns] = useState([])
+  const [columns, setColumns] = useState()
   const [dataSource, setDataSource] = useState([])
   const [popupMode, setPopupMode] = useState('add')
   const [showPopup, setShowPopup] = useState(false)
   const [popupData, setPopupData] = useState()
   const { apiConfig } = useApiConfig()
+  const [loading, setLoading] = useState(true)
   const http = useHttp()
 
   useEffect(() => {
-    const dtSrc = [
-      {
-        documentId: 'd1f7a9b2-45f6-4c92-95f1-53f9b2d09e1e',
-        documentName: 'ProjectPlan.docx'
-      },
-      {
-        documentId: 'a7c6d48b-9b45-401e-9b10-d6bda48a91f3',
-        documentName: 'AnnualReport.pdf'
-      },
-      {
-        documentId: 'b2c9a584-25f3-4b6e-8f7d-2b8f2d0a73e5',
-        documentName: 'MeetingNotes.txt'
-      },
-      {
-        documentId: 'e1a6f9d3-67f5-4b8e-9f9c-6d4b7a8b9a1c',
-        documentName: 'Budget.xlsx'
-      },
-      {
-        documentId: 'f2a8d6e9-98b3-4017-8d7e-8d3c7a9e4f1a',
-        documentName: 'ResearchPaper.doc'
+    console.log('i18n: ', i18n.isInitialized)
+    if (i18n.isInitialized) {
+      setColumns([
+        {
+          accessor: 'documentTypeId',
+          title: t('documentId'),
+          width: 350,
+          style: { padding: '10px' }
+        },
+        {
+          accessor: 'documentTypeEnglish',
+          title: t('documentName'),
+          width: 'auto',
+          style: { padding: '10px', flex: 1 }
+        },
+        {
+          accessor: 'documentTypeArabic',
+          title: t('documentName'),
+          width: 'auto',
+          style: { padding: '10px', flex: 1 }
+        }
+      ])
+      const getDocumentList = async () => {
+        try {
+          const response = await http.get(apiConfig.document.getList)
+          if (response?.status === 200) {
+            const data = response['data']
+            setDataSource(data)
+            setLoading(false)
+          }
+        } catch (err) {
+          setLoading(false)
+          console.log(err)
+        }
       }
-    ]
-
-    const cols = [
-      {
-        accessor: 'documentId',
-        title: t('documentId'),
-        width: 350,
-        style: { padding: '10px' }
-      },
-      {
-        accessor: 'documentName',
-        title: t('documentName'),
-        width: 'auto',
-        style: { padding: '10px', flex: 1 }
-      }
-    ]
-
-    setDataSource(dtSrc)
-    setColumns(cols)
-
-    const getDocumentList = async () => {
-      const response = await http.get(apiConfig.document.getList)
-      console.log('response: ', response)
+      getDocumentList()
     }
-
-    getDocumentList()
-  }, [])
+  }, [i18n.language])
 
   const handleOnAdd = () => {
     setPopupMode('add')
@@ -97,6 +88,26 @@ export function Documents () {
     setShowPopup(false)
   }
 
+  if (loading) {
+    return (
+      <Container
+        p={0}
+        px={10}
+        className='!flex-1'
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          height: 'calc(100% - 3rem)',
+          margin: '0 auto'
+        }}
+      >
+        <Loader />
+      </Container>
+    )
+  }
+
   return (
     <Container m={0} p={0} size='lg' w='100%' maw='100%' h='100%'>
       {showPopup && (
@@ -108,12 +119,11 @@ export function Documents () {
         />
       )}
 
-      <h1 className='mb-4'>Documents Page</h1>
-
       <DataTableWrapper
+        loading={loading}
         showAddButton={true}
-        id={'documentId'}
-        addTitle='Document'
+        id={'documentTypeId'}
+        addTitle={t('document')}
         columns={columns}
         dataSource={dataSource}
         handleOnAdd={() => handleOnAdd()}

@@ -9,37 +9,32 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { SquarePen, Plus, Trash2 } from 'lucide-react'
+import styles from '@styles/DataTableWrapper.module.css'
 
-export function DataTableWrapper ({
-  columns = [],
-  dataSource = [],
-  showAddButton = false,
-  showFilter = false,
-  addTitle = '',
-  id,
-  handleOnAdd,
-  handleOnEdit,
-  handleOnDelete
-}) {
-  const [pagination, setPagination] = useState({
-    page: 1,
-    pageSize: 15,
-    sortStatus: { columnAccessor: 'name', direction: 'asc' }
-  })
-  const [loading, setLoading] = useState(true)
+export function DataTableWrapper({
+                                     loading,
+                                     columns = [],
+                                     dataSource = [],
+                                     showAddButton = false,
+                                     showFilter = false,
+                                     addTitle = '',
+                                     id,
+                                     handleOnAdd,
+                                     handleOnEdit,
+                                     handleOnDelete
+                                 }) {
+    const [pagination, setPagination] = useState({
+        page: 1,
+        pageSize: 15,
+        sortStatus: {columnAccessor: 'name', direction: 'asc'}
+    })
 
   const PAGE_SIZES = [10, 15, 20]
   const theme = useMantineTheme()
   const { t } = useTranslation()
 
-  useEffect(() => {
-    setLoading(true)
-    const timer = setTimeout(() => setLoading(false), 300)
-    return () => clearTimeout(timer)
-  }, [dataSource, columns])
-
-  const handleEdit = record => handleOnEdit(record)
-  const handleDelete = record => handleOnDelete(record)
+    const handleEdit = record => handleOnEdit(record)
+    const handleDelete = record => handleOnDelete(record)
 
   const actionColumn = {
     accessor: 'actions',
@@ -69,9 +64,9 @@ export function DataTableWrapper ({
 
   return (
     <div className='h-[calc(100%_-_50px)] w-full flex flex-col items-start justify-start gap-4'>
-      <div className='toolbar w-full flex items-center justify-between'>
+      <div className={`${styles.toolbar}`}>
         <div className='search-filter flex-1 flex items-center justify-end gap-2'></div>
-        <div className='action-items flex-1 flex items-center justify-end gap-2'>
+        <div className={`${styles.dataTableWrapper}`}>
           {showAddButton && (
             <Button leftSection={<Plus size={16} />} onClick={handleOnAdd}>
               {addTitle}
