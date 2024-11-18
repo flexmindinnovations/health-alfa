@@ -84,7 +84,12 @@ function AppWrapper () {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true
+      }}
+    >
       <DirectionProvider>
         <NextUIProvider className='!h-full'>
           <ErrorBoundary>
