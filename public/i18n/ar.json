@@ -3,7 +3,7 @@
   "home": "الرئيسية",
   "aboutUs": "معلومات عنا",
   "contactUs": "اتصل بنا",
-  "users": "المستخدمين",
+  "users": "المستخدمون",
   "document": "وثيقة",
   "documents": "الوثائق",
   "documentId": "معرف الوثيقة",
@@ -17,5 +17,10 @@
   "nothingFound": "لم يتم العثور على شيء",
   "selectOrTypePlaceholder": "ابحث في القائمة",
   "edit": "تعديل",
-  "delete": "حذف"
+  "delete": "حذف",
+  "records": "السجلات",
+  "of": "من",
+  "loading": "جاري التحميل",
+  "noRecordsToShow": "لا توجد سجلات لعرضها",
+  "recordsPerPage": "السجلات لكل صفحة"
 }
