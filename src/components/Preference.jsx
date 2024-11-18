@@ -61,6 +61,7 @@ export function PreferenceComponent () {
     setThemeList(themeData)
     const _theme = localStorage.getItem('mantine-color-scheme-value') || 'auto'
     setPreference(lng)
+    i18n.changeLanguage(lng)
     setTheme(_theme)
 
     setLoading(false)
