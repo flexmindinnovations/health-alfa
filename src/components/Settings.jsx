@@ -48,7 +48,7 @@ function Settings({ isOpen, toggle }) {
                         ))}
                     </Tabs.List>
                     {settingOptions.map((item) => (
-                        <Tabs.Panel mih="25rem" p={10} key={item.id} value={item.key}>
+                        <Tabs.Panel mih="25rem" className='py-5 px-0 md:!p-5 lg:!p-5 xl:!p-5' key={item.id} value={item.key}>
                             <item.component />
                         </Tabs.Panel>
                     ))}

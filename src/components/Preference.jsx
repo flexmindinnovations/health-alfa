@@ -110,17 +110,17 @@ export function PreferenceComponent () {
   }
 
   return (
-    <Container m={0} p={0} px={10}>
+    <Container m={0} p={0} className='px-0 md:px-4 lg:px-4 xl:px-4 2xl:px-4'>
       <Grid align='center' m={0} p={0}>
-        <Grid.Col span={{ base: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
+        <Grid.Col span={{ base: 4, sm: 4, md: 6, lg: 6, xl: 6 }}>
           <Text size='sm'>Theme</Text>
         </Grid.Col>
-        <Grid.Col span={{ base: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
+        <Grid.Col span={{ base: 8, sm: 8, md: 6, lg: 6, xl: 6 }}>
           <SegmentedControl
             data={themeData.map(item => ({
               value: item.value,
               label: (
-                <div className='flex items-center justify-center gap-2'>
+                <div className='flex items-center justify-center gap-2 text-xs md:text-sm lg:text-sm xl:text-sm'>
                   {createElement(item.icon, { size: 14 })}
                   {item.label}
                 </div>
@@ -136,10 +136,10 @@ export function PreferenceComponent () {
           />
         </Grid.Col>
 
-        <Grid.Col span={{ base: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
+        <Grid.Col span={{ base: 4, sm: 4, md: 6, lg: 6, xl: 6 }}>
           <Text size='sm'>Language</Text>
         </Grid.Col>
-        <Grid.Col span={{ base: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
+        <Grid.Col span={{ base: 8, sm: 8, md: 6, lg: 6, xl: 6 }}>
           <ComboBoxComponent
             loading={loading}
             onValueChange={data => handleLanguageChange(data)}
