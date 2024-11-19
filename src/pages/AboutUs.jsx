@@ -24,12 +24,14 @@ export default function AboutUs() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        padding: 0,
+        paddingTop: "32px"
       }}
     >
       <div
-        className="max-w-6xl space-y-5 relative"
+        className="max-w-6xl space-y-5 relative px-4"
         style={{
-          maxHeight: "90vh",
+          maxHeight: "75vh",
           overflowY: "auto",
         }}
       >

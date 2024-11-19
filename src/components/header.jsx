@@ -1,6 +1,5 @@
 import { AppShell, Burger, Group, UnstyledButton } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import classes from './MobileNavbar.module.css';
 import { Link } from 'react-router-dom';
 
 const links = [

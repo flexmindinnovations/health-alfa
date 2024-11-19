@@ -32,14 +32,19 @@ export default function ContactUs() {
 
   return (
     <Container
-    m={0} p={0} size='lg' w='100%' maw='100%' h='100%'
-    style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-    }}
+      m={0} p={0} size='lg' w='100%' maw='100%' h='100%'
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 0,
+        paddingTop: "32px"
+      }}
     >
-      <div className="max-w-6xl">
+      <div className="max-w-6xl px-4" style={{
+        maxHeight: "75vh",
+        overflowY: "auto",
+      }}>
         {/* Title Section */}
         <div className="text-center mb-10">
           <h1 className="text-3xl !text-cPrimaryFilled font-bold mb-4">Contact Us</h1>
