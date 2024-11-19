@@ -8,19 +8,19 @@ import {createElement, useEffect, useState} from 'react'
 import {HeadsetIcon, HomeIcon, InfoIcon, LayoutDashboardIcon, LockIcon} from 'lucide-react';
 
 const links = [
-    {link: '/', label: 'Home', icon: HomeIcon, key: 'Home', active: false},
+    {link: '/', label: 'Home', icon: HomeIcon, key: 'home', active: false},
     {
         link: '/about-us',
         label: 'About',
         icon: InfoIcon,
-        key: 'About',
+        key: 'aboutUs',
         active: false
     },
     {
         link: '/contact-us',
         label: 'Contact',
         icon: HeadsetIcon,
-        key: 'Contact',
+        key: 'contactUs',
         active: false
     }
 ]
@@ -42,7 +42,7 @@ const authItems = [
     }
 ]
 
-export function PublicLayout() {
+export default function PublicLayout() {
     const [opened, {toggle}] = useDisclosure()
     const {t} = useTranslation()
     const [menuItems, setMenuItems] = useState([])

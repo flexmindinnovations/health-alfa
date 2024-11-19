@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import { Container} from '@mantine/core'
 
-export function AboutUs() {
+export default function AboutUs() {
   const { t } = useTranslation();
   useDocumentTitle(t("aboutUs"));
 

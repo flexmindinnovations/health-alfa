@@ -22,5 +22,15 @@
     "of": "of",
     "loading": "Loading",
     "noRecordsToShow": "No records to show",
-    "recordsPerPage": "Records per page"
+    "recordsPerPage": "Records per page",
+    "settings":"Settings",
+    "logout":"Log Out",
+    "preference":"Preference",
+    "profile":"Profile",
+    "theme":"Theme",
+    "language":"Language",
+    "auto":"Auto",
+    "light":"Light",
+    "dark":"Dark",
+    "signedInAs":"Signed In As"
 }
