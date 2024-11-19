@@ -1,4 +1,4 @@
-import { useEffect, useState, Suspense } from 'react'
+import { useEffect, useState } from 'react'
 import { Container, Loader } from '@mantine/core'
 import { useDocumentTitle } from '@hooks/DocumentTitle'
 import { useTranslation } from 'react-i18next'
@@ -57,17 +57,6 @@ export function Documents () {
       getDocumentList()
     }
   }, [i18n.language])
-
-  const handleOnAdd = () => {
-    setPopupMode('add')
-    setShowPopup(true)
-  }
-
-  const handleEdit = record => {
-    setPopupMode('edit')
-    setShowPopup(true)
-    setPopupData(record)
-  }
 
   const handleDelete = record => {
     const itemIndex = dataSource.findIndex(

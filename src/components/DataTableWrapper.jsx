@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import { SquarePen, Plus, Trash2 } from 'lucide-react'
 import styles from '@styles/DataTableWrapper.module.css'
 
-export function DataTableWrapper ({
+export function DataTableWrapper({
   loading,
   columns = [],
   dataSource = [],
