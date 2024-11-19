@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from '../contexts/auth.context.jsx'
+import { useAuth } from '@contexts/AuthContext.jsx'
 import {
   AppShell,
   Burger,

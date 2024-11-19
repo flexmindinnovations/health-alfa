@@ -3,7 +3,7 @@ import {useForm} from "react-hook-form";
 import {Button, Card, CardBody, CardHeader, Input, Link} from "@nextui-org/react";
 import {useState} from "react";
 import http from '@hooks/axios-instance.js';
-import {useApiConfig} from "@contexts/api-config.context";
+import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
 import toast from "react-hot-toast";
 import {Eye, EyeOff, Lock} from 'lucide-react';
 import {motion, useInView} from "framer-motion";
