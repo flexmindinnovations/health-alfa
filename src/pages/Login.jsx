@@ -9,7 +9,7 @@ import {Eye, EyeOff, Lock} from 'lucide-react';
 import {motion, useInView} from "framer-motion";
 
 
-export function Login() {
+export default function Login() {
     const { ref, inView } = useInView({
         threshold: .8
     })

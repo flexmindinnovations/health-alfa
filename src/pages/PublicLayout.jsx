@@ -42,7 +42,7 @@ const authItems = [
     }
 ]
 
-export function PublicLayout() {
+export default function PublicLayout() {
     const [opened, {toggle}] = useDisclosure()
     const {t} = useTranslation()
     const [menuItems, setMenuItems] = useState([])

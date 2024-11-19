@@ -7,7 +7,7 @@ import { AddEditDocument } from '@modals/AddEditDocument'
 import { useApiConfig } from '@contexts/api-config.context'
 import useHttp from '@hooks/axios-instance'
 
-export function Documents () {
+export default function Documents () {
   const { t, i18n } = useTranslation()
   useDocumentTitle(t('documents'))
   const [columns, setColumns] = useState()

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useDocumentTitle } from "@hooks/DocumentTitle";
 import image from '/images/banner.jpg'
 
-export function Home() {
+export default function Home() {
   const { t } = useTranslation();
   useDocumentTitle(t("home"));
 

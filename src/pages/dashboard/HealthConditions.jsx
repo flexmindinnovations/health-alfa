@@ -1,7 +1,7 @@
 import { Container } from "@mantine/core";
 import { useDocumentTitle } from "@hooks/DocumentTitle";
 import { useTranslation } from "react-i18next";
-export function HealthConditions() {
+export default function HealthConditions() {
     const { t } = useTranslation();
     useDocumentTitle(t("healthConditions"));
     return (
