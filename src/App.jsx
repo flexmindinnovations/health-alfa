@@ -31,7 +31,7 @@ function App() {
         setPreferences();
         const direction = i18n.dir();
         setDirection(direction);
-    }, [i18n, setDirection, setPreferences]);
+    }, [i18n.language, setDirection]);
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
