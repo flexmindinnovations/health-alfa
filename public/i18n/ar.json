@@ -22,5 +22,15 @@
   "of": "من",
   "loading": "جاري التحميل",
   "noRecordsToShow": "لا توجد سجلات لعرضها",
-  "recordsPerPage": "السجلات لكل صفحة"
+  "recordsPerPage": "السجلات لكل صفحة",
+  "settings": "الإعدادات",
+  "logout": "تسجيل الخروج",
+  "preference": "التفضيلات",
+  "profile": "الملف الشخصي",
+  "theme": "السمة",
+  "language": "اللغة",
+  "auto": "تلقائي",
+  "light": "فاتح",
+  "dark": "داكن",
+  "signedInAs":"تسجيل الدخول باسم"
 }

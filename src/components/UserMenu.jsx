@@ -19,7 +19,7 @@ const UserButton = forwardRef(({image, name, email, ...others}, ref) => (
 ))
 
 export function UserMenu({showHideSettingsModel}) {
-    const {i18n} = useTranslation()
+    const {i18n,t} = useTranslation()
 
     const changeLanguage = lng => {
         i18n.changeLanguage(lng)
@@ -38,7 +38,7 @@ export function UserMenu({showHideSettingsModel}) {
                 <Menu.Dropdown>
                     <Menu.Item className='pointer-events-none'>
                         <div className='flex flex-col items-start justify-start'>
-                            <p className='opacity-50 text-sm'>Signed in as</p>
+                            <p className='opacity-50 text-sm'>{t('signedInAs')}</p>
                             <h2 className='font-semibold'>User</h2>
                             <p className='font-light text-xs'>zoey@example.com</p>
                         </div>
@@ -48,11 +48,11 @@ export function UserMenu({showHideSettingsModel}) {
                         leftSection={<SettingsIcon size={14}/>}
                         onClick={showHideSettingsModel(true)}
                     >
-                        Settings
+                        {t('settings')}
                     </Menu.Item>
                     <Menu.Divider/>
                     <Menu.Item color='red' leftSection={<LogOutIcon size={14}/>}>
-                        Log Out
+                    {t('logout')}
                     </Menu.Item>
                 </Menu.Dropdown>
             </Menu>

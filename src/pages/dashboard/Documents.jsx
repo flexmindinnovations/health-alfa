@@ -58,6 +58,17 @@ export function Documents () {
     }
   }, [i18n.language])
 
+  const handleOnAdd = () => {
+    setPopupMode('add')
+    setShowPopup(true)
+  }
+
+  const handleEdit = record => {
+    setPopupMode('edit')
+    setShowPopup(true)
+    setPopupData(record)
+  }
+
   const handleDelete = record => {
     const itemIndex = dataSource.findIndex(
       item => item.documentTypeId === record.documentTypeId
