@@ -69,7 +69,8 @@ function AppWrapper () {
       Loader: Loader.extend({
         defaultProps: {
           loaders: { ...Loader.defaultLoaders, ring: RingLoader },
-          type: 'ring'
+          type: 'ring',
+          size: 'xl'
         }
       })
     }
