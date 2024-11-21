@@ -1,4 +1,4 @@
-import Button from "@components/button.jsx";
+import Button from "@components/Button.jsx";
 import { Container } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { useDocumentTitle } from "@hooks/DocumentTitle";
@@ -49,7 +49,6 @@ export default function Home() {
 
   return (
     <Container m={0} p={0} size='lg' w='100%' maw='100%' h='100%' className="min-h-screen">
-     {/* <Header /> */}
       {/* Hero Section */}
       <div
         className="relative w-full h-[600px] bg-cover bg-center"

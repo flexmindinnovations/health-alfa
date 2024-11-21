@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useAuth } from "@contexts/auth.context.jsx";
+import { useAuth } from "@contexts/AuthContext.jsx";
 
 const useHttp = () => {
     const { isAuthenticated, getToken } = useAuth();

@@ -4,7 +4,7 @@ import {useDirection} from '@mantine/core';
 import {useTranslation} from 'react-i18next';
 import {Route, Routes} from 'react-router-dom';
 import {Layout} from '@pages/Layout.jsx';
-import {useApiConfig} from '@contexts/api-config.context';
+import {useApiConfig} from '@contexts/ApiConfigContext.jsx';
 
 const PublicLayout = lazy(() => import('@pages/PublicLayout'));
 const PageNotFound = lazy(() => import('@pages/PageNotFound'));

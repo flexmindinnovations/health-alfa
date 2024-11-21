@@ -7,7 +7,7 @@ import {
     useMantineTheme,
   } from "@mantine/core";
   import { useDisclosure } from "@mantine/hooks";
-  import { useAuth } from "@contexts/auth.context";
+  import { useAuth } from "@contexts/AuthContext";
   import { useTranslation } from "react-i18next";
   import { Link, Outlet, useLocation } from "react-router-dom";
   import styles from "@styles/layout.module.css";

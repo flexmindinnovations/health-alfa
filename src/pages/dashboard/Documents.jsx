@@ -4,7 +4,7 @@ import {useDocumentTitle} from '@hooks/DocumentTitle'
 import {useTranslation} from 'react-i18next'
 import {DataTableWrapper} from '@components/DataTableWrapper'
 import {AddEditDocument} from '@modals/AddEditDocument'
-import {useApiConfig} from '@contexts/api-config.context'
+import {useApiConfig} from '@contexts/ApiConfigContext.jsx'
 import useHttp from '@hooks/axios-instance'
 
 export default function Documents() {
