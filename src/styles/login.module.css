@@ -1,7 +1,43 @@
 .loginPage {
-  @apply bg-gradient-to-r from-indigo-600 to-violet-600 h-dvh w-dvw;
+  background: linear-gradient(
+    45deg,
+    #143345,
+    #224557,
+    #227798,
+    #2594b5,
+    #245066,
+    #22617c,
+    #227798,
+    #224557,
+    #143345
+  );
+  background-size: 1200% 1200%; /* Larger background size to make gradient smoother */
+  animation: gradientAnimation 12s ease infinite; /* Slow down animation for smoother transition */
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .overlay {
-  @apply h-full w-full flex items-center justify-center;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

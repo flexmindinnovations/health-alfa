@@ -1,4 +1,4 @@
-import Button from "@components/Button.jsx";
+import {CButton} from "@components/Button.jsx";
 import { Container } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { useDocumentTitle } from "@hooks/DocumentTitle";
@@ -65,9 +65,9 @@ export default function Home() {
             In today’s fast-paced world, managing your health and wellness can be a challenge. At Health Alpha, we aim to simplify this process with a platform designed to give you seamless access to your health information and care resources. From tracking medical documents to scheduling appointments with top-rated doctors, Health Alpha is committed to making your healthcare journey smooth, accessible, and stress-free.
           </p>
           <div className="mt-10">
-            <Button className="px-10 py-4 !bg-cPrimaryFilled rounded-full text-lg shadow-lg transition-all duration-300">
+            <CButton className="px-10 py-4 !bg-cPrimaryFilled rounded-full text-lg shadow-lg transition-all duration-300">
               Get Started
-            </Button>
+            </CButton>
           </div>
         </section>
       </div>

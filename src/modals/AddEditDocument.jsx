@@ -1,9 +1,18 @@
 import ModalWrapper from '@components/Modal'
 import { useState, useEffect } from 'react'
 import { Container, Loader } from '@mantine/core'
+import { useForm } from "@mantine/form";
+
 export function AddEditDocument ({ data, mode = 'add' | 'edit', handleOnClose, open }) {
   const [loading, setLoading] = useState(true)
-  const [title, setTitle] = useState('Add Document')
+  const [title, setTitle] = useState('Add Document');
+  const form = useForm({
+      mode: "controlled",
+      initialValues: {
+
+      },
+      va
+  });
 
   useEffect(() => {
     const _title = mode === 'edit' ? 'Edit Document' : 'Add Document'
@@ -30,5 +39,7 @@ export function AddEditDocument ({ data, mode = 'add' | 'edit', handleOnClose, o
     )
   }
 
-  return <ModalWrapper isOpen={open} toggle={handleOnClose} title={title}></ModalWrapper>
+  return <ModalWrapper isOpen={open} toggle={handleOnClose} title={title}>
+
+  </ModalWrapper>
 }
