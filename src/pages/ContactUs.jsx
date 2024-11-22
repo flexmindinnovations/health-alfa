@@ -14,8 +14,7 @@ export default function ContactUs() {
     "col-span-1 row-span-1", // Card 4
   ];
 
-  const baseCardClasses =
-    "rounded-3xl shadow-2xl p-3";
+  const baseCardClasses = "rounded-3xl shadow-xl p-3";
 
   // Define an array of contact card information
   const contactDetails = [
@@ -48,59 +47,77 @@ export default function ContactUs() {
         "Join us in creating meaningful collaborations! If you're a healthcare provider, organization, or innovator, connect with us to explore partnership opportunities aimed at improving healthcare accessibility.",
     },
   ];
-  
-
 
   return (
     <Container
-      m={0} p={0} size='lg' w='100%' maw='100%' h='100%'
+      m={0}
+      p={0}
+      size="lg"
+      w="100%"
+      maw="100%"
+      h="100%"
       style={{
-        display: 'flex',
+        display: "flex",
         alignItems: "center",
         justifyContent: "center",
         padding: 0,
-        paddingTop: "32px"
+        paddingTop: "32px",
       }}
     >
-      <div className="max-w-5xl px-4" style={{
-        maxHeight: "75vh",
-      }}>
+      <div
+        className="max-w-5xl px-4"
+        style={{
+          maxHeight: "75vh",
+        }}
+      >
         {/* Title Section */}
-        <div className="text-center">
-          <h1 className="text-3xl !text-cPrimaryFilled font-bold mb-4">Contact Us</h1>
+        <div className="text-center mb-8">
+          <h1 className="text-3xl !text-cPrimaryFilled font-bold mb-4">
+            Contact Us
+          </h1>
           <p className="text-lg">
-            We're here to assist you. If you have any questions or feedback, please feel free to reach out to us.
+            We're here to assist you. If you have any questions or feedback,
+            please feel free to reach out to us.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 grid-rows-4 gap-5 w-full h-screen p-5 overflow-hidden md:grid-cols-2 sm:grid-rows-[repeat(6,minmax(auto,300px))]">
+        {/* Responsive Grid */}
+        <div className="grid grid-cols-1 h-screen md:grid-cols-2 gap-5 w-full p-5 md:grid-rows-[repeat(6,minmax(auto,300px))]">
           {contactDetails.map((contact, index) => (
-            <div key={index} className={`card item${index + 1} ${gridClasses[index]} ${baseCardClasses}`}>
-              <ContactCard title={contact.title} icon={contact.icon} email={contact.email} description={contact.description} />
+            <div
+              key={index}
+              className={`card item${index + 1} ${gridClasses[index]} ${baseCardClasses}`}
+            >
+              <ContactCard
+                title={contact.title}
+                icon={contact.icon}
+                email={contact.email}
+                description={contact.description}
+              />
             </div>
           ))}
-        </div>;
+        </div>
       </div>
-    </Container >
+    </Container>
   );
 }
 
 const ContactCard = ({ title, icon, email, description }) => (
   <div>
-    {/* Collage grid */}
-    <div className="flex gap-4 p-4">
+    {/* Card Layout */}
+    <div className="flex flex-col items-start gap-4 p-4">
       {/* Icon */}
-      <div className="flex flex-col gap-4 justify-center">
-        <div className="flex gap-4">
-          <div className="flex items-center justify-center overflow-hidden transform hover:scale-110 transition-all duration-300 ease-in-out">
-            <span className="text-xl">{icon}</span>
-          </div>
-          <h3 className="text-xl !text-cPrimaryFilled font-bold tracking-tight transition-transform duration-300 ease-in-out transform hover:translate-x-1">
-            {title}
-          </h3>
+      <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-center overflow-hidden transform hover:scale-110 transition-all duration-300 ease-in-out">
+          <span className="text-xl">{icon}</span>
         </div>
-        <div className="flex flex-col justify-center space-y-2">
-        <p className="text-sm text-balance">{description}</p>
+        <h3 className="text-xl !text-cPrimaryFilled font-bold tracking-tight transition-transform duration-300 ease-in-out transform hover:translate-x-1">
+          {title}
+        </h3>
+      </div>
+      {/* Content */}
+      <div className="flex flex-col gap-2 justify-center">
+        <p className="text-sm text-gray-600">{description}</p>
         <a
           href={`mailto:${email}`}
           className="text-sm text-indigo-500 font-bold hover:text-indigo-700"
@@ -108,10 +125,6 @@ const ContactCard = ({ title, icon, email, description }) => (
           {email}
         </a>
       </div>
-      </div>
-
-      {/* Content */}
-  
     </div>
   </div>
 );
