@@ -22,15 +22,21 @@
     "framer-motion": "^11.11.11",
     "i18next": "^23.16.5",
     "i18next-http-backend": "^2.6.2",
+    "libphonenumber-js": "^1.11.14",
     "lucide-react": "^0.454.0",
     "mantine-datatable": "^7.12.4",
+    "mantine-form-zod-resolver": "^1.1.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.1",
     "react-hot-toast": "^2.4.1",
     "react-i18next": "^15.1.1",
-    "react-router-dom": "^6.27.0"
+    "react-phone-number-input": "^3.4.9",
+    "react-router-dom": "^6.27.0",
+    "react-world-flags": "^1.6.0",
+    "underscore": "^1.13.7",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
