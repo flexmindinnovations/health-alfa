@@ -36,7 +36,7 @@ export default function AboutUs() {
         }}
       >
         <h3 className="text-center text-3xl font-extrabold !text-cPrimaryFilled tracking-wide">
-          About Us
+        {t('aboutUs')}
         </h3>
 
         <p className="text-base leading-relaxed">

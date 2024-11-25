@@ -59,6 +59,7 @@ export default function ContactUs() {
       style={{
         display: "flex",
         alignItems: "center",
+        flexDirection:'column',
         justifyContent: "center",
         padding: 0,
         paddingTop: "32px",
@@ -70,18 +71,15 @@ export default function ContactUs() {
           maxHeight: "75vh",
         }}
       >
-        {/* Title Section */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-4">
           <h1 className="text-3xl !text-cPrimaryFilled font-bold mb-4">
-            Contact Us
+            {t('contactUs')}
           </h1>
-          <p className="text-lg">
+          <p className="text-base leading-relaxed">
             We're here to assist you. If you have any questions or feedback,
             please feel free to reach out to us.
           </p>
         </div>
-
-        {/* Responsive Grid */}
         <div className="grid grid-cols-1 h-screen md:grid-cols-2 gap-5 w-full p-5 md:grid-rows-[repeat(6,minmax(auto,300px))]">
           {contactDetails.map((contact, index) => (
             <div
