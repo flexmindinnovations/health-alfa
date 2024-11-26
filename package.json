@@ -23,6 +23,7 @@
     "i18next": "^23.16.5",
     "i18next-http-backend": "^2.6.2",
     "libphonenumber-js": "^1.11.14",
+    "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.454.0",
     "mantine-datatable": "^7.12.4",
     "mantine-form-zod-resolver": "^1.1.0",

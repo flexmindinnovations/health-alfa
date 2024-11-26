@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState,forwardRef } from "react";
 import { TextInput } from "@mantine/core";
 
-export default function Input({ value, onChange, title }) {
+export default function Input({ value = "", onChange, title, error, name }) {
   const [focused, setFocused] = useState(false);
   const floating = value.trim().length !== 0 || focused;
 
@@ -11,8 +11,9 @@ export default function Input({ value, onChange, title }) {
         label={title}
         placeholder={`Enter ${title}`}
         required
+        name={name}
         value={value}
-        onChange={(event) => onChange(event.currentTarget.value)}
+        onChange={(event) => onChange(event)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         autoComplete="off"
@@ -27,6 +28,7 @@ export default function Input({ value, onChange, title }) {
         }}
         labelProps={{ "data-floating": floating }}
       />
+      {error && <span style={{ color: "red" }}>{error}</span>}
     </div>
   );
 }

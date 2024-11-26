@@ -1,29 +1,73 @@
-import ModalWrapper from '@components/Modal';
 import { useState, useEffect } from 'react';
+import ModalWrapper from '@components/Modal';
 import { Container, Loader, Button } from '@mantine/core';
-import Input from '@components/Input'; // Your custom Input component
+import Input from '@components/Input';
+import axios from 'axios';
+import debounce from 'lodash.debounce';
 
 export function AddEditDocument({ data, mode = 'add', handleOnClose, open }) {
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('Add Document');
-  const [error, setError] = useState('');
-  
-  const [documentName, setDocumentName] = useState(data?.documentName || ''); // manage document name state
+  const [errors, setErrors] = useState({
+    documentNameEnglish: "",
+    documentNameArabic: "",
+  });
+
+  const [translatedText, setTranslatedText] = useState('');
+  const [error, setError] = useState(null);
+
+  const [inputs, setInputs] = useState({
+    documentNameEnglish: "",
+    documentNameArabic: "",
+  });
+
+  // Debounced translate function to prevent excessive API calls
+  const debouncedTranslate = debounce(async (text) => {
+    try {
+      const options = {
+        method: 'POST',
+        url: 'https://rapid-translate-multi-traduction.p.rapidapi.com/t',
+        headers: {
+          'x-rapidapi-key': 'c9c7afa5c2msh95eeca710489737p171324jsn2a4da1714fe3',
+          'x-rapidapi-host': 'rapid-translate-multi-traduction.p.rapidapi.com',
+          'Content-Type': 'application/json',
+        },
+        data: {
+          from: 'en',  // Language code for source language
+          to: 'ar',    // Language code for target language
+          q: text,     // The text you want to translate
+        },
+      };
+      const response = await axios.request(options);
+      setTranslatedText(response.data);
+    } catch (err) {
+      setError('Error translating text');
+      console.error(err);
+    }
+  }, 500); // Set a 500ms delay (can be adjusted as needed)
 
   // Handle input change
-  const handleInputChange = (value) => {
-    setDocumentName(value);
+  const handleInputChange = async (e) => {
+    const { name, value } = e.target;
+    setInputs((prev) => ({ ...prev, [name]: value }));
+
+    // If input is documentNameEnglish, trigger the debounced translate
+    if (name === "documentNameEnglish") {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: value.trim() === "" ? "This field is required" : "",
+      }));
+      debouncedTranslate(value); // Call debounced translation
+    }
   };
 
   // Handle form submission
   const handleSubmit = () => {
     setLoading(true);
-
-    // Simulate an API call or form processing
     setTimeout(() => {
-      console.log('Form submitted:', { documentName });
+      console.log('Form submitted:', inputs);
       setLoading(false);
-      handleOnClose(); // Close modal after form submission
+      handleOnClose();
     }, 1000);
   };
 
@@ -53,23 +97,26 @@ export function AddEditDocument({ data, mode = 'add', handleOnClose, open }) {
 
   return (
     <ModalWrapper isOpen={open} toggle={handleOnClose} title={title}>
-      <div className="p-4">
-        {/* Document Name Input */}
+      <div className="flex flex-col gap-4">
         <Input
-          value={documentName}
+          value={inputs.documentNameEnglish}
           onChange={handleInputChange}
-          title="Document Name"
-          placeholder="Enter document name" // Show error message for validation
+          title="Document Name English"
+          error={errors.documentNameEnglish}
+          name="documentNameEnglish"
+        />
+        <Input
+          value={inputs.documentNameArabic}
+          onChange={handleInputChange}
+          title="Document Name Arabic"
+          error={errors.documentNameArabic}
+          name="documentNameArabic"
+          disabled={true} // Document name in Arabic should be read-only while translating
         />
 
         {/* Submit Button */}
-        <div className="mt-4">
-          <Button
-            onClick={handleSubmit}
-            fullWidth
-            loading={loading}
-            disabled={loading}
-          >
+        <div className="flex justify-end mt-4">
+          <Button onClick={handleSubmit} loading={loading} disabled={loading}>
             Submit
           </Button>
         </div>

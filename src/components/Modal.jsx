@@ -13,7 +13,7 @@ export default function ModalWrapper({ children, isOpen, toggle, title }) {
         <Modal
             transitionProps={{ transition: 'fade', duration: 200 }}
             radius={'lg'}
-            size="lg"
+            size="md"
             centered
             opened={opened}
             onClose={handleModalClose}
