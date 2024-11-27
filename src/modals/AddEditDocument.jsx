@@ -4,8 +4,10 @@ import { Container, Loader, Button } from '@mantine/core';
 import Input from '@components/Input';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
+import { useTranslation } from "react-i18next";
 
 export function AddEditDocument({ data, mode = 'add', handleOnClose, open }) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('Add Document');
   const [errors, setErrors] = useState({
@@ -21,7 +23,7 @@ export function AddEditDocument({ data, mode = 'add', handleOnClose, open }) {
     documentNameArabic: "",
   });
 
-  // Debounced translate function to prevent excessive API calls
+
   const debouncedTranslate = debounce(async (text) => {
     try {
       const options = {
@@ -33,35 +35,40 @@ export function AddEditDocument({ data, mode = 'add', handleOnClose, open }) {
           'Content-Type': 'application/json',
         },
         data: {
-          from: 'en',  // Language code for source language
-          to: 'ar',    // Language code for target language
-          q: text,     // The text you want to translate
+          from: 'en', 
+          to: 'ar',    
+          q: text,    
         },
       };
       const response = await axios.request(options);
+      +
       setTranslatedText(response.data);
     } catch (err) {
       setError('Error translating text');
       console.error(err);
     }
-  }, 500); // Set a 500ms delay (can be adjusted as needed)
+  }, 500);
 
-  // Handle input change
   const handleInputChange = async (e) => {
     const { name, value } = e.target;
     setInputs((prev) => ({ ...prev, [name]: value }));
 
-    // If input is documentNameEnglish, trigger the debounced translate
     if (name === "documentNameEnglish") {
       setErrors((prev) => ({
         ...prev,
-        [name]: value.trim() === "" ? "This field is required" : "",
+        [name]: value.trim() === "" ? `${t('thisFieldIsRequired')}` : "",
       }));
-      debouncedTranslate(value); // Call debounced translation
+      debouncedTranslate(value);
+    }
+    if (name === "documentNameArabic") {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: value.trim() === "" ? `${t('thisFieldIsRequired')}` : "",
+      }));
+      debouncedTranslate(value);
     }
   };
 
-  // Handle form submission
   const handleSubmit = () => {
     setLoading(true);
     setTimeout(() => {
@@ -72,10 +79,16 @@ export function AddEditDocument({ data, mode = 'add', handleOnClose, open }) {
   };
 
   useEffect(() => {
-    const _title = mode === 'edit' ? 'Edit Document' : 'Add Document';
+    const _title = mode === 'edit' ? `${t('edit')} ${t('document')}` : `${t('add')} ${t('document')}`;
     setTitle(_title);
+    if (mode === 'edit' && data) {
+      setInputs({
+        documentNameEnglish: data.documentTypeEnglish || "",
+        documentNameArabic: data.documentTypeArabic || "",
+      });
+    }
     setLoading(false);
-  }, [mode]);
+  }, [mode, data, t]);
 
   if (loading) {
     return (
@@ -96,28 +109,28 @@ export function AddEditDocument({ data, mode = 'add', handleOnClose, open }) {
   }
 
   return (
-    <ModalWrapper isOpen={open} toggle={handleOnClose} title={title}>
-      <div className="flex flex-col gap-4">
+    <ModalWrapper isOpen={open} toggle={handleOnClose} title={title} size='md'>
+      <div className="flex flex-col gap-2">
         <Input
           value={inputs.documentNameEnglish}
           onChange={handleInputChange}
-          title="Document Name English"
+          title={`${t('documentName')} ${t('english')}`}
           error={errors.documentNameEnglish}
           name="documentNameEnglish"
+
         />
         <Input
           value={inputs.documentNameArabic}
           onChange={handleInputChange}
-          title="Document Name Arabic"
+          title={`${t('documentName')} ${t('arabic')}`}
           error={errors.documentNameArabic}
           name="documentNameArabic"
-          disabled={true} // Document name in Arabic should be read-only while translating
+          disabled={true}
         />
 
-        {/* Submit Button */}
         <div className="flex justify-end mt-4">
           <Button onClick={handleSubmit} loading={loading} disabled={loading}>
-            Submit
+            {t('submit')}
           </Button>
         </div>
       </div>

@@ -88,7 +88,7 @@ export function Layout() {
                         <Group justify='space-between' style={{flex: 1}}>
                             <div></div>
                             <Group pos={'right'}>
-                                <UserMenu showHideSettingsModel={() => showHideSettingsModel}/>
+                                <UserMenu showHideSettingsModel={() => showHideSettingsModel()}/>
                             </Group>
                         </Group>
                     </Group>

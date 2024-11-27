@@ -17,6 +17,7 @@
     "nothingFound": "Nothing found",
     "selectOrTypePlaceholder": "Search list",
     "edit": "Edit",
+    "add":"Add",
     "delete": "Delete",
     "records": "Records",
     "of": "of",
@@ -34,5 +35,10 @@
     "dark": "Dark",
     "signedInAs": "Signed In As",
     "noValueTextInput": "Phone number is required",
-    "invalidPhoneNumber": "Please enter a valid phone number"
+    "invalidPhoneNumber": "Please enter a valid phone number",
+    "submit":"Submit",
+    "enter":"Enter",
+    "english":"English",
+    "arabic":"Arabic",
+    "thisFieldIsRequired":"This field is required"
 }

@@ -1,7 +1,7 @@
 import { useDocumentTitle } from "@hooks/DocumentTitle";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
-import { Container} from '@mantine/core'
+import { Container,Text} from '@mantine/core'
 
 export default function AboutUs() {
   const { t } = useTranslation();
@@ -39,13 +39,13 @@ export default function AboutUs() {
         {t('aboutUs')}
         </h3>
 
-        <p className="text-base leading-relaxed">
+        <Text>
           At <span className="font-semibold !text-cPrimaryFilled">Health Alpha</span>,
           we are passionate about transforming the way individuals and families
           manage their health. Founded with the goal of bridging the gaps in
           healthcare accessibility and organization, our platform is the result
           of dedicated research and real-world healthcare insights.
-        </p>
+        </Text>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 rounded-lg shadow-md">
@@ -85,9 +85,9 @@ export default function AboutUs() {
 
         <div className="text-center">
           <div className="w-24 h-1 !text-cPrimaryFilled mx-auto mb-4"></div>
-          <h2 className="text-xl font-semibold ">
+          <Text size="lg">
             Your Health, Your Way
-          </h2>
+          </Text>
         </div>
       </div>
     </Container>
