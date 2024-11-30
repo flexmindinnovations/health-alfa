@@ -1,31 +1,31 @@
-import {DataTable} from 'mantine-datatable'
-import {Button, Tooltip, useMantineTheme} from '@mantine/core'
-import {useTranslation} from 'react-i18next'
-import {useState} from 'react'
-import {Plus, SquarePen, Trash2} from 'lucide-react'
+import { DataTable } from 'mantine-datatable'
+import { Button, Tooltip, useMantineTheme } from '@mantine/core'
+import { useTranslation } from 'react-i18next'
+import { useState } from 'react'
+import { Plus, SquarePen, Trash2 } from 'lucide-react'
 import styles from '@styles/DataTableWrapper.module.css'
 
 export function DataTableWrapper({
-                                     loading,
-                                     columns = [],
-                                     dataSource = [],
-                                     showAddButton = false,
-                                     showFilter = false,
-                                     addTitle = '',
-                                     id,
-                                     handleOnAdd,
-                                     handleOnEdit,
-                                     handleOnDelete
-                                 }) {
+    loading,
+    columns = [],
+    dataSource = [],
+    showAddButton = false,
+    showFilter = false,
+    addTitle = '',
+    id,
+    handleOnAdd,
+    handleOnEdit,
+    handleOnDelete
+}) {
     const [pagination, setPagination] = useState({
         page: 1,
         pageSize: 15,
-        sortStatus: {columnAccessor: 'name', direction: 'asc'}
+        sortStatus: { columnAccessor: 'name', direction: 'asc' }
     })
 
     const PAGE_SIZES = [10, 15, 20]
     const theme = useMantineTheme()
-    const {t, i18n} = useTranslation()
+    const { t, i18n } = useTranslation()
 
     const handleEdit = record => handleOnEdit(record)
     const handleDelete = record => handleOnDelete(record)
@@ -35,18 +35,18 @@ export function DataTableWrapper({
         title: t('action'),
         width: 100,
         render: record => (
-            <div style={{display: 'flex', gap: '10px'}}>
+            <div style={{ display: 'flex', gap: '10px' }}>
                 <Tooltip label={t('edit')}>
                     <SquarePen
                         size={16}
-                        style={{cursor: 'pointer', color: theme.primaryColor}}
+                        style={{ cursor: 'pointer', color: theme.primaryColor }}
                         onClick={() => handleEdit(record)}
                     />
                 </Tooltip>
                 <Tooltip label={t('delete')}>
                     <Trash2
                         size={16}
-                        style={{cursor: 'pointer', color: 'red'}}
+                        style={{ cursor: 'pointer', color: 'red' }}
                         onClick={() => handleDelete(record)}
                     />
                 </Tooltip>
@@ -61,7 +61,8 @@ export function DataTableWrapper({
                 <div className='search-filter flex-1 flex items-center justify-end gap-2'></div>
                 <div className={`${styles.dataTableWrapper}`}>
                     {showAddButton && (
-                        <Button leftSection={<Plus size={16}/>} onClick={handleOnAdd}>
+                        <Button leftSection={<Plus size={16} />}
+                            onClick={handleOnAdd}>
                             {addTitle}
                         </Button>
                     )}
@@ -88,18 +89,18 @@ export function DataTableWrapper({
                 paginationActiveBackgroundColor='grape'
                 recordsPerPage={pagination.pageSize}
                 page={pagination.page}
-                onPageChange={page => setPagination(prev => ({...prev, page}))}
+                onPageChange={page => setPagination(prev => ({ ...prev, page }))}
                 recordsPerPageOptions={PAGE_SIZES}
                 onRecordsPerPageChange={pageSize =>
-                    setPagination(prev => ({...prev, pageSize}))
+                    setPagination(prev => ({ ...prev, pageSize }))
                 }
                 sortStatus={pagination.sortStatus}
                 onSortStatusChange={sortStatus =>
-                    setPagination(prev => ({...prev, sortStatus}))
+                    setPagination(prev => ({ ...prev, sortStatus }))
                 }
                 paginationSize='md'
                 loadingText={`${t('loading')}...`}
-                paginationText={({from, to, totalRecords}) =>
+                paginationText={({ from, to, totalRecords }) =>
                     `${t('records')} ${from} - ${to} ${t('of')} ${totalRecords}`
                 }
             />

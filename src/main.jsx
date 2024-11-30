@@ -20,8 +20,8 @@ export const notificationAudio = new Audio('/sounds/notification.wav')
 notificationAudio.load()
 
 const theme = createTheme({
-    fontFamily: `'Poppins', sans-serif`,
-    headings: { fontFamily: `'Poppins', sans-serif` },
+    // fontFamily: `'Poppins', sans-serif`,
+    // headings: { fontFamily: `'Poppins', sans-serif` },
     colors: {
         brand: [
             '#effafc', '#d6f1f7', '#b2e4ef', '#7dcee3', '#41b0cf',
@@ -45,7 +45,25 @@ const theme = createTheme({
                 type: 'ring',
                 size: 'xl'
             }
-        })
+        }),
+        Button: {
+            defaultProps: {
+                radius: 'sm',
+                loaderProps: { h: '48px', w: '48px' }
+            },
+        },
+        Modal: {
+            defaultProps: {
+                styles: {
+                    inner: {
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        translate: '-50% -50%'
+                    }
+                }
+            }
+        }
     }
 })
 

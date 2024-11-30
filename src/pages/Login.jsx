@@ -172,13 +172,10 @@ export default function Login() {
                                         }}
                                     />
                                     <Button
-                                        radius={'md'}
                                         disabled={!form.isValid()}
                                         size='md'
                                         my={20}
-                                        loaderProps={{ h: '48px', w: '48px' }}
                                         loading={loading}
-                                        autoContrast
                                         onClick={handleFormSubmit}
                                     >
                                         Login

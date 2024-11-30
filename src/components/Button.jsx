@@ -1,6 +1,21 @@
 import { Button } from "@mantine/core";
-export function CButton(props) {
+
+/**
+ * @typedef {import("@mantine/core").ButtonProps} ButtonProps
+ */
+
+/**
+ * Custom Button component
+ * @param {ButtonProps & { title?: string }} props - Props for the component
+ */
+export function CButton({ children, ...rest }) {
     return (
-        <Button className="!rounded-xl"  {...props}></Button>
-    )
+        <Button
+            loaderProps={{ h: '48px', w: '48px' }}
+            radius={"md"}
+            {...rest}
+        >
+            {children}
+        </Button>
+    );
 }
