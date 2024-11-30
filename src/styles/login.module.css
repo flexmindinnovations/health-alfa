@@ -1,5 +1,5 @@
 .loginPage {
-  background: linear-gradient(
+  /* background: linear-gradient(
     45deg,
     #143345,
     #224557,
@@ -11,8 +11,9 @@
     #224557,
     #143345
   );
-  background-size: 1200% 1200%; /* Larger background size to make gradient smoother */
-  animation: gradientAnimation 12s ease infinite; /* Slow down animation for smoother transition */
+  background-size: 1200% 1200%; */
+  background-color: #143345;
+  animation: gradientAnimation 12s ease infinite;
   height: 100vh;
   margin: 0;
   display: flex;
@@ -20,6 +21,7 @@
   align-items: center;
   font-family: Arial, sans-serif;
   color: white;
+  @apply p-4 lg:p-40 xl:p-40 2xl:p-40
 }
 
 @keyframes gradientAnimation {
@@ -39,5 +41,5 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }

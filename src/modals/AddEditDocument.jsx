@@ -9,9 +9,7 @@ export function AddEditDocument ({ data, mode = 'add' | 'edit', handleOnClose, o
   const form = useForm({
       mode: "controlled",
       initialValues: {
-
       },
-      va
   });
 
   useEffect(() => {

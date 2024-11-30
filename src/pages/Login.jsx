@@ -1,184 +1,194 @@
 import styles from '../styles/login.module.css'
+import { Button, Card, Stack, Center, Image, PasswordInput, Text, useMantineTheme } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import { useForm } from '@mantine/form'
-import { Button, Card, Text, useMantineTheme, Divider } from '@mantine/core'
-import { useState, useEffect } from 'react'
-import http from '@hooks/axios-instance.js'
+import { useState } from 'react';
+import useHttp from '@hooks/axios-instance.js'
 import { useApiConfig } from '@contexts/ApiConfigContext.jsx'
-import toast from 'react-hot-toast'
-import { Lock } from 'lucide-react'
-import { motion, useInView } from 'framer-motion'
+import { openNotificationWithSound } from '@config/Notifications'
 import { GlobalPhoneInput } from '@components/PhoneInput'
-import { debounce } from 'underscore'
-import { OtpInput } from '@components/OTPInput'
-import { zodResolver } from 'mantine-form-zod-resolver'
-import { z } from 'zod'
+import Logo from '/images/logo.png';
+import { zodResolver } from 'mantine-form-zod-resolver';
+import { z } from 'zod';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 
-export default function Login () {
-  const { ref, inView } = useInView({
-    threshold: 0.4
-  })
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false)
-  const [isValidNumber, setIsValidNumber] = useState(false)
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [isOtpSent, setIsOtpSent] = useState(false)
-  const [apiState, setApiState] = useState('primary')
-  const [otp, setOtp] = useState('')
-  const theme = useMantineTheme()
-  const apiConfig = useApiConfig()
+const emailSchema = z.string().min(3, { message: "Atleast 3 chars" });
+const phoneNumberSchema = z.string().refine(
+    (value) => {
+        const phoneNumber = parsePhoneNumberFromString(value);
+        return phoneNumber?.isValid() || false;
+    },
+    { message: "Please enter a valid phone number" }
+);
 
-  const handlePhoneNumberChange = data => {
-    const { value, isValidNumber } = data
-    setIsValidNumber(isValidNumber)
-    setPhoneNumber(value)
-  }
+const passwordSchema = z.string().min(3, "Password must be at least 3 characters long.")
+const loginSchema = z.object({
+    userName: z.string().refine(
+        (value) => {
+            const trimmedValue = value.trim();
+            const isPhoneNumber = /^\d|\+/.test(trimmedValue);
+            if (!isPhoneNumber) {
+                return emailSchema.safeParse(trimmedValue).success;
+            } else {
+                return phoneNumberSchema.safeParse(value).success;
+            }
+        },
+        { message: "Please enter a valid username" }
+    ),
+    userPassword: passwordSchema
+})
 
-  const handleCountryChange = e => {
-    setSelectedCountry(e)
-  }
+export default function Login() {
+    const form = useForm({
+        initialValues: {
+            userName: '',
+            userPassword: ''
+        },
+        validateInputOnBlur: true,
+        validateInputOnChange: true,
+        validate: zodResolver(loginSchema)
+    });
 
-  const verifyPhoneNumber = async () => {
-    setIsLoading(true)
-    const phoneData = form.values.phoneNumber
-    const payload = {
-      country: phoneData.country,
-      phone: phoneData.value
+    const [visible, { toggle }] = useDisclosure(false);
+    const theme = useMantineTheme()
+    const { apiConfig } = useApiConfig()
+    const [loading, setLoading] = useState(false);
+    const http = useHttp();
+    const navigate = useNavigate();
+
+    const handleCountryChange = (selected) => {
+        const { userName } = form.getValues();
+        const formattedValue = userName.trim();
+        if (formattedValue) {
+            const isPhoneNumber = /^\d|\+/.test(formattedValue);
+            if (isPhoneNumber && !formattedValue.startsWith(selected.label)) {
+                const updatedValue = formattedValue.replace(/^\+?/, '');
+                form.setFieldValue('userName', updatedValue);
+                form.validateField('userName');
+            } else {
+                form.setFieldValue('userName', formattedValue);
+                form.validateField('userName');
+            }
+        }
+        form.validateField('userName');
+    };
+
+    const handleUsernameChange = (event) => {
+        const { value } = event;
+        form.setFieldValue('userName', value);
+        form.validateField('userName');
     }
 
-    try {
-      const response = await http.post(apiConfig.user.verifyPhone, payload)
-      if (response.data && response.data.isRegistered) {
-        setIsPhoneVerified(true) // Phone is verified, show OTP input
-        toast.success('Phone number verified! Please enter OTP.')
-      } else {
-        toast.error('Phone number not registered.')
-        setIsPhoneVerified(false)
-      }
-    } catch (error) {
-      toast.error('Error verifying phone number.')
-    } finally {
-      setIsLoading(false)
+    const handleFormSubmit = (event) => {
+        event.preventDefault();
+        setLoading(true);
+        const formValue = form.values;
+
+        http.post(apiConfig.auth.login, formValue)
+            .then((response) => {
+                const { data } = response;
+                if (data) {
+                    const { token } = data;
+                    localStorage.setItem('token', token)
+                    openNotificationWithSound({
+                        title: 'Success',
+                        message: 'You have been successfully verified',
+                        color: theme.colors.brand[9]
+                    }, 'success')
+                    navigate('/')
+                }
+            }).catch(error => {
+                openNotificationWithSound({
+                    title: error.name,
+                    message: error.message,
+                    color: theme.colors.red[6]
+                }, 'error')
+            }).finally(() => {
+                setLoading(false);
+            })
     }
-  }
 
-  // Handle OTP sending after phone verification
-  const sendOtp = async () => {
-    setIsLoading(true)
-    const phoneData = form.values.phoneNumber
-    const payload = {
-      country: phoneData.country,
-      phone: phoneData.value
-    }
-
-    try {
-      const response = await http.post(apiConfig.user.sendOtp, payload)
-      if (response.data && response.data.otpSent) {
-        setIsOtpSent(true) // OTP sent successfully
-        toast.success('OTP sent to your phone.')
-      } else {
-        toast.error('Failed to send OTP.')
-      }
-    } catch (error) {
-      toast.error('Error sending OTP.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  // Handle OTP form submission
-  const handleOtpSubmit = () => {
-    if (otp.length === 6) {
-      alert('OTP Submitted: ' + otp)
-    } else {
-      toast.error('Please enter a valid 6-digit OTP.')
-    }
-  }
-
-  return (
-    <div className={styles.loginPage}>
-      <div className={styles.overlay}>
-        <motion.div
-          layout
-          ref={ref}
-          animate={{ height: 'auto' }}
-          initial='hidden'
-          whileInView='visible'
-          viewport={{ once: true }}
-          transition={{ delay: 0.1, duration: 0.5 }}
-          variants={{
-            visible: { opacity: 1, scale: 1 },
-            hidden: { opacity: 0, scale: 0.9 }
-          }}
-          style={{ overflow: 'hidden' }}
-        >
-          <Card p={theme.spacing.xl} className='min-h-80' radius={'lg'}>
-            <Card.Section p={theme.spacing.sm}>
-              <Text align='center' fz={'h3'} fw={'bold'}>
-                Welcome Back!
-              </Text>
-              <Text fz={'h5'}>Enter Your Phone Number to Get OTP</Text>
-            </Card.Section>
-            <Card.Section>
-                <Divider/>
-            </Card.Section>
-            <Card.Section p={theme.spacing.sm} className='flex-1 !flex items-center justify-center'>
-              <form
-                onSubmit={e => {
-                  e.preventDefault()
-                  if (!isPhoneVerified) {
-                    verifyPhoneNumber()
-                  } else if (!isOtpSent) {
-                    sendOtp()
-                  } else {
-                    handleOtpSubmit()
-                  }
-                }}
-                className='flex flex-1 flex-col h-full w-full justify-center items-center space-y-6'
-              >
-                {!isPhoneVerified && (
-                  <GlobalPhoneInput
-                    defaultValue={'IN'}
-                    label='Phone Number'
-                    onChange={data => handlePhoneNumberChange(data)}
-                  />
-                )}
-
-                {/* OTP Input */}
-                {isPhoneVerified && isOtpSent && (
-                  <>
-                    <OtpInput length={6} onChange={setOtp} />{' '}
-                    {/* OTP Input Component */}
-                    <Button
-                      variant='solid'
-                      radius='md'
-                      fullWidth
-                      size='md'
-                      color={apiState}
-                      type='submit'
-                      loading={isLoading}
-                    >
-                      Submit OTP
-                    </Button>
-                  </>
-                )}
-
-                <Button
-                  variant='solid'
-                  radius='md'
-                  fullWidth
-                  size='md'
-                  color={apiState}
-                  type='submit'
-                  loading={isLoading}
-                  disabled={!isValidNumber}
+    return (
+        <div className={styles.loginPage}>
+            <div className={styles.overlay}>
+                <motion.div
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    style={{ height: 'auto', overflow: 'hidden' }}
                 >
-                  Get OTP
-                </Button>
-              </form>
-            </Card.Section>
-          </Card>
-        </motion.div>
-      </div>
-    </div>
-  )
+                    <Card p={0} className='min-h-80 min-w-96 lg:min-h-[62vh] lg:max-w-96' radius={'lg'}>
+                        <Card.Section mx={'auto'} my={10}>
+                            <Stack className='w-full' align='center' gap={0}>
+                                <Center>
+                                    <Image
+                                        bd={1}
+                                        h={120}
+                                        w={120}
+                                        fit='scale-down'
+                                        src={Logo}
+                                    />
+                                </Center>
+                            </Stack>
+                        </Card.Section>
+                        <Card.Section className='w-full !mx-auto'>
+                            <Stack className='w-full py-2' align='center' gap={0}>
+                                <Text align='center' className='w-full m-0' fz={'h3'} fw={'bold'}>
+                                    Welcome Back!
+                                </Text>
+                                <Text className='w-full text-center' fz={'h6'} opacity={0.8}>Enter Your Phone Number to Get OTP</Text>
+                            </Stack>
+                        </Card.Section>
+                        <Card.Section className='w-full !mx-auto' px={30}>
+                            <form onSubmit={handleFormSubmit}>
+                                <Stack my={20} gap={20}>
+                                    <GlobalPhoneInput
+                                        {...form.getInputProps('userName')}
+                                        label='Username'
+                                        withAsterisk
+                                        onChange={handleUsernameChange}
+                                        onCountryChange={handleCountryChange}
+                                        styles={{
+                                            label: {
+                                                fontWeight: 'inherit',
+                                                fontSize: '14px'
+                                            }
+                                        }}
+                                    />
+                                    <PasswordInput
+                                        {...form.getInputProps('userPassword')}
+                                        label='Password'
+                                        withAsterisk
+                                        size='md'
+                                        radius={'md'}
+                                        onVisibilityChange={toggle}
+                                        styles={{
+                                            label: {
+                                                fontWeight: 'inherit',
+                                                fontSize: '14px'
+                                            }
+                                        }}
+                                    />
+                                    <Button
+                                        radius={'md'}
+                                        disabled={!form.isValid()}
+                                        size='md'
+                                        my={20}
+                                        loaderProps={{ h: '48px', w: '48px' }}
+                                        loading={loading}
+                                        autoContrast
+                                        onClick={handleFormSubmit}
+                                    >
+                                        Login
+                                    </Button>
+                                </Stack>
+                            </form>
+                        </Card.Section>
+                    </Card>
+                </motion.div>
+            </div>
+        </div >
+    )
 }

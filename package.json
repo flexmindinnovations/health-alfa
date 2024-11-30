@@ -10,10 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mantine/core": "^7.13.5",
-    "@mantine/form": "^7.13.5",
-    "@mantine/hooks": "^7.13.5",
-    "@mantine/modals": "^7.13.5",
+    "@mantine/core": "^7.14.3",
+    "@mantine/form": "^7.14.3",
+    "@mantine/hooks": "^7.14.3",
+    "@mantine/modals": "^7.14.3",
+    "@mantine/notifications": "^7.14.3",
     "@mantinex/mantine-logo": "^1.0.1",
     "@nextui-org/react": "^2.4.8",
     "axios": "^1.7.7",
@@ -33,7 +34,7 @@
     "react-hot-toast": "^2.4.1",
     "react-i18next": "^15.1.1",
     "react-phone-number-input": "^3.4.9",
-    "react-router-dom": "^6.27.0",
+    "react-router-dom": "^6.28.0",
     "react-world-flags": "^1.6.0",
     "underscore": "^1.13.7",
     "zod": "^3.23.8"
