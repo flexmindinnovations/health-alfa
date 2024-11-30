@@ -17,6 +17,7 @@
   "nothingFound": "لم يتم العثور على شيء",
   "selectOrTypePlaceholder": "ابحث في القائمة",
   "edit": "تعديل",
+  "add": "إضافة",
   "delete": "حذف",
   "records": "السجلات",
   "of": "من",
@@ -32,5 +33,10 @@
   "auto": "تلقائي",
   "light": "فاتح",
   "dark": "داكن",
-  "signedInAs":"تسجيل الدخول باسم"
+  "signedInAs":"تسجيل الدخول باسم",
+  "submit": "إرسال",
+  "enter": "أدخل",
+  "english": "الإنجليزية",
+  "arabic": "العربية",
+  "thisFieldIsRequired": "هذا الحقل مطلوب"
 }

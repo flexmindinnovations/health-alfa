@@ -1,7 +1,7 @@
 import { useDisclosure } from '@mantine/hooks';
 import { Modal } from '@mantine/core';
 
-export default function ModalWrapper({ children, isOpen, toggle, title }) {
+export default function ModalWrapper({ children, isOpen, toggle, title,size="lg" }) {
     const [opened, { open, close }] = useDisclosure(isOpen);
 
     const handleModalClose = () => {
@@ -13,7 +13,7 @@ export default function ModalWrapper({ children, isOpen, toggle, title }) {
         <Modal
             transitionProps={{ transition: 'fade', duration: 200 }}
             radius={'lg'}
-            size="lg"
+            size={size}
             centered
             opened={opened}
             onClose={handleModalClose}
