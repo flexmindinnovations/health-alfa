@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import ModalWrapper from "@components/Modal";
 import { Stack, Container, Loader, Button } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -6,18 +6,27 @@ import Input from "@components/Input";
 import { z } from "zod";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { Save } from "lucide-react";
-import axios from "axios";
 import { useTranslation } from "react-i18next";
-
-const addEditDocumentSchema = z.object({
-  documentNameEnglish: z.string().min(1, { message: "English name is required" }),
-  documentNameArabic: z.string().min(1, { message: "Arabic name is required" }),
-});
+import { useApiConfig } from "@contexts/ApiConfigContext";
+import useHttp from "@hooks/axios-instance";
+import _ from "underscore";
 
 export function AddEditDocument({ data, mode = "add", handleOnClose, open }) {
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
+  const { apiConfig } = useApiConfig();
+  const http = useHttp();
+  const [disableFormField, setDisableFormField] = useState({
+    documentNameEnglish: false,
+    documentNameArabic: false
+  })
+
+  const addEditDocumentSchema = z.object({
+    documentNameEnglish: z.string().min(1, { message: t('englishNameIsRequired') }),
+    documentNameArabic: z.string().min(1, { message: t('arabicNameIsRequired') }),
+  });
+
 
   const form = useForm({
     initialValues: {
@@ -29,44 +38,62 @@ export function AddEditDocument({ data, mode = "add", handleOnClose, open }) {
     validateInputOnChange: true,
   });
 
-  const handleTranslate = async (text) => {
-    try {
-      const response = await axios.post(
-        "https://rapid-translate-multi-traduction.p.rapidapi.com/t",
-        { from: "en", to: "ar", q: text },
-        {
-          headers: {
-            "x-rapidapi-key": "YOUR_API_KEY",
-            "x-rapidapi-host": "rapid-translate-multi-traduction.p.rapidapi.com",
-            "Content-Type": "application/json",
-          },
+  const translateText = async (disabledKey, text, targetLanguage) => {
+    if (text) {
+      try {
+        const response = await http.post(
+          apiConfig.translate,
+          JSON.stringify({
+            q: text,
+            source: "auto",
+            target: targetLanguage,
+            format: "text",
+            alternatives: 3,
+          }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+
+        if (response?.data?.translatedText) {
+          form.setFieldValue(disabledKey, response.data.translatedText);
         }
-      );
-      form.setFieldValue("documentNameArabic", response.data.translatedText);
-    } catch (error) {
-      console.error("Translation error", error);
+      } catch (error) {
+        console.error("Translation error", error);
+      }
     }
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    console.log("Form submitted:", form.values);
-    // setTimeout(() => {
-    //   setLoading(false);
-    //   handleOnClose();
-    // }, 1000);
+  const debouncedTranslateText = useCallback(
+    _.debounce((disabledKey, nextValue, targetLanguage) => {
+      translateText(disabledKey, nextValue, targetLanguage)
+    }, 500)
+    , []);
+
+  const handleTextChange = (disabledKey, value, targetLanguage) => {
+    debouncedTranslateText(disabledKey, value, targetLanguage);
   };
 
-  // useEffect(() => {
-  //   setTitle(mode === "edit" ? `${t("edit")} ${t("document")}` : `${t("add")} ${t("document")}`);
-  //   if (mode === "edit" && data) {
-  //     form.setValues({
-  //       documentNameEnglish: data.documentTypeEnglish || "",
-  //       documentNameArabic: data.documentTypeArabic || "",
-  //     });
-  //   }
-  //   setLoading(false);
-  // }, [mode, data, t]);
+  const handleSubmit = async () => {
+    // setLoading(true);
+    console.log("Form submitted:", form.values);
+  };
+
+  useEffect(() => {
+    setTitle(mode === "edit" ? `${t("edit")} ${t("document")}` : `${t("add")} ${t("document")}`);
+
+    const { documentNameEnglish, documentNameArabic } = form.values;
+    const lng = i18n.language;
+    const sourceText = lng === 'en' ? documentNameEnglish : documentNameArabic;
+    const targetLanguage = lng === 'en' ? 'ar' : 'en';
+    const disabledKey = lng === 'en' ? 'documentNameArabic' : 'documentNameEnglish';
+    setDisableFormField((val) => ({
+      ...val,
+      [disabledKey]: true,
+    }));
+    if (sourceText)
+      handleTextChange(disabledKey, sourceText, targetLanguage)
+
+    setLoading(false);
+  }, [mode, data, t, i18n.language, form.values]);
 
   if (loading) {
     return (
@@ -90,15 +117,22 @@ export function AddEditDocument({ data, mode = "add", handleOnClose, open }) {
           {...form.getInputProps("documentNameEnglish")}
           title={`${t("documentName")} ${t("english")}`}
           withAsterisk
-        // onBlur={(e) => handleTranslate(e.target.value)}
+          // disabled={disableFormField.documentNameEnglish}
         />
         <Input
           {...form.getInputProps("documentNameArabic")}
           title={`${t("documentName")} ${t("arabic")}`}
           withAsterisk
+          // disabled={disableFormField.documentNameArabic}
+          styles={{
+            input: {
+              textAlign: 'right',
+              direction: 'rtl'
+            }
+          }}
         />
 
-        <div className="flex justify-end mt-4">
+        <div className={`flex ${i18n.language === 'en' ? 'justify-end' : 'justify-start'} mt-4`}>
           <Button
             onClick={handleSubmit}
             leftSection={<Save size={16} />}

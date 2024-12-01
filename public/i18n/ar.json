@@ -33,10 +33,12 @@
   "auto": "تلقائي",
   "light": "فاتح",
   "dark": "داكن",
-  "signedInAs":"تسجيل الدخول باسم",
+  "signedInAs": "تسجيل الدخول باسم",
   "submit": "إرسال",
   "enter": "أدخل",
   "english": "الإنجليزية",
   "arabic": "العربية",
-  "thisFieldIsRequired": "هذا الحقل مطلوب"
+  "thisFieldIsRequired": "هذا الحقل مطلوب",
+  "englishNameIsRequired": "الاسم الانكليزي مطلوب",
+  "arabicNameIsRequired": "الاسم العربي مطلوب"
 }

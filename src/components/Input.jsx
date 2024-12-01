@@ -29,6 +29,7 @@ export default function Input({
         value={value}
         error={error}
         onChange={onChange}
+        size="md"
         autoComplete="off"
         classNames={{
           input: `w-full px-3 pt-4 pb-2 text-sm border rounded-md ${isArabic ? "text-right" : "text-left"

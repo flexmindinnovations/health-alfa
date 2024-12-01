@@ -40,5 +40,7 @@
     "enter":"Enter",
     "english":"English",
     "arabic":"Arabic",
-    "thisFieldIsRequired":"This field is required"
+    "thisFieldIsRequired":"This field is required",
+    "englishNameIsRequired": "English name is required",
+    "arabicNameIsRequired": "Arabic name is required"
 }

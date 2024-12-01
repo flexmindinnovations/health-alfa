@@ -2,6 +2,7 @@ import { createContext, useContext } from 'react'
 import { useDirection } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 const defaultApiConfig = {
+  translate: `http://localhost:5000/translate`,
   auth: {
     login: '/User/SignIn',
     register: '',

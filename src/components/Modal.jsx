@@ -38,7 +38,7 @@ export default function ModalWrapper({
             styles={{
                 title: {
                     fontWeight: 'bold',
-                    fontSize: theme.fontSizes.md
+                    fontSize: theme.fontSizes.sm
                 }
             }}
             {...rest}
