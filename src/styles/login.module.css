@@ -12,8 +12,14 @@
     #143345
   );
   background-size: 1200% 1200%; */
-  background-color: #143345;
-  animation: gradientAnimation 12s ease infinite;
+  /* background-color: #143345; */
+  /* background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)),
+  url('../assets/images/box.svg'); */
+  background-image: url('../assets/images/login_bg.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  /* animation: gradientAnimation 12s ease infinite; */
   height: 100vh;
   margin: 0;
   display: flex;
@@ -21,7 +27,7 @@
   align-items: center;
   font-family: Arial, sans-serif;
   color: white;
-  @apply p-4 lg:p-40 xl:p-40 2xl:p-40
+  @apply p-4 lg:p-40 xl:p-40 2xl:p-40;
 }
 
 @keyframes gradientAnimation {
@@ -42,4 +48,13 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+}
+
+.loginInfoSection {
+  background-image: 
+    url('../assets/images/bubbles.svg');
+}
+.loginFormSection {
+  background-image: url('../assets/images/login_form.svg');
+  @apply bg-cover bg-no-repeat bg-center shadow-lg h-full;
 }

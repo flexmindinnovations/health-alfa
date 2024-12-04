@@ -46,6 +46,11 @@ const theme = createTheme({
                 size: 'xl'
             }
         }),
+        TextInput: {
+            defaultProps: {
+                radius: 'md'
+            }
+        },
         Button: {
             defaultProps: {
                 radius: 'sm',

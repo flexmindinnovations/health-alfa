@@ -1,23 +1,23 @@
-import { CheckIcon, Combobox, Group, Input, InputBase, Loader, useCombobox } from '@mantine/core'
+import {CheckIcon, Combobox, Group, Input, InputBase, Loader, useCombobox} from '@mantine/core'
 import cx from 'clsx'
-import { useTranslation } from 'react-i18next'
-import { createElement, useEffect, useState } from 'react'
+import {useTranslation} from 'react-i18next'
+import {createElement, useEffect, useState} from 'react'
 import classes from '@styles/ComboBox.module.css'
 
 export function ComboBoxComponent({
-    loading,
-    label,
-    dataSource = [],
-    defaultValue,
-    onValueChange,
-    props,
-    styles,
-    withinPortal = false,
-    left,
-    isPhoneInput = false,
-    minWidth
-}) {
-    const { t } = useTranslation()
+                                      loading,
+                                      label,
+                                      dataSource = [],
+                                      defaultValue,
+                                      onValueChange,
+                                      props,
+                                      styles,
+                                      withinPortal = false,
+                                      left,
+                                      isPhoneInput = false,
+                                      minWidth
+                                  }) {
+    const {t} = useTranslation()
     const [animating, setAnimating] = useState(false)
     const combobox = useCombobox({
         onDropdownClose: () => {
@@ -59,7 +59,7 @@ export function ComboBoxComponent({
             return (
                 <div className='flex items-center justify-start gap-2'>
                     {item.icon && typeof item.icon === 'string'
-                        ? createElement(item.icon, { size: 14 })
+                        ? createElement(item.icon, {size: 14})
                         : item.icon}
                     <span> {item.label}</span>
                 </div>
@@ -73,15 +73,15 @@ export function ComboBoxComponent({
         <Combobox.Option
             value={item.value}
             key={item.value}
-            className={cx({ [classes.animateOption]: animating })}
-            style={{ animationDelay: `${index * 50}ms`, width: '100%' }}
+            className={cx({[classes.animateOption]: animating})}
+            style={{animationDelay: `${index * 50}ms`, width: '100%'}}
         >
             <Group flex justify='space-between' className='min-w-10'>
                 <div className='flex items-center justify-start gap-2'>
                     {getLabel(item)}
                     {isPhoneInput && item.value}
                 </div>
-                {item.value === value && <CheckIcon opacity={'0.4'} size={12} />}
+                {item.value === value && <CheckIcon opacity={'0.4'} size={12}/>}
             </Group>
         </Combobox.Option>
     ))
@@ -122,10 +122,10 @@ export function ComboBoxComponent({
                     type='button'
                     pointer
                     className='!border-none'
-                    rightSection={loading ? <Loader size={14} /> : <Combobox.Chevron />}
+                    rightSection={loading ? <Loader size={14}/> : <Combobox.Chevron/>}
                     onClick={() => combobox.openDropdown()}
                     rightSectionPointerEvents='none'
-                    styles={{ ...styles }}
+                    styles={{...styles}}
                 >
                     {getLabel(selectedItem) || (
                         <Input.Placeholder>
