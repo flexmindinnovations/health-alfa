@@ -122,7 +122,7 @@ export default function Login() {
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     style={{ height: 'auto', width: '100%', overflow: 'hidden' }}
                 >
-                    <Card shadow='lg' className='!p-0 min-h-80 min-w-96 lg:h-[60vh] lg:w-[75%] lg:min-h-[62vh] flex flex-col lg:!flex-row-reverse' radius={'lg'}>
+                    <Card shadow='lg' className='!p-0 min-h-80 min-w-96 lg:h-[75vh] lg:w-[75%] lg:min-h-[62vh] flex flex-col lg:!flex-row-reverse' radius={'lg'}>
                         <Card.Section m={'auto'} className={`!flex flex-col ${styles.loginFormSection} flex-1 p-8`}>
                             <Card.Section className='w-full !mx-auto'>
                                 <Stack className='w-full py-2' align='center' gap={0}>
@@ -136,7 +136,7 @@ export default function Login() {
                             </Card.Section>
                             <Card.Section className='w-full flex-1 !mx-auto'>
                                 <form onSubmit={handleFormSubmit}>
-                                    <Stack my={20} gap={20}>
+                                    <Stack my={20} gap={10}>
                                         <GlobalPhoneInput
                                             {...form.getInputProps('userName')}
                                             label='Username'
