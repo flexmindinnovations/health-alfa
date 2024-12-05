@@ -1,4 +1,4 @@
-import {Container} from "@mantine/core";
+import {Button, Container} from "@mantine/core";
 import {useTranslation} from "react-i18next";
 import {useDocumentTitle} from "@hooks/DocumentTitle";
 import {HeroCarousel} from "@components/HeroCarousel.jsx";
