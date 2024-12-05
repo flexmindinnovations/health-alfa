@@ -222,21 +222,33 @@ export default function Login() {
                                 </Stack>
                             </Card.Section>
                         </Card.Section>
-                        <Card.Section m="auto" className={`${styles.loginInfoSection} flex-[2]`}
+                        <Card.Section
+                            m="auto"
+                            className={`${styles.loginInfoSection} flex-[2] relative`}
                             style={{
-                                height: '100%'
+                                height: '100%',
+                                position: 'relative', // Ensure this is set for absolute positioning inside
                             }}
                         >
-                            <Group className='w-full' p={'lg'} align='center' gap={0}>
+                            <Group className="w-full" p="lg" align="center" gap={0}>
                                 <Image
                                     bd={1}
                                     h={150}
                                     w={150}
-                                    fit='scale-down'
+                                    fit="scale-down"
                                     src={Logo}
                                 />
                             </Group>
+
+                            {/* Gradient at the bottom */}
+                            <div
+                                className="absolute bottom-0 left-0 w-full h-24 pointer-events-none"
+                                style={{
+                                    background: `linear-gradient(to bottom, transparent, ${theme.colors.brand[9]})`, // Use theme color directly
+                                }}
+                            />
                         </Card.Section>
+
                     </Card>
                 </motion.div>
             </div>
