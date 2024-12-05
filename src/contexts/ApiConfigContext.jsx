@@ -2,8 +2,12 @@ import { createContext, useContext } from 'react'
 import { useDirection } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 const defaultApiConfig = {
-  user: {
-    login: '',
+  appConfig: {
+    opacity: '0.4'
+  },
+  translate: `http://localhost:5000/translate`,
+  auth: {
+    login: '/User/SignIn',
     register: '',
     getUserDetails: ''
   },
@@ -18,7 +22,7 @@ const defaultApiConfig = {
 
 const ApiConfigContext = createContext({
   apiConfig: defaultApiConfig,
-  setPreferences: () => {}
+  setPreferences: () => { }
 })
 
 export const ApiConfigProvider = ({ children }) => {

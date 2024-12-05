@@ -25,6 +25,14 @@ export function UserMenu({showHideSettingsModel}) {
         i18n.changeLanguage(lng)
     }
 
+    const handleMenuItemClicked = (item) => {
+        switch(item) {
+            case 'settings':
+            showHideSettingsModel(true);
+            break;
+        }
+    }
+
     return (
         <div>
             <Menu shadow='md' width={250} radius='md' withArrow>
@@ -46,7 +54,7 @@ export function UserMenu({showHideSettingsModel}) {
                     <Menu.Divider/>
                     <Menu.Item
                         leftSection={<SettingsIcon size={14}/>}
-                        onClick={showHideSettingsModel(true)}
+                        onClick={() => handleMenuItemClicked('settings')}
                     >
                         {t('settings')}
                     </Menu.Item>

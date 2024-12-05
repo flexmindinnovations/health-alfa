@@ -1,25 +1,49 @@
-import { useDisclosure } from '@mantine/hooks';
-import { Modal } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
+import { Modal, useMantineTheme } from '@mantine/core';
 
-export default function ModalWrapper({ children, isOpen, toggle, title }) {
-    const [opened, { open, close }] = useDisclosure(isOpen);
+/**
+ * @typedef {import('@mantine/core').ModalProps & { title: string, isOpen: boolean, toggle: Function }} ModalWrapperProps
+ */
+
+/**
+ * ModalWrapper component that wraps the Mantine Modal component with additional customization
+ * @param {ModalWrapperProps} props - Props for the ModalWrapper component
+ */
+export default function ModalWrapper({
+    children,
+    isOpen,
+    toggle,
+    title,
+    size = "lg",
+    ...rest
+}) {
+    const isMobile = useMediaQuery('(max-width: 50em)');
+    const theme = useMantineTheme();
 
     const handleModalClose = () => {
-        close();
         toggle();
-    }
+    };
 
     return (
         <Modal
-            transitionProps={{ transition: 'fade', duration: 200 }}
-            radius={'lg'}
-            size="lg"
-            centered
-            opened={opened}
+            opened={isOpen}
             onClose={handleModalClose}
             title={title}
+            size={size}
+            fullScreen={isMobile}
+            centered
+            transitionProps={{ transition: 'fade', duration: 300, timingFunction: 'linear' }}
+            radius="lg"
+            withinPortal={true}
+            styles={{
+                title: {
+                    fontWeight: 'bold',
+                    fontSize: theme.fontSizes.sm
+                }
+            }}
+            {...rest}
         >
             {children}
         </Modal>
-    )
+    );
 }

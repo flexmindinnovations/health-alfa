@@ -1,166 +1,254 @@
-import styles from '../styles/login.module.css';
-import {useForm} from "react-hook-form";
-import {Button, Card, CardBody, CardHeader, Input, Link} from "@nextui-org/react";
-import {useState} from "react";
-import http from '@hooks/axios-instance.js';
-import {useApiConfig} from "@contexts/api-config.context";
-import toast from "react-hot-toast";
-import {Eye, EyeOff, Lock} from 'lucide-react';
-import {motion, useInView} from "framer-motion";
+import styles from '../styles/login.module.css'
+import { Button, Card, Center, Image, PasswordInput, Stack, Text, useMantineTheme, Checkbox, Group, Anchor } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import { useForm } from '@mantine/form'
+import { useState } from 'react';
+import useHttp from '@hooks/axios-instance.js'
+import { useApiConfig } from '@contexts/ApiConfigContext.jsx'
+import { openNotificationWithSound } from '@config/Notifications'
+import { GlobalPhoneInput } from '@components/PhoneInput'
+import Logo from '/images/logo.png';
+import { zodResolver } from 'mantine-form-zod-resolver';
+import { z } from 'zod';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next';
+import { useDocumentTitle } from '@hooks/DocumentTitle';
 
+const emailSchema = z.string().min(3, { message: "Atleast 3 chars" });
+const phoneNumberSchema = z.string().refine(
+    (value) => {
+        const phoneNumber = parsePhoneNumberFromString(value);
+        return phoneNumber?.isValid() || false;
+    },
+    { message: "Please enter a valid phone number" }
+);
+
+const passwordSchema = z.string().min(3, "Password must be at least 3 characters long.")
+const loginSchema = z.object({
+    userName: z.string().refine(
+        (value) => {
+            const trimmedValue = value.trim();
+            const isPhoneNumber = /^\d|\+/.test(trimmedValue);
+            if (!isPhoneNumber) {
+                return emailSchema.safeParse(trimmedValue).success;
+            } else {
+                return phoneNumberSchema.safeParse(value).success;
+            }
+        },
+        { message: "Please enter a valid username" }
+    ),
+    userPassword: passwordSchema
+})
 
 export default function Login() {
-    const { ref, inView } = useInView({
-        threshold: .8
-    })
-    const {
-        register,
-        handleSubmit,
-        formState: {
-            errors,
-            isValid
-        }, trigger
-    }
-        = useForm({mode: "onChange"});
+    const form = useForm({
+        initialValues: {
+            userName: '',
+            userPassword: ''
+        },
+        validateInputOnBlur: true,
+        validateInputOnChange: true,
+        validate: zodResolver(loginSchema)
+    });
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [apiState, setApiState] = useState("primary");
-    const [isVisible, setIsVisible] = useState(false);
-    const apiConfig = useApiConfig();
+    const [visible, { toggle }] = useDisclosure(false);
+    const theme = useMantineTheme()
+    const { apiConfig } = useApiConfig()
+    const [loading, setLoading] = useState(false);
+    const http = useHttp();
+    const navigate = useNavigate();
+    const { t } = useTranslation();
+    useDocumentTitle(t("login"));
 
-    const toggleVisibility = () => setIsVisible(!isVisible);
-
-    const onSubmit = async (data) => {
-        setIsLoading(true);
-        const payload = {
-            customerUserName: data["email"],
-            customerPassword: data["password"]
-        };
-        try {
-            const {data} = await http.post(apiConfig.user.login, payload);
-            if (data) {
-                console.log('data', data);
+    const handleCountryChange = (selected) => {
+        const { userName } = form.getValues();
+        const formattedValue = userName.trim();
+        if (formattedValue) {
+            const isPhoneNumber = /^\d|\+/.test(formattedValue);
+            if (isPhoneNumber && !formattedValue.startsWith(selected.label)) {
+                const updatedValue = formattedValue.replace(/^\+?/, '');
+                form.setFieldValue('userName', updatedValue);
+                form.validateField('userName');
+            } else {
+                form.setFieldValue('userName', formattedValue);
+                form.validateField('userName');
             }
-
-        } catch (error) {
-            const errorMessage = error.message;
-            toast.error(errorMessage);
-            setApiState("danger");
-        } finally {
-            setIsLoading(false);
         }
+        form.validateField('userName');
     };
 
-    const passwordToggleComponent = () => (
-        <button
-            className="focus:outline-none"
-            type="button"
-            onClick={toggleVisibility}
-            aria-label="toggle password visibility"
-        >
-            {isVisible ? (
-                <Eye className="text-2xl text-default-400 pointer-events-none"/>
-            ) : (
-                <EyeOff className="text-2xl text-default-400 pointer-events-none"/>
-            )}
-        </button>
-    );
+    const handleUsernameChange = (event) => {
+        const { value } = event;
+        form.setFieldValue('userName', value);
+        form.validateField('userName');
+    }
 
-    const getErrorMessage = (error) => error ? error.message : "";
+    const handleFormSubmit = (event) => {
+        event.preventDefault();
+        setLoading(true);
+        const formValue = form.values;
 
+        http.post(apiConfig.auth.login, formValue)
+            .then((response) => {
+                const { data } = response;
+                if (data) {
+                    const { token } = data;
+                    localStorage.setItem('token', token)
+                    openNotificationWithSound({
+                        title: 'Success',
+                        message: 'You have been successfully verified',
+                        color: theme.colors.brand[9]
+                    }, 'success')
+                    navigate('/')
+                }
+            }).catch(error => {
+                openNotificationWithSound({
+                    title: error.name,
+                    message: error.message,
+                    color: theme.colors.red[6]
+                }, 'error')
+            }).finally(() => {
+                setLoading(false);
+            })
+    }
 
     return (
         <div className={styles.loginPage}>
             <div className={styles.overlay}>
                 <motion.div
-                    layout
-                    ref={ref}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{once: true}}
-                    transition={{delay: 0.2, duration: 0.4}}
-                    variants={{
-                        visible: {opacity: 1, scale: 1},
-                        hidden: {opacity: 0, scale: 0}
-                    }}
-
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    className='flex items-center justify-center'
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    style={{ height: 'auto', width: '100%', overflow: 'hidden' }}
                 >
-                    <Card className="p-4 !rounded-3xl bg-white shadow-none min-w-96 !w-1/4">
-                        <CardHeader className="flex flex-col items-center justify-start gap-2">
-                            <motion.h1
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{once: true}}
-                                transition={{delay: 0.8, duration: 0.4}}
-                                variants={{
-                                    visible: {opacity: 1, x: 0},
-                                    hidden: {opacity: 0, x: "-30px"}
+                    <Card shadow='lg' className='!p-0 min-h-80 min-w-96 lg:h-[75vh] lg:w-[75%] lg:min-h-[62vh] flex flex-col lg:!flex-row-reverse' radius={'lg'}>
+                        <Card.Section m={'auto'} className={`!flex flex-col ${styles.loginFormSection} flex-1 p-8`}>
+                            <Card.Section className='w-full !mx-auto'>
+                                <Stack className='w-full py-2' align='center' gap={0}>
+                                    <Text align='center' className='w-full m-0' fz={'h3'} fw={'bold'}>
+                                        Sign In
+                                    </Text>
+                                    <Text className='w-full text-center' fz={'sm'}>
+                                        Welcome back, please enter your details
+                                    </Text>
+                                </Stack>
+                            </Card.Section>
+                            <Card.Section className='w-full flex-1 !mx-auto'>
+                                <form onSubmit={handleFormSubmit}>
+                                    <Stack my={20} gap={10}>
+                                        <GlobalPhoneInput
+                                            {...form.getInputProps('userName')}
+                                            label='Username'
+                                            withAsterisk
+                                            onChange={handleUsernameChange}
+                                            onCountryChange={handleCountryChange}
+                                            styles={{
+                                                label: {
+                                                    fontWeight: 'inherit',
+                                                    fontSize: '14px'
+                                                }
+                                            }}
+                                        />
+                                        <PasswordInput
+                                            {...form.getInputProps('userPassword')}
+                                            label='Password'
+                                            withAsterisk
+                                            size='md'
+                                            radius={'md'}
+                                            onVisibilityChange={toggle}
+                                            styles={{
+                                                label: {
+                                                    fontWeight: 'inherit',
+                                                    fontSize: '14px'
+                                                },
+                                                error: {
+                                                    fontSize: theme.fontSizes.xs
+                                                }
+                                            }}
+                                        />
+                                        <Group justify='space-between'>
+                                            <Checkbox
+                                                size='sm'
+                                                styles={{
+                                                    label: {
+                                                        cursor: 'pointer'
+                                                    }
+                                                }}
+
+                                                label="Remember Me"
+                                            />
+                                            <Anchor underline="hover" size='sm'>
+                                                Forgot Password
+                                            </Anchor>
+                                        </Group>
+                                        <Button
+                                            disabled={!form.isValid()}
+                                            size='md'
+                                            my={20}
+                                            loading={loading}
+                                            onClick={handleFormSubmit}
+                                        >
+                                            Sign In
+                                        </Button>
+                                        <Center className='w-full'>
+                                            <Text size='xs' styles={{
+                                                root: {
+                                                    textAlign: 'center'
+                                                }
+                                            }} className='opacity-70'>
+                                                By clicking on 'Sign In', you acknowledge the&nbsp;
+                                                <Anchor underline="always" size='xs'>
+                                                    Terms of Services
+                                                </Anchor>
+                                                &nbsp; and &nbsp;
+                                                <Anchor underline="always" size='xs'>
+                                                    Privacy Policy
+                                                </Anchor>
+                                            </Text>
+                                        </Center>
+                                    </Stack>
+                                </form>
+                            </Card.Section>
+                            <Card.Section>
+                                <Stack>
+                                    <Center>
+                                        <Text size='sm' opacity={apiConfig.appConfig.opacity}>
+                                            {t('brandName')} &copy; {t('since')} {2023}
+                                        </Text>
+                                    </Center>
+                                </Stack>
+                            </Card.Section>
+                        </Card.Section>
+                        <Card.Section
+                            m="auto"
+                            className={`${styles.loginInfoSection} flex-[2] relative`}
+                            style={{
+                                height: '100%',
+                                position: 'relative', // Ensure this is set for absolute positioning inside
+                            }}
+                        >
+                            <Group className="w-full" p="lg" align="center" gap={0}>
+                                <Image
+                                    bd={1}
+                                    h={150}
+                                    w={150}
+                                    fit="scale-down"
+                                    src={Logo}
+                                />
+                            </Group>
+
+                            {/* Gradient at the bottom */}
+                            <div
+                                className="absolute bottom-0 left-0 w-full h-24 pointer-events-none"
+                                style={{
+                                    background: `linear-gradient(to bottom, transparent, ${theme.colors.brand[9]})`, // Use theme color directly
                                 }}
-                                className="text-start w-full font-semibold text-2xl">
-                                Welcome Back!
-                            </motion.h1>
-                        </CardHeader>
-                        <CardBody>
-                            <form
-                                onSubmit={handleSubmit(onSubmit)}
-                                className="flex flex-1 flex-col h-full w-full justify-center items-center max-w-xs space-y-6"
-                            >
-                                <Input
-                                    {
-                                        ...register("email", {
-                                            required: "Username or mobile number is required",
-                                            pattern: {
-                                                value: /^[0-9]{10}$|^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                                message: "Please enter a valid mobile number or email address"
-                                            }
-                                        })}
-                                    type="text"
-                                    radius="lg"
-                                    label="Enter Username or Mobile Number"
-                                    isInvalid={!!errors.email}
-                                    errorMessage={getErrorMessage(errors.email)}
-                                    className="w-full"
-                                    onBlur={() => trigger("email")}
-                                />
-                                <Input
-                                    {...register("password", {
-                                        required: "Password is required",
-                                        minLength: {
-                                            value: 4,
-                                            message: "Password must be at least 4 characters"
-                                        }
-                                    })}
-                                    label="Password"
-                                    isInvalid={!!errors.password}
-                                    errorMessage={getErrorMessage(errors.password)}
-                                    endContent={passwordToggleComponent()}
-                                    type={isVisible ? "text" : "password"}
-                                    className="max-w-xs text-white w-full"
-                                    onBlur={() => trigger("password")}
-                                />
-                                <div className="w-full flex items-center justify-between">
-                                    <div className="rememberMe"></div>
-                                    <Button
-                                        startContent={isLoading ? "" : <Lock size={16}/>}
-                                        variant="solid"
-                                        radius="lg"
-                                        fullWidth
-                                        size="lg"
-                                        color={apiState}
-                                        type="submit"
-                                        isLoading={isLoading}
-                                        isDisabled={!isValid}
-                                    >
-                                        Login
-                                    </Button>
-                                </div>
-                                <div className="forgot-password flex flex-col w-full gap-2">
-                                    <Link href="/register">
-                                        <p className="text-sm w-full text-center font-semibold">Reset Password!</p>
-                                    </Link>
-                                </div>
-                            </form>
-                        </CardBody>
+                            />
+                        </Card.Section>
+
                     </Card>
                 </motion.div>
             </div>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useAuth } from "@contexts/auth.context.jsx";
+import { useAuth } from "@contexts/AuthContext.jsx";
 
 const useHttp = () => {
     const { isAuthenticated, getToken } = useAuth();
@@ -10,11 +10,17 @@ const useHttp = () => {
 
     http.interceptors.request.use(
         async (config) => {
-            const isLoggedIn = await isAuthenticated();
-            if (isLoggedIn) {
-                const token = await getToken();
-                config.headers.Authorization = `Bearer ${token}`;
+            const excludedEndpoints = [
+                'http://localhost:5000/',
+            ];
+            if (!excludedEndpoints.includes(config.url)) {
+                const isLoggedIn = await isAuthenticated();
+                if (isLoggedIn) {
+                    const token = await getToken();
+                    config.headers.Authorization = `Bearer ${token}`;
+                }
             }
+
             return config;
         },
         (error) => Promise.reject(error)
