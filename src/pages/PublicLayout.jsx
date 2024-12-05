@@ -109,7 +109,7 @@ export default function PublicLayout() {
             {/* Top Navbar Items */}
             <div className="flex md:hidden"></div>
             <Group>
-            <AspectRatio ratio={1600 / 900} mx='auto'>
+            <AspectRatio ratio={900 / 720} mx='auto'>
             <Image
               src={logo}
               alt='logo'
