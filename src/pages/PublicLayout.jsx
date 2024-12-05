@@ -113,7 +113,7 @@ export default function PublicLayout() {
             <Image
               src={logo}
               alt='logo'
-              className='!object-fill h-10 w-6'
+              className='!object-fill h-[60px]'
             />
             </AspectRatio>
             </Group>

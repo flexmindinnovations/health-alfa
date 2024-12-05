@@ -1,20 +1,21 @@
-import { StrictMode, Suspense } from 'react'
-import { createRoot } from 'react-dom/client'
+import {StrictMode, Suspense} from 'react'
+import {createRoot} from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import { BrowserRouter } from 'react-router-dom'
-import { ApiConfigProvider } from '@contexts/ApiConfigContext'
-import { AuthProvider } from '@contexts/AuthContext'
-import { ErrorBoundary } from '@components/ErrorBoundary'
-import { NextUIProvider } from '@nextui-org/react'
-import { DeviceProvider } from '@hooks/device-detector'
+import {BrowserRouter} from 'react-router-dom'
+import {ApiConfigProvider} from '@contexts/ApiConfigContext'
+import {AuthProvider} from '@contexts/AuthContext'
+import {ErrorBoundary} from '@components/ErrorBoundary'
+import {NextUIProvider} from '@nextui-org/react'
+import {DeviceProvider} from '@hooks/device-detector'
 import './i18n'
-import { createTheme, DirectionProvider, Loader, MantineProvider } from '@mantine/core'
-import { Notifications } from '@mantine/notifications'
+import {createTheme, DirectionProvider, Loader, MantineProvider} from '@mantine/core'
+import {Notifications} from '@mantine/notifications'
 import RingLoader from '@components/RingLoader'
 import '@mantine/core/styles.css'
 import 'mantine-datatable/styles.layer.css'
 import '@mantine/notifications/styles.css'
+import '@mantine/carousel/styles.css';
 
 export const notificationAudio = new Audio('/sounds/notification.wav')
 notificationAudio.load()
@@ -41,7 +42,7 @@ const theme = createTheme({
     components: {
         Loader: Loader.extend({
             defaultProps: {
-                loaders: { ...Loader.defaultLoaders, ring: RingLoader },
+                loaders: {...Loader.defaultLoaders, ring: RingLoader},
                 type: 'ring',
                 size: 'xl'
             }
@@ -54,7 +55,7 @@ const theme = createTheme({
         Button: {
             defaultProps: {
                 radius: 'sm',
-                loaderProps: { h: '48px', w: '48px' }
+                loaderProps: {h: '48px', w: '48px'}
             },
         },
         Modal: {
@@ -75,9 +76,9 @@ const theme = createTheme({
 function AppWrapper() {
     return (
         <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
-            <Notifications position='top-right' zIndex={9999} />
+            <Notifications position='top-right' zIndex={9999}/>
             <Suspense>
-                <App />
+                <App/>
             </Suspense>
         </MantineProvider>
     )
@@ -100,7 +101,7 @@ root.render(
                         <ApiConfigProvider>
                             <AuthProvider>
                                 <DeviceProvider>
-                                    <AppWrapper />
+                                    <AppWrapper/>
                                 </DeviceProvider>
                             </AuthProvider>
                         </ApiConfigProvider>
