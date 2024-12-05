@@ -1,5 +1,5 @@
 import {CButton} from "@components/Button.jsx";
-import {Container} from "@mantine/core";
+import {Button, Container} from "@mantine/core";
 import {useTranslation} from "react-i18next";
 import {useDocumentTitle} from "@hooks/DocumentTitle";
 import image from '/images/banner.jpg'
@@ -70,10 +70,10 @@ export default function Home() {
                         smooth, accessible, and stress-free.
                     </p>
                     <div className="mt-10">
-                        <CButton
+                        <Button
                             className="px-10 py-4 !bg-cPrimaryFilled rounded-full text-lg shadow-lg transition-all duration-300">
                             Get Started
-                        </CButton>
+                        </Button>
                     </div>
                 </section>
             </div>
