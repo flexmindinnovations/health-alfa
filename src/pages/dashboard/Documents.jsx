@@ -43,25 +43,24 @@ export default function Documents() {
     useEffect(() => {
         if (i18n.isInitialized) {
             setColumns(_columns);
-
-            const getDocumentList = async () => {
-                setLoading(true);
-                try {
-                    const response = await http.get(apiConfig.document.getList);
-                    if (response?.status === 200) {
-                        const data = response.data;
-                        setDataSource(data);
-                    }
-                } catch (err) {
-                    console.log(err);
-                } finally {
-                    setLoading(false);
-                }
-            };
-
             getDocumentList();
         }
     }, [i18n.language]);
+
+    const getDocumentList = async () => {
+        setLoading(true);
+        try {
+            const response = await http.get(apiConfig.document.getList);
+            if (response?.status === 200) {
+                const data = response.data;
+                setDataSource(data);
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const handleOnAdd = () => {
         setPopupMode('add')
@@ -92,25 +91,8 @@ export default function Documents() {
         setShowPopup(false)
     }
 
-    if (loading) {
-        return (
-            <Container
-                p={0}
-                px={10}
-                className='!flex-1'
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '100%',
-                    height: '100%',
-                    margin: '0 auto',
-                    background: 'transparent',
-                }}
-            >
-                <Loader/>
-            </Container>
-        )
+    const handleOnRefresh = () => {
+        getDocumentList();
     }
 
     return (
@@ -134,6 +116,7 @@ export default function Documents() {
                 handleOnAdd={() => handleOnAdd()}
                 handleOnDelete={data => handleDelete(data)}
                 handleOnEdit={data => handleEdit(data)}
+                onRefresh={() => handleOnRefresh()}
             />
         </Container>
     )

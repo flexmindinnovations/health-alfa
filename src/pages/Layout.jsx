@@ -138,7 +138,7 @@ export function Layout() {
                         <Outlet/>
                     </div>
                 </AppShell.Main>
-                <AppShell.Footer p='md'>
+                {/* <AppShell.Footer p='md'>
                     <div className='container w-full h-full flex items-center justify-end'>
                         <Group className='flex !items-start !justify-start !gap-2'>
                             {menuItems
@@ -164,7 +164,7 @@ export function Layout() {
                                 ))}
                         </Group>
                     </div>
-                </AppShell.Footer>
+                </AppShell.Footer> */}
             </AppShell>
         </>
     )

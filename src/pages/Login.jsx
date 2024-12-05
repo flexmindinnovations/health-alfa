@@ -14,6 +14,7 @@ import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next';
+import { useDocumentTitle } from '@hooks/DocumentTitle';
 
 const emailSchema = z.string().min(3, { message: "Atleast 3 chars" });
 const phoneNumberSchema = z.string().refine(
@@ -59,6 +60,7 @@ export default function Login() {
     const http = useHttp();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    useDocumentTitle(t("login"));
 
     const handleCountryChange = (selected) => {
         const { userName } = form.getValues();

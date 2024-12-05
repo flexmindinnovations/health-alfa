@@ -1,10 +1,10 @@
 import './App.css';
-import {lazy, Suspense, useEffect} from 'react';
-import {useDirection} from '@mantine/core';
-import {useTranslation} from 'react-i18next';
-import {Route, Routes} from 'react-router-dom';
-import {Layout} from '@pages/Layout.jsx';
-import {useApiConfig} from '@contexts/ApiConfigContext.jsx';
+import { lazy, Suspense, useEffect } from 'react';
+import { useDirection } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
+import { Route, Routes } from 'react-router-dom';
+import { Layout } from '@pages/Layout.jsx';
+import { useApiConfig } from '@contexts/ApiConfigContext.jsx';
 
 const PublicLayout = lazy(() => import('@pages/PublicLayout'));
 const PageNotFound = lazy(() => import('@pages/PageNotFound'));
@@ -23,9 +23,9 @@ const AboutUs = lazy(() => import('@pages/AboutUs'));
 const ContactUs = lazy(() => import('@pages/ContactUs'));
 
 function App() {
-    const {setDirection} = useDirection();
-    const {i18n} = useTranslation();
-    const {setPreferences} = useApiConfig();
+    const { setDirection } = useDirection();
+    const { i18n } = useTranslation();
+    const { setPreferences } = useApiConfig();
 
     useEffect(() => {
         setPreferences();
@@ -36,29 +36,30 @@ function App() {
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <Routes>
-                <Route path='/app' element={<Layout/>}>
-                    <Route index element={<Dashboard/>}/>
-                    <Route path='users' element={<Users/>}/>
-                    <Route path='documents' element={<Documents/>}/>
-                    <Route path='medical-tests' element={<MedicalTests/>}/>
-                    <Route path='health-conditions' element={<HealthConditions/>}/>
-                    <Route path='medications' element={<Medications/>}/>
-                    <Route path='allergies' element={<Allergies/>}/>
-                    <Route path='immunizations' element={<Immunizations/>}/>
-                    <Route path='about-us' element={<AboutUs/>}/>
-                    <Route path='contact-us' element={<ContactUs/>}/>
+                <Route path='/app' element={<Layout />}>
+                    <Route index element={<Dashboard />} />
+                    <Route path='users' element={<Users />} />
+                    <Route path='documents' element={<Documents />} />
+                    <Route path='medical-tests' element={<MedicalTests />} />
+                    <Route path='health-conditions' element={<HealthConditions />} />
+                    <Route path='medications' element={<Medications />} />
+                    <Route path='allergies' element={<Allergies />} />
+                    <Route path='immunizations' element={<Immunizations />} />
+                    {/* <Route path='about-us' element={<AboutUs/>}/>
+                    <Route path='contact-us' element={<ContactUs/>}/> */}
+                    <Route path='*' element={<PageNotFound />} />
                 </Route>
 
-                <Route path='/login' element={<Login/>}/>
-                <Route path='/register' element={<Register/>}/>
+                <Route path='/login' element={<Login />} />
+                <Route path='/register' element={<Register />} />
 
-                <Route path='/' element={<PublicLayout/>}>
-                    <Route index element={<Home/>}/>
-                    <Route path='about-us' element={<AboutUs/>}/>
-                    <Route path='contact-us' element={<ContactUs/>}/>
+                <Route path='/' element={<PublicLayout />}>
+                    <Route index element={<Home />} />
+                    <Route path='about-us' element={<AboutUs />} />
+                    <Route path='contact-us' element={<ContactUs />} />
                 </Route>
 
-                <Route path='*' element={<PageNotFound/>}/>
+                <Route path='*' element={<PageNotFound />} />
             </Routes>
         </Suspense>
     );

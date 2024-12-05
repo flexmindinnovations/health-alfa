@@ -56,5 +56,5 @@
 }
 .loginFormSection {
   background-image: url('../assets/images/login_form.svg');
-  @apply bg-cover bg-no-repeat bg-center shadow-lg h-full;
+  @apply bg-auto bg-no-repeat bg-center shadow-lg h-full;
 }
