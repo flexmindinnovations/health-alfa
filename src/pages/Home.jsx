@@ -1,10 +1,10 @@
-import {Button, Container} from "@mantine/core";
-import {useTranslation} from "react-i18next";
-import {useDocumentTitle} from "@hooks/DocumentTitle";
-import {HeroCarousel} from "@components/HeroCarousel.jsx";
+import { Button, Container } from "@mantine/core";
+import { useTranslation } from "react-i18next";
+import { useDocumentTitle } from "@hooks/DocumentTitle";
+import { HeroCarousel } from "@components/HeroCarousel.jsx";
 
 export default function Home() {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     useDocumentTitle(t("home"));
 
     const services = [
@@ -49,35 +49,7 @@ export default function Home() {
     return (
         <Container m={0} p={0} size='lg' w='100%' maw='100%' h='100%' className="min-h-screen flex flex-col">
             {/* Hero Section */}
-            {/*<div*/}
-            {/*    className="relative w-full h-[600px] bg-cover bg-center"*/}
-            {/*    style={{backgroundImage: `url(${image})`}}*/}
-            {/*>*/}
-
-            {/*    <div className="absolute inset-0 bg-black opacity-60"/>*/}
-
-            {/*    <section*/}
-            {/*        className="relative z-10 flex flex-col items-center justify-center text-center h-full py-16 px-6 lg:px-10">*/}
-            {/*        <h1 className="text-3xl text-white md:4xl lg:5xl font-extrabold leading-tigh">*/}
-            {/*            Simplify Your Health Management*/}
-            {/*        </h1>*/}
-            {/*        <p className="mt-6 text-md lg:text-xl text-white">*/}
-            {/*            In today’s fast-paced world, managing your health and wellness can be a challenge. At Health*/}
-            {/*            Alpha, we aim to simplify this process with a platform designed to give you seamless access to*/}
-            {/*            your health information and care resources. From tracking medical documents to scheduling*/}
-            {/*            appointments with top-rated doctors, Health Alpha is committed to making your healthcare journey*/}
-            {/*            smooth, accessible, and stress-free.*/}
-            {/*        </p>*/}
-            {/*        <div className="mt-10">*/}
-            {/*            <CButton*/}
-            {/*                className="px-10 py-4 !bg-cPrimaryFilled rounded-full text-lg shadow-lg transition-all duration-300">*/}
-            {/*                Get Started*/}
-            {/*            </CButton>*/}
-            {/*        </div>*/}
-            {/*    </section>*/}
-            {/*</div>*/}
-
-            <HeroCarousel height={'calc(100vh - 80px)'}/>
+            <HeroCarousel height={'calc(100vh - 80px)'} />
 
             {/* Services Section */}
             <section className="py-16">
