@@ -13,12 +13,12 @@ export function CarouselCard(
             className={classes.card}
         >
             <div>
-                <Text className={classes.category} size="xs">
-                    {category}
-                </Text>
                 <Title order={3} className={classes.title}>
                     {title}
                 </Title>
+                <Text className={classes.category} size="lg">
+                    {category}
+                </Text>
             </div>
             <Button variant="white" color="dark">
                 Read article
