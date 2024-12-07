@@ -1,18 +1,18 @@
-import {Button, Paper, Text, Title} from '@mantine/core';
+import { Button, Paper, Text, Title } from '@mantine/core';
 import classes from '@styles/card.module.css';
 
 export function CarouselCard(
-    {image, title, category}
+    { image, title, category }
 ) {
     return (
         <Paper
             shadow="md"
             p="xl"
             radius={'none'}
-            style={{backgroundImage: `url(${image})`}}
+            style={{ backgroundImage: `url(${image})` }}
             className={classes.card}
         >
-            <div>
+            <div className="flex flex-col items-center justify-center h-full max-w-5xl mx-auto text-center gap-4 px-4 sm:px-6 lg:px-8">
                 <Title order={3} className={classes.title}>
                     {title}
                 </Title>
