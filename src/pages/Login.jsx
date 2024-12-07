@@ -75,7 +75,6 @@ export default function Login() {
     const {t} = useTranslation();
     useDocumentTitle(t("login"));
     const radius = theme.radius.xl;
-    console.log('radius: ', radius)
 
     const handleCountryChange = (selected) => {
         const {userName} = form.getValues();

@@ -30,7 +30,6 @@ export const AuthProvider = ({children}) => {
         localStorage.removeItem('user')
         localStorage.removeItem('token')
         setIsLoggedIn(false)
-        window.location.reload()
     }
 
     const loginUser = async () => {

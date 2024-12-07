@@ -59,7 +59,6 @@ export default function Home() {
                         {services.map((service, index) => (
                             <Card
                                 key={index}
-                                shadow="sm"
                                 radius="md"
                                 padding="lg"
                                 withBorder
