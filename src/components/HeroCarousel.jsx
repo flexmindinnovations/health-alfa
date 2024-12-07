@@ -65,7 +65,7 @@ export function HeroCarousel({height}) {
             event.preventDefault();
         }
     };
-    
+
     useEffect(() => {
         const handleWheel = (event) => {
             if (carouselRef.current && carouselRef.current.contains(event.target)) {

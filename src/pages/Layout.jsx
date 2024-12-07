@@ -1,5 +1,4 @@
-import {Link, Outlet, useLocation, useNavigate} from 'react-router-dom'
-import {useAuth} from '@contexts/AuthContext.jsx'
+import {Link, Outlet, useLocation} from 'react-router-dom'
 import {AppShell, AspectRatio, Burger, Group, Image, UnstyledButton} from '@mantine/core'
 import {useDisclosure} from '@mantine/hooks'
 import styles from '@styles/layout.module.css'
@@ -14,8 +13,6 @@ export function Layout() {
     const {t} = useTranslation()
     const [menuItems, setMenuItems] = useState([])
     const [publicItems, setPublicItems] = useState([])
-    const {isAuthenticated} = useAuth()
-    const navigate = useNavigate()
     const [opened, {toggle}] = useDisclosure()
     const {pathname} = useLocation()
     const [showSettingsModel, setShowSettingsModel] = useState(false)
@@ -32,12 +29,6 @@ export function Layout() {
         setPublicItems(publicItems)
         setMenuItems(updatedMenuItems)
     }, [pathname])
-
-    // useEffect(() => {
-    //     if (!isAuthenticated) {
-    //         navigate("/login");
-    //     }
-    // }, [isAuthenticated]);
 
     const handleNavClick = menuItem => {
         const publicLinkItemIndex = publicItems.findIndex(
