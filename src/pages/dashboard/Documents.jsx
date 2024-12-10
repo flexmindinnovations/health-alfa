@@ -71,8 +71,6 @@ export default function Documents() {
 
     const handleEdit = record => {
         setPopupMode('edit')
-        // setShowPopup(true)
-        // setPopupData(record)
         openAddEditModal({data: record, mode: 'edit'});
     }
 
@@ -80,7 +78,6 @@ export default function Documents() {
         const itemIndex = dataSource.findIndex(
             item => item.documentTypeId === record.documentTypeId
         )
-
         if (itemIndex > -1) {
             const deleteItem = dataSource.splice(itemIndex, 1)
             const updatedData = dataSource.filter(
