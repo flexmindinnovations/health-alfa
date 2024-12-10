@@ -8,6 +8,7 @@ import Settings from '@components/Settings.jsx'
 import {useTranslation} from 'react-i18next'
 import {UserMenu} from '@components/UserMenu.jsx'
 import logo from '/images/logo.png'
+import {AnimatePresence, motion} from 'framer-motion';
 
 export function Layout() {
     const {t} = useTranslation()
@@ -16,6 +17,7 @@ export function Layout() {
     const [opened, {toggle}] = useDisclosure()
     const {pathname} = useLocation()
     const [showSettingsModel, setShowSettingsModel] = useState(false)
+    const [hoveredIndex, setHoveredIndex] = useState(null);
 
     useEffect(() => {
         const updatedMenuItems = MENU_ITEMS.map(item => ({
@@ -87,8 +89,9 @@ export function Layout() {
 
                 <AppShell.Navbar className='px-0'>
                     <Group className='flex !flex-col !items-start !justify-start !gap-2'>
-                        <div className='header w-full relative h-24 flex items-center justify-center bg-cDefault/50'>
-                            <AspectRatio ratio={900 / 720} maw={100} mx='auto'>
+                        <div
+                            className='header w-full relative h-24 flex items-center justify-center bg-cDefault/50'>
+                            <AspectRatio ratio={16 / 9} maw={100} mx='auto'>
                                 <Image
                                     src={logo}
                                     alt='logo'
@@ -104,58 +107,79 @@ export function Layout() {
                                 size='md'
                             />
                         </div>
-                        {menuItems.slice(0, menuItems.length - 2).map(item => (
-                            <UnstyledButton
-                                key={item.key}
-                                onClick={() => handleNavClick(item)}
-                                className={`${
-                                    item.active ? styles.activeItem : styles.inactiveItem
-                                } ${styles.navbarItem}`}
-                            >
-                                <Link
-                                    to={`/app${item.route}`}
-                                    className={`flex items-center py-2 px-6 text-sm gap-2 lg:gap-4 xl:gap-4 2xl:gap-4 !font-medium`}
+                        <motion.ul
+                            className={styles.navbarContainer}
+                            variants={{
+                                visible: {
+                                    opacity: 1,
+                                    transition: {
+                                        when: "beforeChildren",
+                                        staggerChildren: 0.4,
+                                    },
+                                },
+                                hidden: {opacity: 0},
+                            }}
+                            initial="hidden"
+                            animate="visible"
+                        >
+                            {menuItems.slice(0, menuItems.length - 2).map((item, index) => (
+                                <motion.li
+                                    key={item.key}
+                                    className={styles.navbarItemWrapper}
+                                    onMouseEnter={() => setHoveredIndex(index)}
+                                    // onMouseLeave={() => setHoveredIndex(null)}
+                                    variants={{
+                                        hidden: {
+                                            x: -40,
+                                            opacity: 0,
+                                        },
+                                        visible: {
+                                            x: 0,
+                                            opacity: 1,
+                                            transition: {
+                                                delay: index * 0.03,
+                                            },
+                                        },
+                                    }}
                                 >
-                                    <span>{createElement(item.icon, {size: 16})}</span>
-                                    <span>{t(item.key)}</span>
-                                </Link>
-                            </UnstyledButton>
-                        ))}
-                    </Group>
-                </AppShell.Navbar>
-
-                <AppShell.Main>
-                    <div className='w-full h-full flex flex-col flex-1'>
-                        <Outlet/>
-                    </div>
-                </AppShell.Main>
-                {/* <AppShell.Footer p='md'>
-                    <div className='container w-full h-full flex items-center justify-end'>
-                        <Group className='flex !items-start !justify-start !gap-2'>
-                            {menuItems
-                                .slice(menuItems.length - 2, menuItems.length)
-                                .map(item => (
                                     <UnstyledButton
                                         key={item.key}
                                         onClick={() => handleNavClick(item)}
                                         className={`${
-                                            item.active
-                                                ? styles.footerActiveItem
-                                                : styles.footerInactiveItem
-                                        } rounded-full`}
+                                            item.active ? styles.activeItem : styles.inactiveItem
+                                        } ${styles.navbarItem}`}
                                     >
                                         <Link
                                             to={`/app${item.route}`}
-                                            className={`flex items-center py-1.5 px-4 text-sm gap-1 !font-medium `}
+                                            className={`flex items-center py-2 px-6 text-sm gap-2 lg:gap-4 xl:gap-4 2xl:gap-4 !font-medium`}
                                         >
                                             <span>{createElement(item.icon, {size: 16})}</span>
                                             <span>{t(item.key)}</span>
                                         </Link>
                                     </UnstyledButton>
-                                ))}
-                        </Group>
+                                </motion.li>
+                            ))}
+                        </motion.ul>
+                    </Group>
+                </AppShell.Navbar>
+
+                <AppShell.Main>
+                    <div className={`w-full h-full flex flex-col flex-1`}>
+                        <AnimatePresence mode={"wait"}>
+                            <div style={{overflow: "hidden", height: "100%", width: "100%"}}>
+                                <motion.div
+                                    key={pathname}
+                                    initial={{x: -10, opacity: 0}}
+                                    animate={{x: 0, opacity: 1}}
+                                    exit={{opacity: 0}}
+                                    transition={{duration: 0.2, ease: "easeOut"}}
+                                    className='w-full h-full'>
+                                    <Outlet/>
+                                </motion.div>
+                            </div>
+                        </AnimatePresence>
                     </div>
-                </AppShell.Footer> */}
+                </AppShell.Main>
             </AppShell>
         </>
     )

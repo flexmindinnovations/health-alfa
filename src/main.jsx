@@ -16,6 +16,7 @@ import '@mantine/core/styles.css'
 import 'mantine-datatable/styles.layer.css'
 import '@mantine/notifications/styles.css'
 import '@mantine/carousel/styles.css';
+import {ModalsProvider} from "@mantine/modals";
 
 export const notificationAudio = new Audio('/sounds/notification.wav')
 notificationAudio.load()
@@ -39,6 +40,7 @@ const theme = createTheme({
     },
     primaryColor: 'brand',
     primaryShade: 9,
+    defaultRadius: 'lg',
     components: {
         Loader: Loader.extend({
             defaultProps: {
@@ -47,14 +49,8 @@ const theme = createTheme({
                 size: 'xl'
             }
         }),
-        TextInput: {
-            defaultProps: {
-                radius: 'md'
-            }
-        },
         Button: {
             defaultProps: {
-                radius: 'sm',
                 loaderProps: {h: '48px', w: '48px'}
             },
         },
@@ -75,11 +71,21 @@ const theme = createTheme({
 
 function AppWrapper() {
     return (
+
         <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
             <Notifications position='top-right' zIndex={9999}/>
-            <Suspense>
-                <App/>
-            </Suspense>
+            <ModalsProvider
+            modalProps={{
+                withCloseButton: false,
+                trapFocus: false,
+                radius: 'lg',
+            }}
+            >
+                <Suspense>
+                    <App/>
+                </Suspense>
+            </ModalsProvider>
+
         </MantineProvider>
     )
 }

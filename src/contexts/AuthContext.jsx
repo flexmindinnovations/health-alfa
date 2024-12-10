@@ -1,10 +1,11 @@
 import {createContext, useContext, useState} from 'react'
 import toast from 'react-hot-toast'
+import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
 
 const AuthContext = createContext(null)
 
 export const AuthProvider = ({children}) => {
-    // const apiConfig = useApiConfig();
+    const apiConfig = useApiConfig();
     const [user, setUser] = useState(null)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [error, setError] = useState(null)
@@ -12,18 +13,23 @@ export const AuthProvider = ({children}) => {
     const fetchUserDetails = async () => {
         try {
             const user = JSON.parse(localStorage.getItem('user') || '{}')
-            // const getUserDetails = apiConfig.customer.getCustomerById(user.customerId) || "";
-            // const response = await http.get(getUserDetails);
-            // const {data} = response;
-            // if (data) {
-            //     setUser(data);
-            //     return data;
-            // }
+            const getUserDetails = apiConfig.customer.getCustomerById(user) || "";
+            const response = await http.get(getUserDetails);
+            const {data} = response;
+            if (data) {
+                setUser(data);
+                return data;
+            }
         } catch (error) {
             const errorMessage = error.message
             toast.error(errorMessage)
             return null
         }
+    }
+
+    const setUserDetails = (userDetails) => {
+        console.log('userDetails: ', userDetails)
+        setUser(userDetails);
     }
 
     const logoutUser = async () => {
@@ -55,6 +61,7 @@ export const AuthProvider = ({children}) => {
             value={{
                 user,
                 getToken,
+                setUserDetails,
                 fetchUserDetails,
                 logoutUser,
                 loginUser,

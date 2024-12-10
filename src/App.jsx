@@ -5,6 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {Route, Routes} from 'react-router-dom';
 import {Layout} from '@pages/Layout.jsx';
 import {useApiConfig} from '@contexts/ApiConfigContext.jsx';
+import {AppLoader} from "@components/AppLoader.jsx";
 
 const PublicLayout = lazy(() => import('@pages/PublicLayout'));
 const PageNotFound = lazy(() => import('@pages/PageNotFound'));
@@ -34,7 +35,7 @@ function App() {
     }, [i18n.language, setDirection]);
 
     return (
-        <Suspense fallback={<div className={`h-screen w-screen flex items-center justify-center`}>Loading...</div>}>
+        <Suspense fallback={<AppLoader/>}>
             <Routes>
                 <Route path='/app' element={<Layout/>}>
                     <Route index element={<Dashboard/>}/>

@@ -139,7 +139,7 @@ export function GlobalPhoneInput({
     };
 
     return (
-        <div className='phoneInput' style={{width: '100%'}}>
+        <div className='phoneInput min-h-[5.5rem]' style={{width: '100%'}}>
             <Text component="label" htmlFor="phoneInput" size="sm" style={{display: 'block', marginBottom: 4}}>
                 {label}
             </Text>

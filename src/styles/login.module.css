@@ -28,7 +28,7 @@
   align-items: center;
   font-family: Arial, sans-serif;
   color: white;
-  @apply p-2 lg:p-40 xl:p-40 2xl:p-40;
+  @apply p-2 lg:p-0 xl:p-0 2xl:p-0;
 }
 
 @keyframes gradientAnimation {

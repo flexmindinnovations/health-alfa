@@ -28,6 +28,7 @@ import {motion} from 'framer-motion'
 import {useNavigate} from 'react-router-dom'
 import {useTranslation} from 'react-i18next';
 import {useDocumentTitle} from '@hooks/DocumentTitle';
+import {useAuth} from "@contexts/AuthContext.jsx";
 
 const emailSchema = z.string().min(3, {message: "Atleast 3 chars"});
 const phoneNumberSchema = z.string().refine(
@@ -69,6 +70,7 @@ export default function Login() {
     const [visible, {toggle}] = useDisclosure(false);
     const theme = useMantineTheme()
     const {apiConfig} = useApiConfig()
+    const {setUserDetails} = useAuth();
     const [loading, setLoading] = useState(false);
     const http = useHttp();
     const navigate = useNavigate();
@@ -103,13 +105,17 @@ export default function Login() {
         event.preventDefault();
         setLoading(true);
         const formValue = form.values;
-
+        const {userName} = formValue;
+        formValue.userName = userName?.includes('+91') ? userName.replace('+91', '') : userName;
         http.post(apiConfig.auth.login, formValue)
             .then((response) => {
                 const {data} = response;
                 if (data) {
-                    const {token} = data;
-                    localStorage.setItem('token', token)
+                    const {token, clientModel} = data;
+                    const {userId} = clientModel;
+                    localStorage.setItem('user', userId);
+                    setUserDetails(JSON.parse((JSON.stringify(clientModel))));
+                    localStorage.setItem('token', token);
                     openNotificationWithSound({
                         title: 'Success',
                         message: 'You have been successfully verified',
@@ -139,7 +145,7 @@ export default function Login() {
                     style={{height: 'auto', width: '100%', overflow: 'hidden'}}
                 >
                     <Card radius={"xl"}
-                          className='!p-0 min-h-80 min-w-96 lg:h-[75vh] lg:w-[75%] lg:min-h-[62vh] flex flex-col lg:!flex-row-reverse'>
+                          className='!p-0 min-h-80 min-w-96 lg:h-[75vh] lg:w-[60%] lg:min-h-[62vh] flex flex-col lg:!flex-row-reverse'>
                         <Card.Section withBorder m={'auto'}
                                       className={`!flex flex-col ${styles.loginFormSection} flex-1 p-8`}>
                             <Card.Section className='w-full !mx-auto rounded-md'>
@@ -154,7 +160,7 @@ export default function Login() {
                                             src={Logo}
                                         />
                                     </AspectRatio>
-                                    <Text align='center' className='w-full m-0' fz={'h3'} fw={'bold'}>
+                                    <Text align='center' className='w-full m-0' fz={'h1'} fw={'bold'}>
                                         Sign In
                                     </Text>
                                     <Text className='w-full text-center' fz={'sm'}>
@@ -162,7 +168,7 @@ export default function Login() {
                                     </Text>
                                 </Stack>
                             </Card.Section>
-                            <Card.Section className='w-full !mx-auto !flex-1'>
+                            <Card.Section className='w-full !mx-auto !flex items-center !flex-1'>
                                 <form onSubmit={handleFormSubmit}>
                                     <Stack my={20} gap={10}>
                                         <GlobalPhoneInput
@@ -185,6 +191,7 @@ export default function Login() {
                                             size='md'
                                             radius={'md'}
                                             onVisibilityChange={toggle}
+                                            className={`min-h-[5.5rem]`}
                                             styles={{
                                                 label: {
                                                     fontWeight: 'inherit',

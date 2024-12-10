@@ -35,3 +35,13 @@ body {
     height: 100dvh;
     width: 100dvw;
 }
+
+html, body {
+    scroll-behavior: smooth;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.mantine-datatable-pagination-pages-control {
+    @apply !rounded-2xl;
+}

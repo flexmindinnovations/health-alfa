@@ -48,3 +48,11 @@
 :root[data-mantine-color-scheme='dark'] .footerInactiveItem {
   @apply hover:!bg-cPrimaryFilled hover:!text-cDefault ;
 }
+
+.navbarContainer {
+  @apply relative flex flex-col w-full gap-2;
+}
+.navbarItemWrapper {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}

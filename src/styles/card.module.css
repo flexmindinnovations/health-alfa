@@ -1,6 +1,7 @@
 .card {
     height: 100%;
     display: flex;
+    position: relative;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
@@ -11,10 +12,9 @@
 .title {
     font-weight: 900;
     color: var(--mantine-color-white);
-    line-height: 1.2;
-    font-size: 32px;
     margin-top: var(--mantine-spacing-xs);
     cursor: default;
+    @apply text-lg lg:text-5xl;
 }
 
 .category {

@@ -1,5 +1,5 @@
-import { useMediaQuery } from '@mantine/hooks';
-import { Modal, useMantineTheme } from '@mantine/core';
+import {useMediaQuery} from '@mantine/hooks';
+import {Modal, useMantineTheme} from '@mantine/core';
 
 /**
  * @typedef {import('@mantine/core').ModalProps & { title: string, isOpen: boolean, toggle: Function }} ModalWrapperProps
@@ -10,13 +10,13 @@ import { Modal, useMantineTheme } from '@mantine/core';
  * @param {ModalWrapperProps} props - Props for the ModalWrapper component
  */
 export default function ModalWrapper({
-    children,
-    isOpen,
-    toggle,
-    title,
-    size = "lg",
-    ...rest
-}) {
+                                         children,
+                                         isOpen,
+                                         toggle,
+                                         title,
+                                         size = "lg",
+                                         ...rest
+                                     }) {
     const isMobile = useMediaQuery('(max-width: 50em)');
     const theme = useMantineTheme();
 
@@ -32,17 +32,17 @@ export default function ModalWrapper({
             size={size}
             fullScreen={isMobile}
             centered
-            transitionProps={{ transition: 'fade', duration: 300, timingFunction: 'linear' }}
+            transitionProps={{transition: 'scale', duration: 300, timingFunction: 'linear'}}
             radius="lg"
             withinPortal={true}
             styles={{
                 title: {
-                    fontWeight: 'bold',
                     fontSize: theme.fontSizes.sm
                 }
             }}
             {...rest}
         >
+
             {children}
         </Modal>
     );

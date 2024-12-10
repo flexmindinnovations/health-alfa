@@ -7,9 +7,9 @@
 }
 
 .dataTableWrapper {
-  @apply flex-1 flex items-center justify-end gap-2;
+    @apply flex-1 flex items-center justify-end gap-2;
 }
 
-:root[dir='rtl']  .dataTableWrapper {
-  @apply flex-1 flex flex-row items-center justify-start gap-2;
+:root[dir='rtl'] .dataTableWrapper {
+    @apply flex-1 flex flex-row items-center justify-start gap-2;
 }
