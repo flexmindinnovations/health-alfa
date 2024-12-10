@@ -12,7 +12,7 @@ export function CarouselCard(
             style={{ backgroundImage: `url(${image})` }}
             className={classes.card}
         >
-            <div className="flex flex-col items-center justify-center h-full max-w-5xl mx-auto text-center gap-4 px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col items-center justify-center h-full mx-auto text-center gap-4 px-4 sm:px-6 lg:px-8">
                 <Title order={3} className={classes.title}>
                     {title}
                 </Title>
