@@ -1,6 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
-import ModalWrapper from "@components/Modal";
-import {Button, Container, Loader, Stack} from "@mantine/core";
+import {Button, CloseIcon, Container, Loader, Stack, Group, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import Input from "@components/Input";
 import {z} from "zod";
@@ -11,7 +10,7 @@ import {useApiConfig} from "@contexts/ApiConfigContext";
 import useHttp from "@hooks/axios-instance";
 import _ from "underscore";
 
-export function AddEditDocument({data, mode = "add", handleOnClose, open}) {
+export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
     const {i18n, t} = useTranslation();
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState("");
@@ -74,6 +73,7 @@ export function AddEditDocument({data, mode = "add", handleOnClose, open}) {
 
     const handleSubmit = async () => {
         // setLoading(true);
+        onAddEdit();
         console.log("Form submitted:", form.values);
     };
 
@@ -111,38 +111,45 @@ export function AddEditDocument({data, mode = "add", handleOnClose, open}) {
     }
 
     return (
-        <ModalWrapper isOpen={open} toggle={handleOnClose} title={title} size="md">
-            <Stack className="flex flex-col gap-2">
-                <Input
-                    {...form.getInputProps("documentNameEnglish")}
-                    title={`${t("documentName")} ${t("english")}`}
-                    withAsterisk
-                    // disabled={disableFormField.documentNameEnglish}
-                />
-                <Input
-                    {...form.getInputProps("documentNameArabic")}
-                    title={`${t("documentName")} ${t("arabic")}`}
-                    withAsterisk
-                    // disabled={disableFormField.documentNameArabic}
-                    styles={{
-                        input: {
-                            textAlign: 'right',
-                            direction: 'rtl'
-                        }
-                    }}
-                />
+        // <ModalWrapper isOpen={open} toggle={handleOnClose} title={title} size="md">
+        <Stack className="flex flex-col gap-2">
+            <TextInput
+                {...form.getInputProps("documentNameEnglish")}
+                label={`${t("documentName")} ${t("english")}`}
+                withAsterisk
+                // disabled={disableFormField.documentNameEnglish}
+            />
+            <TextInput
+                {...form.getInputProps("documentNameArabic")}
+                label={`${t("documentName")} ${t("arabic")}`}
+                withAsterisk
+                // disabled={disableFormField.documentNameArabic}
+                styles={{
+                    input: {
+                        textAlign: 'right',
+                        direction: 'rtl'
+                    }
+                }}
+            />
 
-                <div className={`flex ${i18n.language === 'en' ? 'justify-end' : 'justify-start'} mt-4`}>
-                    <Button
-                        onClick={handleSubmit}
-                        leftSection={<Save size={16}/>}
-                        loading={loading}
-                        disabled={!form.isValid()}
-                    >
-                        {t("submit")}
-                    </Button>
-                </div>
-            </Stack>
-        </ModalWrapper>
+            <Group gap={20} justify={'right'} className={`flex ${i18n.language === 'en' ? 'justify-end' : 'justify-start'} mt-4`}>
+                <Button
+                    onClick={handleCancel}
+                    leftSection={<CloseIcon size={16}/>}
+                    variant="default"
+                >
+                    {t("cancel")}
+                </Button>
+                <Button
+                    onClick={handleSubmit}
+                    leftSection={<Save size={16}/>}
+                    loading={loading}
+                    disabled={!form.isValid()}
+                >
+                    {t("submit")}
+                </Button>
+            </Group>
+        </Stack>
+        // </ModalWrapper>
     );
 }

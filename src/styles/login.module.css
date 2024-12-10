@@ -21,13 +21,14 @@
   background-position: center;
   /* animation: gradientAnimation 12s ease infinite; */
   height: 100vh;
+  width: 100vw;
   margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: Arial, sans-serif;
   color: white;
-  @apply p-4 lg:p-40 xl:p-40 2xl:p-40;
+  @apply p-2 lg:p-0 xl:p-0 2xl:p-0;
 }
 
 @keyframes gradientAnimation {
@@ -56,5 +57,5 @@
 }
 .loginFormSection {
   background-image: url('../assets/images/login_form.svg');
-  @apply bg-auto bg-no-repeat bg-center shadow-lg h-full;
+  @apply bg-auto bg-no-repeat bg-right lg:bg-center xl:bg-center 2xl:bg-center shadow-lg h-full;
 }

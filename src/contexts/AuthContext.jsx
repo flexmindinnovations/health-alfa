@@ -1,10 +1,11 @@
 import {createContext, useContext, useState} from 'react'
 import toast from 'react-hot-toast'
+import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
 
 const AuthContext = createContext(null)
 
 export const AuthProvider = ({children}) => {
-    // const apiConfig = useApiConfig();
+    const apiConfig = useApiConfig();
     const [user, setUser] = useState(null)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [error, setError] = useState(null)
@@ -12,13 +13,13 @@ export const AuthProvider = ({children}) => {
     const fetchUserDetails = async () => {
         try {
             const user = JSON.parse(localStorage.getItem('user') || '{}')
-            // const getUserDetails = apiConfig.customer.getCustomerById(user.customerId) || "";
-            // const response = await http.get(getUserDetails);
-            // const {data} = response;
-            // if (data) {
-            //     setUser(data);
-            //     return data;
-            // }
+            const getUserDetails = apiConfig.customer.getCustomerById(user) || "";
+            const response = await http.get(getUserDetails);
+            const {data} = response;
+            if (data) {
+                setUser(data);
+                return data;
+            }
         } catch (error) {
             const errorMessage = error.message
             toast.error(errorMessage)
@@ -26,11 +27,15 @@ export const AuthProvider = ({children}) => {
         }
     }
 
+    const setUserDetails = (userDetails) => {
+        console.log('userDetails: ', userDetails)
+        setUser(userDetails);
+    }
+
     const logoutUser = async () => {
         localStorage.removeItem('user')
         localStorage.removeItem('token')
         setIsLoggedIn(false)
-        window.location.reload()
     }
 
     const loginUser = async () => {
@@ -45,17 +50,27 @@ export const AuthProvider = ({children}) => {
     }
 
     const isAuthenticated = () => {
-        const _user = JSON.parse(localStorage.getItem('user') || '{}')
-        const hasUserObj = _user && typeof _user === 'object' && Object.keys(_user).length > 0
-        // return hasUserObj && !!localStorage.getItem("token");
-        return !!localStorage.getItem('token')
-    }
+        const userString = localStorage.getItem('user');
+        let _user = null;
+        if (userString) {
+            try {
+                _user = JSON.parse(userString);
+            } catch (e) {
+                console.error('Error parsing user:', e);
+            }
+        }
+
+        const hasUserObj = _user && typeof _user === 'object' && Object.keys(_user).length > 0;
+        // return hasUserObj && !!localStorage.getItem('token');
+        return !!localStorage.getItem('token');
+    };
 
     return (
         <AuthContext.Provider
             value={{
                 user,
                 getToken,
+                setUserDetails,
                 fetchUserDetails,
                 logoutUser,
                 loginUser,

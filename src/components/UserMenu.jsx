@@ -2,7 +2,12 @@ import {forwardRef} from 'react'
 import {Avatar, Group, Menu, UnstyledButton} from '@mantine/core'
 import {LogOutIcon, SettingsIcon} from 'lucide-react'
 import {useTranslation} from 'react-i18next'
+import {useAuth} from "@contexts/AuthContext.jsx";
+import {useNavigate} from "react-router-dom";
+import {modals} from "@mantine/modals";
+import Settings from "@components/Settings.jsx";
 
+// eslint-disable-next-line react/display-name
 const UserButton = forwardRef(({image, name, email, ...others}, ref) => (
     <UnstyledButton
         ref={ref}
@@ -19,17 +24,20 @@ const UserButton = forwardRef(({image, name, email, ...others}, ref) => (
 ))
 
 export function UserMenu({showHideSettingsModel}) {
-    const {i18n,t} = useTranslation()
+    const {i18n, t} = useTranslation();
+    const {logoutUser} = useAuth();
+    const navigate = useNavigate();
 
-    const changeLanguage = lng => {
-        i18n.changeLanguage(lng)
+    const handleLogout = () => {
+        logoutUser();
+        navigate('/');
     }
 
     const handleMenuItemClicked = (item) => {
-        switch(item) {
+        switch (item) {
             case 'settings':
-            showHideSettingsModel(true);
-            break;
+                showHideSettingsModel(true);
+                break;
         }
     }
 
@@ -59,8 +67,8 @@ export function UserMenu({showHideSettingsModel}) {
                         {t('settings')}
                     </Menu.Item>
                     <Menu.Divider/>
-                    <Menu.Item color='red' leftSection={<LogOutIcon size={14}/>}>
-                    {t('logout')}
+                    <Menu.Item color='red' onClick={handleLogout} leftSection={<LogOutIcon size={14}/>}>
+                        {t('logout')}
                     </Menu.Item>
                 </Menu.Dropdown>
             </Menu>

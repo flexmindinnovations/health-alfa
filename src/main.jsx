@@ -1,20 +1,22 @@
-import { StrictMode, Suspense } from 'react'
-import { createRoot } from 'react-dom/client'
+import {StrictMode, Suspense} from 'react'
+import {createRoot} from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import { BrowserRouter } from 'react-router-dom'
-import { ApiConfigProvider } from '@contexts/ApiConfigContext'
-import { AuthProvider } from '@contexts/AuthContext'
-import { ErrorBoundary } from '@components/ErrorBoundary'
-import { NextUIProvider } from '@nextui-org/react'
-import { DeviceProvider } from '@hooks/device-detector'
+import {BrowserRouter} from 'react-router-dom'
+import {ApiConfigProvider} from '@contexts/ApiConfigContext'
+import {AuthProvider} from '@contexts/AuthContext'
+import {ErrorBoundary} from '@components/ErrorBoundary'
+import {NextUIProvider} from '@nextui-org/react'
+import {DeviceProvider} from '@hooks/device-detector'
 import './i18n'
-import { createTheme, DirectionProvider, Loader, MantineProvider } from '@mantine/core'
-import { Notifications } from '@mantine/notifications'
+import {createTheme, DirectionProvider, Loader, MantineProvider} from '@mantine/core'
+import {Notifications} from '@mantine/notifications'
 import RingLoader from '@components/RingLoader'
 import '@mantine/core/styles.css'
 import 'mantine-datatable/styles.layer.css'
 import '@mantine/notifications/styles.css'
+import '@mantine/carousel/styles.css';
+import {ModalsProvider} from "@mantine/modals";
 
 export const notificationAudio = new Audio('/sounds/notification.wav')
 notificationAudio.load()
@@ -38,23 +40,87 @@ const theme = createTheme({
     },
     primaryColor: 'brand',
     primaryShade: 9,
+    defaultRadius: 'lg',
     components: {
         Loader: Loader.extend({
             defaultProps: {
-                loaders: { ...Loader.defaultLoaders, ring: RingLoader },
+                loaders: {...Loader.defaultLoaders, ring: RingLoader},
                 type: 'ring',
                 size: 'xl'
             }
         }),
+        Input: {
+            defaultProps: {
+                radius: 'xl',
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem'
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.5rem'
+                },
+            })
+        },
         TextInput: {
             defaultProps: {
-                radius: 'md'
-            }
+                radius: 'xl'
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem'
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.5rem'
+                },
+            })
+        },
+        PasswordInput: {
+            defaultProps: {
+                radius: 'xl'
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.7rem'
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.7rem'
+                },
+            })
+        },
+        Textarea: {
+            defaultProps: {
+                radius: 'xl',
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem'
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.5rem'
+                },
+            })
         },
         Button: {
             defaultProps: {
-                radius: 'sm',
-                loaderProps: { h: '48px', w: '48px' }
+                radius: 'xl',
+                loaderProps: {h: '48px', w: '48px'}
             },
         },
         Modal: {
@@ -74,11 +140,21 @@ const theme = createTheme({
 
 function AppWrapper() {
     return (
+
         <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
-            <Notifications position='top-right' zIndex={9999} />
-            <Suspense>
-                <App />
-            </Suspense>
+            <Notifications position='top-right' zIndex={9999}/>
+            <ModalsProvider
+                modalProps={{
+                    withCloseButton: false,
+                    trapFocus: false,
+                    radius: 'lg',
+                }}
+            >
+                <Suspense>
+                    <App/>
+                </Suspense>
+            </ModalsProvider>
+
         </MantineProvider>
     )
 }
@@ -100,7 +176,7 @@ root.render(
                         <ApiConfigProvider>
                             <AuthProvider>
                                 <DeviceProvider>
-                                    <AppWrapper />
+                                    <AppWrapper/>
                                 </DeviceProvider>
                             </AuthProvider>
                         </ApiConfigProvider>

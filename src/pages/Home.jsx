@@ -1,116 +1,106 @@
-import {CButton} from "@components/Button.jsx";
-import {Button, Container} from "@mantine/core";
-import {useTranslation} from "react-i18next";
-import {useDocumentTitle} from "@hooks/DocumentTitle";
-import image from '/images/banner.jpg'
+import {Card, Container, Text} from "@mantine/core";
+import {HeroCarousel} from "@components/HeroCarousel.jsx";
+import {FileText, Globe, Heart, Lock, Search, User} from "lucide-react";
+import {motion} from "framer-motion";
+import {useEffect, useState} from "react";
+import 'lenis/dist/lenis.css'
+
+const HeroSection = ({height}) => {
+
+
+    return (<motion.div
+        className="w-full"
+        style={{height}}
+        initial={{opacity: 0}}
+        animate={{opacity: 1}}
+        transition={{duration: 0.5, type: "spring"}}
+    >
+        <HeroCarousel height={height}/>
+    </motion.div>);
+};
 
 export default function Home() {
-    const {t} = useTranslation();
-    useDocumentTitle(t("home"));
+    const [height, setHeight] = useState(0);
+    const services = [{
+        title: "Health Record Management",
+        description: "Forget the hassle of sorting through stacks of papers. Upload all your medical documents, lab results, prescriptions, and more to Health Alpha. You’ll have everything you need, neatly organized and accessible at any time.",
+        icon: <FileText size={32} className="text-cPrimaryFilled"/>,
+    }, {
+        title: "Find Doctors Nearby",
+        description: "Looking for a doctor, specialist, or clinic? Health Alpha makes it simple. With just a few taps, you can locate trusted healthcare professionals near you, read reviews, and book appointments seamlessly.",
+        icon: <Search size={32} className="text-cPrimaryFilled"/>,
+    }, {
+        title: "Personalized Health Tracking",
+        description: "Your health is unique, and so are your goals. Health Alpha helps you track everything from blood pressure and sugar levels to heart rate and oxygen saturation. Stay on top of your wellness with reminders for fitness activities, sleep improvements, and stress management.",
+        icon: <Heart size={32} className="text-cPrimaryFilled"/>,
+    }, {
+        title: "Manage Dependents’ Health",
+        description: "Whether it’s your child, elderly parent, or even your pet, Health Alpha helps you stay organized. Manage their health records, set reminders for appointments, and keep track of vaccinations—all from one app.",
+        icon: <User size={32} className="text-cPrimaryFilled"/>,
+    }, {
+        title: "Multilingual Support",
+        description: "Health Alpha offers multilingual support to ensure that language is never a barrier to managing your health. Access the app in your preferred language and navigate through its features with ease.",
+        icon: <Globe size={32} className="text-cPrimaryFilled"/>,
+    }, {
+        title: "Emergency Info Lock Screen",
+        description: "In case of emergencies, Health Alpha provides an emergency info lock screen where you can store vital medical details for quick access. This feature ensures your loved ones can easily find your medical information when needed.",
+        icon: <Lock size={32} className="text-cPrimaryFilled"/>,
+    },];
 
-    const services = [
-        {
-            title: "Comprehensive Health Record Management",
-            description:
-                "Upload, store, and access medical documents, lab results, prescriptions, and doctor’s notes with ease. Offline access and automatic syncing ensure your records are always available.",
-            icon: "📂",
-        },
-        {
-            title: "Doctor, Clinic, and Veterinary Locator",
-            description:
-                "Find healthcare providers near you, including specialists like gynecologists, maternity hospitals, dermatologists, and veterinary services. Read reviews and choose the best for your needs.",
-            icon: "📍",
-        },
-        {
-            title: "Personalized Health Tracking",
-            description:
-                "Monitor vital metrics like blood pressure, blood sugar levels, and heart rate. Get reminders for medication and appointments to stay on top of your health.",
-            icon: "📊",
-        },
-        {
-            title: "Dependents’ Health and Women’s Health Management",
-            description:
-                "Manage health records for your children, elderly family members, and track menstrual cycles, pregnancies, and specific women’s health conditions. Find top surgeons and specialists.",
-            icon: "👨‍👩‍👧‍👦",
-        },
-        {
-            title: "Medical Expense and Donation Tracking",
-            description:
-                "Categorize expenses for medical visits, medications, and lab tests. Join a community of volunteers for blood or organ donation.",
-            icon: "💳",
-        },
-        {
-            title: "Veterinary Health and Specialized Features for Women",
-            description:
-                "Manage pets’ health records, track their wellness activities, and provide care for veterinary needs. Also track women’s health including surgeries and cosmetic procedures.",
-            icon: "🐾",
-        },
-    ];
+    useEffect(() => {
+        const updateHeight = () => {
+            setHeight(window.innerHeight - 80);
+        };
+        window.addEventListener("resize", updateHeight);
 
-    return (
-        <Container m={0} p={0} size='lg' w='100%' maw='100%' h='100%' className="min-h-screen">
-            {/* Hero Section */}
-            <div
-                className="relative w-full h-[600px] bg-cover bg-center"
-                style={{backgroundImage: `url(${image})`}}
-            >
+        updateHeight();
 
-                <div className="absolute inset-0 bg-black opacity-60"/>
+        return () => {
+            window.removeEventListener("resize", updateHeight);
+        };
+    }, []);
 
-                <section
-                    className="relative z-10 flex flex-col items-center justify-center text-center h-full py-16 px-6 lg:px-10">
-                    <h1 className="text-3xl text-white md:4xl lg:5xl font-extrabold leading-tigh">
-                        Simplify Your Health Management
-                    </h1>
-                    <p className="mt-6 text-md lg:text-xl text-white">
-                        In today’s fast-paced world, managing your health and wellness can be a challenge. At Health
-                        Alpha, we aim to simplify this process with a platform designed to give you seamless access to
-                        your health information and care resources. From tracking medical documents to scheduling
-                        appointments with top-rated doctors, Health Alpha is committed to making your healthcare journey
-                        smooth, accessible, and stress-free.
+    return (<Container m={0} p={0} size="lg" w="100%" maw="100%" h="100%" className="!min-h-screen flex flex-col">
+        <HeroSection height={height}/>
+        <section className="py-16">
+            <Container size="lg">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl font-bold text-gray-800">Our Services</h2>
+                    <p className="mt-4">
+                        Health Alpha offers a comprehensive suite of tools to help you manage your health with ease.
+                        From secure storage of medical records and seamless appointment scheduling to personalized
+                        health tracking and multilingual support, we simplify healthcare for individuals and
+                        families.
+                        With features designed for managing both personal and dependent health needs, including
+                        reminders and doctor searches, Health Alpha ensures you stay on top of your wellness, no
+                        matter where life takes you. Empower your health journey with intuitive, secure, and
+                        accessible solutions from Health Alpha.
                     </p>
-                    <div className="mt-10">
-                        <Button
-                            className="px-10 py-4 !bg-cPrimaryFilled rounded-full text-lg shadow-lg transition-all duration-300">
-                            Get Started
-                        </Button>
-                    </div>
-                </section>
-            </div>
-
-            {/* Services Section */}
-            <section className="py-16">
-                <Container size="lg">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold text-gray-800">Our Services</h2>
-                        <p className="mt-4">
-                            Discover how Health Alpha empowers you to take control of your health and well-being.
-                        </p>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {services.map((service, index) => (
-                            <div
-                                key={index}
-                                className=" shadow-lg rounded-lg p-6 hover:shadow-xl transition duration-300"
-                            >
-                                <div className="flex gap-2">
-                                    <div className="text-3xl">{service.icon} </div>
-                                    <h3 className="text-base font-semibold !text-cPrimaryFilled">{service.title}</h3>
-                                </div>
-                                <p className="mt-3">{service.description}</p>
-                            </div>
-                        ))}
-                    </div>
-                </Container>
-            </section>
-
-            {/* Call to Action Section */}
-            <section className="bg-gradient-to-r text-white !bg-cPrimaryFilled py-12 text-center">
-                <h2 className="text-3xl font-bold">Join Our Health Community</h2>
-                <p className="mt-4 text-lg">
-                    Experience a higher level of control and assurance in managing your health.
-                </p>
-            </section>
-        </Container>
-    );
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {services.map((service, index) => (<Card
+                        key={index}
+                        radius="md"
+                        padding="lg"
+                        withBorder
+                        className="transition duration-300 hover:shadow-2xl hover:scale-105 transform"
+                    >
+                        <div className="flex items-center gap-4">
+                            <div className="text-cPrimaryFilled">{service.icon}</div>
+                            <Text weight={600} size="lg" className="!text-cPrimaryFilled">
+                                {service.title}
+                            </Text>
+                        </div>
+                        <Text mt="md">{service.description}</Text>
+                    </Card>))}
+                </div>
+            </Container>
+        </section>
+        <section className="bg-gradient-to-r text-white !bg-cPrimaryFilled py-12 text-center">
+            <h2 className="text-3xl font-bold">Join Our Health Community</h2>
+            <p className="mt-4 text-lg">
+                Experience a higher level of control and assurance in managing your health.
+            </p>
+        </section>
+    </Container>);
 }

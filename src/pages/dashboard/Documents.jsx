@@ -1,11 +1,12 @@
 import {useEffect, useState} from 'react'
-import {Container, Loader} from '@mantine/core'
+import {Container} from '@mantine/core'
 import {useDocumentTitle} from '@hooks/DocumentTitle'
 import {useTranslation} from 'react-i18next'
 import {DataTableWrapper} from '@components/DataTableWrapper'
 import {AddEditDocument} from '@modals/AddEditDocument'
 import {useApiConfig} from '@contexts/ApiConfigContext.jsx'
 import useHttp from '@hooks/axios-instance'
+import {modals} from "@mantine/modals";
 
 export default function Documents() {
     const {t, i18n} = useTranslation()
@@ -64,20 +65,19 @@ export default function Documents() {
 
     const handleOnAdd = () => {
         setPopupMode('add')
-        setShowPopup(true)
+        // setShowPopup(true)
+        openAddEditModal({data: null, mode: 'add'});
     }
 
     const handleEdit = record => {
         setPopupMode('edit')
-        setShowPopup(true)
-        setPopupData(record)
+        openAddEditModal({data: record, mode: 'edit'});
     }
 
     const handleDelete = record => {
         const itemIndex = dataSource.findIndex(
             item => item.documentTypeId === record.documentTypeId
         )
-
         if (itemIndex > -1) {
             const deleteItem = dataSource.splice(itemIndex, 1)
             const updatedData = dataSource.filter(
@@ -87,25 +87,32 @@ export default function Documents() {
         }
     }
 
-    const handleModalClose = closed => {
-        setShowPopup(false)
+    const onAddEditDone = () => {
+        getDocumentList();
+        handleModalClose();
+    }
+
+    const handleModalClose = () => {
+        modals.closeAll();
     }
 
     const handleOnRefresh = () => {
         getDocumentList();
     }
 
+    const openAddEditModal = ({data = null, mode = 'add'}) => {
+        modals.open({
+            title: mode === "edit" ? `${t("edit")} ${t("document")}` : `${t("add")} ${t("document")}`,
+            centered: true,
+            children: (
+                <AddEditDocument mode={mode} data={data} onAddEdit={() => onAddEditDone()}
+                                 handleCancel={() => handleModalClose()}/>
+            )
+        })
+    }
+
     return (
         <Container m={0} p={0} size='lg' w='100%' maw='100%' h='100%'>
-            {showPopup && (
-                <AddEditDocument
-                    open={showPopup}
-                    data={popupData}
-                    handleOnClose={() => handleModalClose()}
-                    mode={popupMode}
-                />
-            )}
-
             <DataTableWrapper
                 loading={loading}
                 showAddButton={true}

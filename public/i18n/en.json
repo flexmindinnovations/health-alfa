@@ -48,5 +48,9 @@
   "arabicNameIsRequired": "Arabic name is required",
   "add": "Add",
   "search": "Search",
-  "refreshData": "Refresh Data"
+  "refreshData": "Refresh Data",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "deleteConfirm": "Delete Confirmation",
+  "areYouSureToDelete": "Are you sure you want to permanently delete this item"
 }

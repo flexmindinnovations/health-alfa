@@ -1,28 +1,42 @@
 import styles from '../styles/login.module.css'
-import { Button, Card, Center, Image, PasswordInput, Stack, Text, useMantineTheme, Checkbox, Group, Anchor } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
-import { useForm } from '@mantine/form'
-import { useState } from 'react';
+import {
+    Anchor,
+    AspectRatio,
+    Button,
+    Card,
+    Center,
+    Checkbox,
+    Group,
+    Image,
+    PasswordInput,
+    Stack,
+    Text,
+    useMantineTheme
+} from '@mantine/core'
+import {useDisclosure} from '@mantine/hooks'
+import {useForm} from '@mantine/form'
+import {useState} from 'react';
 import useHttp from '@hooks/axios-instance.js'
-import { useApiConfig } from '@contexts/ApiConfigContext.jsx'
-import { openNotificationWithSound } from '@config/Notifications'
-import { GlobalPhoneInput } from '@components/PhoneInput'
+import {useApiConfig} from '@contexts/ApiConfigContext.jsx'
+import {openNotificationWithSound} from '@config/Notifications'
+import {GlobalPhoneInput} from '@components/PhoneInput'
 import Logo from '/images/logo.png';
-import { zodResolver } from 'mantine-form-zod-resolver';
-import { z } from 'zod';
-import { parsePhoneNumberFromString } from 'libphonenumber-js';
-import { motion } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next';
-import { useDocumentTitle } from '@hooks/DocumentTitle';
+import {zodResolver} from 'mantine-form-zod-resolver';
+import {z} from 'zod';
+import {parsePhoneNumberFromString} from 'libphonenumber-js';
+import {motion} from 'framer-motion'
+import {useNavigate} from 'react-router-dom'
+import {useTranslation} from 'react-i18next';
+import {useDocumentTitle} from '@hooks/DocumentTitle';
+import {useAuth} from "@contexts/AuthContext.jsx";
 
-const emailSchema = z.string().min(3, { message: "Atleast 3 chars" });
+const emailSchema = z.string().min(3, {message: "Atleast 3 chars"});
 const phoneNumberSchema = z.string().refine(
     (value) => {
         const phoneNumber = parsePhoneNumberFromString(value);
         return phoneNumber?.isValid() || false;
     },
-    { message: "Please enter a valid phone number" }
+    {message: "Please enter a valid phone number"}
 );
 
 const passwordSchema = z.string().min(3, "Password must be at least 3 characters long.")
@@ -37,7 +51,7 @@ const loginSchema = z.object({
                 return phoneNumberSchema.safeParse(value).success;
             }
         },
-        { message: "Please enter a valid username" }
+        {message: "Please enter a valid username"}
     ),
     userPassword: passwordSchema
 })
@@ -53,17 +67,18 @@ export default function Login() {
         validate: zodResolver(loginSchema)
     });
 
-    const [visible, { toggle }] = useDisclosure(false);
+    const [visible, {toggle}] = useDisclosure(false);
     const theme = useMantineTheme()
-    const { apiConfig } = useApiConfig()
+    const {apiConfig} = useApiConfig()
+    const {setUserDetails} = useAuth();
     const [loading, setLoading] = useState(false);
     const http = useHttp();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     useDocumentTitle(t("login"));
 
     const handleCountryChange = (selected) => {
-        const { userName } = form.getValues();
+        const {userName} = form.getValues();
         const formattedValue = userName.trim();
         if (formattedValue) {
             const isPhoneNumber = /^\d|\+/.test(formattedValue);
@@ -80,7 +95,7 @@ export default function Login() {
     };
 
     const handleUsernameChange = (event) => {
-        const { value } = event;
+        const {value} = event;
         form.setFieldValue('userName', value);
         form.validateField('userName');
     }
@@ -89,13 +104,16 @@ export default function Login() {
         event.preventDefault();
         setLoading(true);
         const formValue = form.values;
-
+        const {userName} = formValue;
+        formValue.userName = userName?.includes('+91') ? userName.replace('+91', '') : userName;
         http.post(apiConfig.auth.login, formValue)
             .then((response) => {
-                const { data } = response;
+                const {data} = response;
                 if (data) {
-                    const { token } = data;
-                    localStorage.setItem('token', token)
+                    const {token, clientModel, userId} = data;
+                    localStorage.setItem('user', userId);
+                    setUserDetails(JSON.parse((JSON.stringify(clientModel))));
+                    localStorage.setItem('token', token);
                     openNotificationWithSound({
                         title: 'Success',
                         message: 'You have been successfully verified',
@@ -104,31 +122,43 @@ export default function Login() {
                     navigate('/')
                 }
             }).catch(error => {
-                openNotificationWithSound({
-                    title: error.name,
-                    message: error.message,
-                    color: theme.colors.red[6]
-                }, 'error')
-            }).finally(() => {
-                setLoading(false);
-            })
+            openNotificationWithSound({
+                title: error.name,
+                message: error.message,
+                color: theme.colors.red[6]
+            }, 'error')
+        }).finally(() => {
+            setLoading(false);
+        })
     }
 
     return (
         <div className={styles.loginPage}>
             <div className={styles.overlay}>
                 <motion.div
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    initial={{ opacity: 0, scale: 0.7 }}
-                    className='flex items-center justify-center'
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    style={{ height: 'auto', width: '100%', overflow: 'hidden' }}
+                    whileInView={{opacity: 1, scale: 1}}
+                    initial={{opacity: 0, scale: 0.7}}
+                    className={`flex items-center justify-center !rounded-[28px]`}
+                    transition={{duration: 0.3, ease: 'easeInOut'}}
+                    style={{height: 'auto', width: '100%', overflow: 'hidden'}}
                 >
-                    <Card shadow='lg' className='!p-0 min-h-80 min-w-96 lg:h-[75vh] lg:w-[75%] lg:min-h-[62vh] flex flex-col lg:!flex-row-reverse' radius={'lg'}>
-                        <Card.Section m={'auto'} className={`!flex flex-col ${styles.loginFormSection} flex-1 p-8`}>
-                            <Card.Section className='w-full !mx-auto'>
+                    <Card radius={"xl"}
+                          className='!p-0 min-h-80 min-w-96 lg:h-[75vh] lg:w-[60%] lg:min-h-[62vh] flex flex-col lg:!flex-row-reverse'>
+                        <Card.Section withBorder m={'auto'}
+                                      className={`!flex flex-col ${styles.loginFormSection} flex-1 p-8`}>
+                            <Card.Section className='w-full !mx-auto rounded-md'>
                                 <Stack className='w-full py-2' align='center' gap={0}>
-                                    <Text align='center' className='w-full m-0' fz={'h3'} fw={'bold'}>
+                                    <AspectRatio ratio={16 / 9} className={`flex lg:!hidden xl:!hidden 2xl:!hidden`}>
+                                        <Image
+                                            bd={1}
+                                            h={100}
+                                            w={100}
+                                            mb={20}
+                                            fit="scale-down"
+                                            src={Logo}
+                                        />
+                                    </AspectRatio>
+                                    <Text align='center' className='w-full m-0' fz={'h1'} fw={'bold'}>
                                         Sign In
                                     </Text>
                                     <Text className='w-full text-center' fz={'sm'}>
@@ -136,7 +166,7 @@ export default function Login() {
                                     </Text>
                                 </Stack>
                             </Card.Section>
-                            <Card.Section className='w-full flex-1 !mx-auto'>
+                            <Card.Section className='w-full !mx-auto !flex items-center !flex-1'>
                                 <form onSubmit={handleFormSubmit}>
                                     <Stack my={20} gap={10}>
                                         <GlobalPhoneInput
@@ -145,20 +175,14 @@ export default function Login() {
                                             withAsterisk
                                             onChange={handleUsernameChange}
                                             onCountryChange={handleCountryChange}
-                                            styles={{
-                                                label: {
-                                                    fontWeight: 'inherit',
-                                                    fontSize: '14px'
-                                                }
-                                            }}
                                         />
                                         <PasswordInput
                                             {...form.getInputProps('userPassword')}
                                             label='Password'
                                             withAsterisk
                                             size='md'
-                                            radius={'md'}
                                             onVisibilityChange={toggle}
+                                            className={`min-h-[5.5rem]`}
                                             styles={{
                                                 label: {
                                                     fontWeight: 'inherit',
@@ -199,7 +223,7 @@ export default function Login() {
                                                     textAlign: 'center'
                                                 }
                                             }} className='opacity-70'>
-                                                By clicking on 'Sign In', you acknowledge the&nbsp;
+                                                By clicking on &#39;Sign In&#39;, you acknowledge the&nbsp;
                                                 <Anchor underline="always" size='xs'>
                                                     Terms of Services
                                                 </Anchor>
@@ -212,7 +236,11 @@ export default function Login() {
                                     </Stack>
                                 </form>
                             </Card.Section>
-                            <Card.Section>
+                            <Card.Section withBorder mih={50} style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
                                 <Stack>
                                     <Center>
                                         <Text size='sm' opacity={apiConfig.appConfig.opacity}>
@@ -224,27 +252,27 @@ export default function Login() {
                         </Card.Section>
                         <Card.Section
                             m="auto"
-                            className={`${styles.loginInfoSection} flex-[2] relative`}
+                            className={`${styles.loginInfoSection} !hidden lg:!flex flex-[2] relative`}
                             style={{
                                 height: '100%',
-                                position: 'relative', // Ensure this is set for absolute positioning inside
+                                position: 'relative',
                             }}
                         >
-                            <Group className="w-full" p="lg" align="center" gap={0}>
-                                <Image
-                                    bd={1}
-                                    h={150}
-                                    w={150}
-                                    fit="scale-down"
-                                    src={Logo}
-                                />
+                            <Group className="w-full" p="lg" align="start" gap={0}>
+                                <AspectRatio ratio={16 / 9}>
+                                    <Image
+                                        bd={1}
+                                        h={150}
+                                        w={150}
+                                        fit="scale-down"
+                                        src={Logo}
+                                    />
+                                </AspectRatio>
                             </Group>
-
-                            {/* Gradient at the bottom */}
                             <div
                                 className="absolute bottom-0 left-0 w-full h-24 pointer-events-none"
                                 style={{
-                                    background: `linear-gradient(to bottom, transparent, ${theme.colors.brand[9]})`, // Use theme color directly
+                                    height: '100%',
                                 }}
                             />
                         </Card.Section>
