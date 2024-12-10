@@ -1,7 +1,7 @@
-import {Carousel} from '@mantine/carousel';
-import {useRef, useState} from "react";
+import { Carousel } from '@mantine/carousel';
+import { useRef, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
-import {CarouselCard} from "@components/CarouselCard.jsx";
+import { CarouselCard } from "@components/CarouselCard.jsx";
 
 const data = [
     {
@@ -36,13 +36,13 @@ const data = [
     },
 ];
 
-export function HeroCarousel({height}) {
-    const autoplay = useRef(Autoplay({delay: 2500}));
+export function HeroCarousel({ height }) {
+    const autoplay = useRef(Autoplay({ delay: 2500 }));
     const [scrollIndex, setScrollIndex] = useState(0);
     const carouselRef = useRef(null);
 
-    const slides = data.map((item) => (
-        <Carousel.Slide key={item.title}>
+    const slides = data.map((item, index) => (
+        <Carousel.Slide key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <CarouselCard {...item} />
         </Carousel.Slide>
     ));
@@ -58,7 +58,27 @@ export function HeroCarousel({height}) {
                 value={isNaN(scrollIndex) ? 0 : scrollIndex}
                 onChange={setScrollIndex}
                 loop={false}
-                style={{flex: 1}}
+                style={{ height: '610px', width: '100%', overflow: 'hidden' }}
+                styles={{
+                    container: {
+                        display: 'flex',
+                        flexDirection: 'column',
+                        height: '615px'
+                    },
+                    viewport: {
+                        display: 'flex',
+                        flexDirection: 'column',
+                        overflowY: 'scroll',
+                        overflowX: 'hidden',
+                        scrollbarWidth: 'none',
+                        msOverflowStyle: 'none',
+                        height: '615px',
+                    },
+                    slide: {
+                        height: '100%',
+                        minHeight: '615px',
+                    },
+                }}
             >
                 {slides}
             </Carousel>
