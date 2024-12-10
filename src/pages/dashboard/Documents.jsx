@@ -91,7 +91,6 @@ export default function Documents() {
     }
 
     const onAddEditDone = () => {
-        console.log('onAddEditDone: ');
         getDocumentList();
         handleModalClose();
     }
@@ -107,6 +106,7 @@ export default function Documents() {
     const openAddEditModal = ({data = null, mode = 'add'}) => {
         modals.open({
             title: mode === "edit" ? `${t("edit")} ${t("document")}` : `${t("add")} ${t("document")}`,
+            centered: true,
             children: (
                 <AddEditDocument mode={mode} data={data} onAddEdit={() => onAddEditDone()}
                                  handleCancel={() => handleModalClose()}/>

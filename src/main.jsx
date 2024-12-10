@@ -49,8 +49,77 @@ const theme = createTheme({
                 size: 'xl'
             }
         }),
+        Input: {
+            defaultProps: {
+                radius: 'xl',
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem'
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.5rem'
+                },
+            })
+        },
+        TextInput: {
+            defaultProps: {
+                radius: 'xl'
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem'
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.5rem'
+                },
+            })
+        },
+        PasswordInput: {
+            defaultProps: {
+                radius: 'xl'
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.7rem'
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.7rem'
+                },
+            })
+        },
+        Textarea: {
+            defaultProps: {
+                radius: 'xl',
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem'
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.5rem'
+                },
+            })
+        },
         Button: {
             defaultProps: {
+                radius: 'xl',
                 loaderProps: {h: '48px', w: '48px'}
             },
         },
@@ -75,11 +144,11 @@ function AppWrapper() {
         <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
             <Notifications position='top-right' zIndex={9999}/>
             <ModalsProvider
-            modalProps={{
-                withCloseButton: false,
-                trapFocus: false,
-                radius: 'lg',
-            }}
+                modalProps={{
+                    withCloseButton: false,
+                    trapFocus: false,
+                    radius: 'lg',
+                }}
             >
                 <Suspense>
                     <App/>

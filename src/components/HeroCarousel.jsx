@@ -50,35 +50,16 @@ export function HeroCarousel({ height }) {
     return (
         <div ref={carouselRef} className={`h-full w-full`}>
             <Carousel
-                plugins={[autoplay.current]}
+                // plugins={[autoplay.current]}
                 orientation="vertical"
                 withControls={false}
                 withIndicators
                 height={height}
+                slidesToScroll={1}
                 value={isNaN(scrollIndex) ? 0 : scrollIndex}
                 onChange={setScrollIndex}
                 loop={false}
-                style={{ height: '610px', width: '100%', overflow: 'hidden' }}
-                styles={{
-                    container: {
-                        display: 'flex',
-                        flexDirection: 'column',
-                        height: '615px'
-                    },
-                    viewport: {
-                        display: 'flex',
-                        flexDirection: 'column',
-                        overflowY: 'scroll',
-                        overflowX: 'hidden',
-                        scrollbarWidth: 'none',
-                        msOverflowStyle: 'none',
-                        height: '615px',
-                    },
-                    slide: {
-                        height: '100%',
-                        minHeight: '615px',
-                    },
-                }}
+                style={{ height: '100%', width: '100%', overflow: 'hidden' }}
             >
                 {slides}
             </Carousel>

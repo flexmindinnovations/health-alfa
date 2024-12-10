@@ -151,7 +151,7 @@ export function GlobalPhoneInput({
                         ? theme.colors.red[6]
                         : isFocused ? `var(--mantine-primary-color-filled)` : theme.colors.gray[4]
                     }`,
-                    borderRadius: theme.radius.md,
+                    borderRadius: theme.radius.xl,
                     padding: 0,
                     transition: 'border-color 0.2s ease',
                 }}
@@ -205,13 +205,13 @@ export function GlobalPhoneInput({
                     {...props}
                     {...form.getInputProps('username')}
                     placeholder={placeholder}
-                    size="md"
                     onChange={handleInputChange}
                     value={inputValue}
                     onFocus={handleOnFocus}
                     onBlur={handleOnBlur}
                     maxLength={isEmail ? 50 : selectedCountry?.maxDigits || 15}
                     error={null}
+                    size={'md'}
                     styles={{
                         error: {
                             display: 'none'
@@ -219,12 +219,11 @@ export function GlobalPhoneInput({
                         input: {
                             border: 'none',
                             padding: '0 10px',
-                            background: 'transparent',
+                            background: 'transparent !important',
                             height: 'auto',
                             width: '100%',
                             flex: '1',
                             fontSize: '0.8rem',
-                            borderRadius: theme.radius.md
                         },
                         root: {
                             width: '100%',
@@ -233,7 +232,7 @@ export function GlobalPhoneInput({
                 />
             </Box>
             {form.errors.username && showError && (
-                <Text size="xs" mt={2} style={{color: theme.colors.red[6]}}>
+                <Text size="xs" ml={'0.7rem'} mt={2} style={{color: theme.colors.red[6]}}>
                     {form.errors.username}
                 </Text>
             )}

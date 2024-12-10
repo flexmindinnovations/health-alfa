@@ -1,7 +1,7 @@
 import {DataTable} from 'mantine-datatable';
 import {ActionIcon, Container, Group, Loader, Text, TextInput, Tooltip, useMantineTheme} from '@mantine/core';
 import {useTranslation} from 'react-i18next';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {Plus, RefreshCcw, SquarePen, Trash2, X} from 'lucide-react';
 import styles from '@styles/DataTableWrapper.module.css';
 import {modals} from "@mantine/modals";
@@ -27,6 +27,7 @@ export function DataTableWrapper({
     const [filteredData, setFilteredData] = useState(dataSource);
     const theme = useMantineTheme();
     const {t} = useTranslation();
+    const [rowData, setRowData] = useState({});
 
     const PAGE_SIZES = [10, 15, 20];
     const radius = theme.radius.xl;
@@ -82,6 +83,7 @@ export function DataTableWrapper({
                             size={16}
                             style={{cursor: 'pointer', color: 'red'}}
                             onClick={() => {
+                                setRowData(record);
                                 openDeleteModal(record);
                             }}
                         />
@@ -91,21 +93,22 @@ export function DataTableWrapper({
         },
     ];
 
-    const openDeleteModal = (data) => {
-        console.log('data: ', data)
-        modals.openConfirmModal({
-            title: t('deleteConfirm'),
-            children: (
-                <Text size="sm">{t('areYouSureToDelete')}</Text>
-            ),
-            labels: {confirm: t('delete'), cancel: t('cancel')},
-            confirmProps: {color: 'red', radius: radius},
-            cancelProps: {radius: radius},
-            onCancel: () => {
-            },
-            onConfirm: () => onDelete(data),
-        })
-    }
+    const openDeleteModal = useCallback(
+        (data) => {
+            modals.openConfirmModal({
+                title: t('deleteConfirm'),
+                centered: true,
+                children: (
+                    <Text size="sm">{t('areYouSureToDelete')}?</Text>
+                ),
+                labels: {confirm: t('delete'), cancel: t('cancel')},
+                confirmProps: {color: 'red', radius: radius},
+                cancelProps: {radius: radius},
+                onCancel: () => {
+                },
+                onConfirm: () => onDelete(data),
+            })
+        }, [rowData])
 
     const onDelete = (data) => {
         handleOnDelete(data);
@@ -121,8 +124,6 @@ export function DataTableWrapper({
                             disabled={loading}
                             placeholder={t('search')}
                             value={searchQuery}
-                            size="md"
-                            radius="lg"
                             onChange={(e) => setSearchQuery(e.target.value)}
                             style={{width: '100%'}}
                         />

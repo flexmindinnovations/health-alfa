@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
-import {Button, CloseIcon, Container, Loader, Stack, Group} from "@mantine/core";
+import {Button, CloseIcon, Container, Loader, Stack, Group, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import Input from "@components/Input";
 import {z} from "zod";
@@ -113,15 +113,15 @@ export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
     return (
         // <ModalWrapper isOpen={open} toggle={handleOnClose} title={title} size="md">
         <Stack className="flex flex-col gap-2">
-            <Input
+            <TextInput
                 {...form.getInputProps("documentNameEnglish")}
-                title={`${t("documentName")} ${t("english")}`}
+                label={`${t("documentName")} ${t("english")}`}
                 withAsterisk
                 // disabled={disableFormField.documentNameEnglish}
             />
-            <Input
+            <TextInput
                 {...form.getInputProps("documentNameArabic")}
-                title={`${t("documentName")} ${t("arabic")}`}
+                label={`${t("documentName")} ${t("arabic")}`}
                 withAsterisk
                 // disabled={disableFormField.documentNameArabic}
                 styles={{

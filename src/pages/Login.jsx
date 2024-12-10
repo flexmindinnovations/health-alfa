@@ -76,7 +76,6 @@ export default function Login() {
     const navigate = useNavigate();
     const {t} = useTranslation();
     useDocumentTitle(t("login"));
-    const radius = theme.radius.xl;
 
     const handleCountryChange = (selected) => {
         const {userName} = form.getValues();
@@ -111,8 +110,7 @@ export default function Login() {
             .then((response) => {
                 const {data} = response;
                 if (data) {
-                    const {token, clientModel} = data;
-                    const {userId} = clientModel;
+                    const {token, clientModel, userId} = data;
                     localStorage.setItem('user', userId);
                     setUserDetails(JSON.parse((JSON.stringify(clientModel))));
                     localStorage.setItem('token', token);
@@ -177,19 +175,12 @@ export default function Login() {
                                             withAsterisk
                                             onChange={handleUsernameChange}
                                             onCountryChange={handleCountryChange}
-                                            styles={{
-                                                label: {
-                                                    fontWeight: 'inherit',
-                                                    fontSize: '14px'
-                                                }
-                                            }}
                                         />
                                         <PasswordInput
                                             {...form.getInputProps('userPassword')}
                                             label='Password'
                                             withAsterisk
                                             size='md'
-                                            radius={'md'}
                                             onVisibilityChange={toggle}
                                             className={`min-h-[5.5rem]`}
                                             styles={{

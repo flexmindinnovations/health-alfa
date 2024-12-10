@@ -3,7 +3,9 @@ import {Avatar, Group, Menu, UnstyledButton} from '@mantine/core'
 import {LogOutIcon, SettingsIcon} from 'lucide-react'
 import {useTranslation} from 'react-i18next'
 import {useAuth} from "@contexts/AuthContext.jsx";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import {modals} from "@mantine/modals";
+import Settings from "@components/Settings.jsx";
 
 // eslint-disable-next-line react/display-name
 const UserButton = forwardRef(({image, name, email, ...others}, ref) => (

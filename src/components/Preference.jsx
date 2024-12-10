@@ -91,7 +91,6 @@ export function PreferenceComponent() {
                     onChange={handleColorSchemeChange}
                     value={theme}
                     fullWidth
-                    radius={'sm'}
                     key={refreshCount}
                     transitionDuration={300}
                     transitionTimingFunction='linear'

@@ -32,6 +32,7 @@ export function CarouselCard({ image, title, category }) {
                 backgroundPosition: 'center center',
                 position: 'relative',
                 overflow: 'hidden',
+                width: '100%'
             }}
             className={`${classes.card}`}
         >

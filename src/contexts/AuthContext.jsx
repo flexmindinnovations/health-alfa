@@ -50,11 +50,20 @@ export const AuthProvider = ({children}) => {
     }
 
     const isAuthenticated = () => {
-        const _user = JSON.parse(localStorage.getItem('user') || '{}')
-        const hasUserObj = _user && typeof _user === 'object' && Object.keys(_user).length > 0
-        // return hasUserObj && !!localStorage.getItem("token");
-        return !!localStorage.getItem('token')
-    }
+        const userString = localStorage.getItem('user');
+        let _user = null;
+        if (userString) {
+            try {
+                _user = JSON.parse(userString);
+            } catch (e) {
+                console.error('Error parsing user:', e);
+            }
+        }
+
+        const hasUserObj = _user && typeof _user === 'object' && Object.keys(_user).length > 0;
+        // return hasUserObj && !!localStorage.getItem('token');
+        return !!localStorage.getItem('token');
+    };
 
     return (
         <AuthContext.Provider
