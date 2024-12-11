@@ -125,6 +125,16 @@ const theme = createTheme({
                 loaderProps: {h: '48px', w: '48px'}
             },
         },
+        Tooltip: {
+            defaultProps: {
+                withArrow: true
+            },
+            styles: (theme) => ({
+                tooltip: {
+                    fontSize: '12px'
+                }
+            })
+        },
         Portal: {
             defaultProps: {
                 target: '#portalRoot'

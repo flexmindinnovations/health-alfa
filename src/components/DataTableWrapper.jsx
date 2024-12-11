@@ -133,7 +133,7 @@ export function DataTableWrapper({
                             type="text"
                             leftSection={<Search size={16}/>}
                             disabled={loading}
-                            rightSection={searchQuery && <CloseButton onClick={() => setSearchQuery('')} />}
+                            rightSection={searchQuery && <Tooltip label={t('clearSearch')}><CloseButton onClick={() => setSearchQuery('')} /></Tooltip>}
                             rightSectionWidth={40}
                             placeholder={t('search')}
                             value={searchQuery}

@@ -53,5 +53,6 @@
   "delete": "Delete",
   "cancel": "Cancel",
   "deleteConfirm": "Delete Confirmation",
-  "areYouSureToDelete": "Are you sure you want to permanently delete this item"
+  "areYouSureToDelete": "Are you sure you want to permanently delete this item",
+  "clearSearch": "Clear Search"
 }

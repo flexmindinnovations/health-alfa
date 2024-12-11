@@ -87,8 +87,8 @@ export default function Documents() {
         }
     }
 
-    const onAddEditDone = () => {
-        getDocumentList();
+    const onAddEditDone = async () => {
+        await getDocumentList();
         handleModalClose();
     }
 
