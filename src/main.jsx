@@ -73,7 +73,9 @@ const theme = createTheme({
             styles: (theme) => ({
                 label: {
                     marginBottom: '4px',
-                    marginLeft: '0.5rem'
+                    marginLeft: '0.5rem',
+                    fontWeight: 'normal',
+                    fontSize: '12px',
                 },
                 error: {
                     fontSize: '12px',
@@ -123,6 +125,11 @@ const theme = createTheme({
                 loaderProps: {h: '48px', w: '48px'}
             },
         },
+        Portal: {
+            defaultProps: {
+                target: '#portalRoot'
+            }
+        },
         Modal: {
             defaultProps: {
                 styles: {
@@ -141,7 +148,11 @@ const theme = createTheme({
 function AppWrapper() {
     return (
 
-        <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
+        <MantineProvider
+            theme={theme}
+            withGlobalStyles
+            withNormalizeCSS
+        >
             <Notifications position='top-right' zIndex={9999}/>
             <ModalsProvider
                 modalProps={{

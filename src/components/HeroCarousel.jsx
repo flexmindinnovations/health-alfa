@@ -1,5 +1,5 @@
 import { Carousel } from '@mantine/carousel';
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { CarouselCard } from "@components/CarouselCard.jsx";
 
@@ -47,10 +47,20 @@ export function HeroCarousel({ height }) {
         </Carousel.Slide>
     ));
 
+    useEffect(() => {
+        const indicators = document.querySelectorAll(
+            '.mantine-Carousel-indicator'
+        );
+        indicators.forEach((indicator) => {
+            indicator.removeAttribute('aria-hidden');
+            indicator.setAttribute('aria-label', 'Carousel indicator'); // Optional: Add meaningful label
+        });
+    }, []);
+
     return (
         <div ref={carouselRef} className={`h-full w-full`}>
             <Carousel
-                // plugins={[autoplay.current]}
+                plugins={[autoplay.current]}
                 orientation="vertical"
                 withControls={false}
                 withIndicators

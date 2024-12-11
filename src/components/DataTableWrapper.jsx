@@ -1,8 +1,18 @@
 import {DataTable} from 'mantine-datatable';
-import {ActionIcon, Container, Group, Loader, Text, TextInput, Tooltip, useMantineTheme} from '@mantine/core';
+import {
+    ActionIcon,
+    CloseButton, CloseIcon,
+    Container,
+    Group,
+    Loader,
+    Text,
+    TextInput,
+    Tooltip,
+    useMantineTheme
+} from '@mantine/core';
 import {useTranslation} from 'react-i18next';
 import {useCallback, useEffect, useState} from 'react';
-import {Plus, RefreshCcw, SquarePen, Trash2, X} from 'lucide-react';
+import {Plus, RefreshCcw, Search, SquarePen, Trash2, X} from 'lucide-react';
 import styles from '@styles/DataTableWrapper.module.css';
 import {modals} from "@mantine/modals";
 
@@ -102,8 +112,8 @@ export function DataTableWrapper({
                     <Text size="sm">{t('areYouSureToDelete')}?</Text>
                 ),
                 labels: {confirm: t('delete'), cancel: t('cancel')},
-                confirmProps: {color: 'red', radius: radius},
-                cancelProps: {radius: radius},
+                confirmProps: {color: 'red', radius: radius, leftSection: <Trash2 size={16}/>},
+                cancelProps: {radius: radius, leftSection: <CloseIcon size={16}/>},
                 onCancel: () => {
                 },
                 onConfirm: () => onDelete(data),
@@ -121,32 +131,20 @@ export function DataTableWrapper({
                     <div style={{position: 'relative', width: '50%'}}>
                         <TextInput
                             type="text"
+                            leftSection={<Search size={16}/>}
                             disabled={loading}
+                            rightSection={searchQuery && <CloseButton onClick={() => setSearchQuery('')} />}
+                            rightSectionWidth={40}
                             placeholder={t('search')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             style={{width: '100%'}}
                         />
-                        {searchQuery && (
-                            <ActionIcon
-                                onClick={() => setSearchQuery('')}
-                                radius="lg"
-                                style={{
-                                    position: 'absolute',
-                                    top: '50%',
-                                    right: 10,
-                                    transform: 'translateY(-50%)',
-                                }}
-                            >
-                                <X size={16}/>
-                            </ActionIcon>
-                        )}
                     </div>
                     <Group gap={1}>
                         <Tooltip label={t('refreshData')}>
                             <ActionIcon
                                 onClick={onRefresh}
-                                radius={0}
                                 loading={loading}
                                 style={{
                                     borderRadius: showAddButton
@@ -163,7 +161,6 @@ export function DataTableWrapper({
                             <Tooltip label={`${t('add')} ${addTitle}`}>
                                 <ActionIcon
                                     onClick={handleOnAdd}
-                                    radius={0}
                                     disabled={loading}
                                     style={{
                                         borderRadius: `0 ${radius} ${radius} 0`,
