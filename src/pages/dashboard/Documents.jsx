@@ -23,7 +23,7 @@ export default function Documents() {
     const _columns = [
         {
             accessor: 'documentTypeId',
-            title: t('documentId'),
+            title: t('id'),
             width: 350,
             style: {padding: '10px'},
         },
@@ -112,7 +112,7 @@ export default function Documents() {
     }
 
     return (
-        <Container m={0} p={0} size='lg' w='100%' maw='100%' h='100%'>
+        <Container>
             <DataTableWrapper
                 loading={loading}
                 showAddButton={true}

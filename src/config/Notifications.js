@@ -1,11 +1,13 @@
 import { showNotification } from "@mantine/notifications";
 import { notificationAudio } from '../main';
 
-export const openNotificationWithSound = (options, type) => {
+export const openNotificationWithSound = (options, { withSound = false }) => {
     showNotification(options);
     notificationAudio.volume = 1.0;
     notificationAudio.currentTime = 0;
-    notificationAudio.play().catch((error) => {
-        console.error("Unable to play sound:", error);
-    });
+    if (withSound) {
+        notificationAudio.play().catch((error) => {
+            console.error("Unable to play sound:", error);
+        });
+    }
 }

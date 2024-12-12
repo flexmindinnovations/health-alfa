@@ -1,4 +1,4 @@
-import {DataTable} from 'mantine-datatable';
+import { DataTable } from 'mantine-datatable';
 import {
     ActionIcon,
     CloseButton, CloseIcon,
@@ -10,33 +10,33 @@ import {
     Tooltip,
     useMantineTheme
 } from '@mantine/core';
-import {useTranslation} from 'react-i18next';
-import {useCallback, useEffect, useState} from 'react';
-import {Plus, RefreshCcw, Search, SquarePen, Trash2, X} from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useCallback, useEffect, useState, useMemo } from 'react';
+import { Plus, RefreshCcw, Search, SquarePen, Trash2, X } from 'lucide-react';
 import styles from '@styles/DataTableWrapper.module.css';
-import {modals} from "@mantine/modals";
+import { modals } from "@mantine/modals";
 
 export function DataTableWrapper({
-                                     loading,
-                                     columns = [],
-                                     dataSource = [],
-                                     showAddButton = false,
-                                     addTitle = '',
-                                     id,
-                                     handleOnAdd,
-                                     handleOnEdit,
-                                     handleOnDelete,
-                                     onRefresh,
-                                 }) {
+    loading,
+    columns = [],
+    dataSource = [],
+    showAddButton = false,
+    addTitle = '',
+    id,
+    handleOnAdd,
+    handleOnEdit,
+    handleOnDelete,
+    onRefresh,
+}) {
     const [pagination, setPagination] = useState({
         page: 1,
         pageSize: 15,
-        sortStatus: {columnAccessor: '', direction: ''},
+        sortStatus: { columnAccessor: '', direction: '' },
     });
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredData, setFilteredData] = useState(dataSource);
     const theme = useMantineTheme();
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const [rowData, setRowData] = useState({});
 
     const PAGE_SIZES = [10, 15, 20];
@@ -44,19 +44,21 @@ export function DataTableWrapper({
 
     const applyFilters = () => {
         const query = searchQuery.toLowerCase();
-        setFilteredData(
-            dataSource.filter((record) =>
-                Object.values(record).some((value) =>
-                    String(value).toLowerCase().includes(query)
+        if (dataSource.length) {
+            setFilteredData(
+                dataSource.filter((record) =>
+                    Object.values(record).some((value) =>
+                        String(value).toLowerCase().includes(query)
+                    )
                 )
-            )
-        );
+            );
+        }
     };
 
     useEffect(applyFilters, [searchQuery, dataSource]);
 
     const handleSortChange = (sortStatus) => {
-        const {columnAccessor, direction} = sortStatus;
+        const { columnAccessor, direction } = sortStatus;
         setFilteredData((prev) =>
             [...prev].sort((a, b) => {
                 const valA = a[columnAccessor];
@@ -70,28 +72,28 @@ export function DataTableWrapper({
                         : -1;
             })
         );
-        setPagination((prev) => ({...prev, sortStatus}));
+        setPagination((prev) => ({ ...prev, sortStatus }));
     };
 
     const enhancedColumns = [
-        ...columns.map((col) => ({...col, sortable: true})),
+        ...columns.map((col) => ({ ...col, sortable: true })),
         {
             accessor: 'actions',
             title: t('action'),
             width: 100,
             render: (record) => (
-                <div style={{display: 'flex', gap: '10px'}}>
+                <div style={{ display: 'flex', gap: '10px' }}>
                     <Tooltip label={t('edit')}>
                         <SquarePen
                             size={16}
-                            style={{cursor: 'pointer', color: theme.primaryColor}}
+                            style={{ cursor: 'pointer', color: theme.primaryColor }}
                             onClick={() => handleOnEdit(record)}
                         />
                     </Tooltip>
                     <Tooltip label={t('delete')}>
                         <Trash2
                             size={16}
-                            style={{cursor: 'pointer', color: 'red'}}
+                            style={{ cursor: 'pointer', color: 'red' }}
                             onClick={() => {
                                 setRowData(record);
                                 openDeleteModal(record);
@@ -111,9 +113,9 @@ export function DataTableWrapper({
                 children: (
                     <Text size="sm">{t('areYouSureToDelete')}?</Text>
                 ),
-                labels: {confirm: t('delete'), cancel: t('cancel')},
-                confirmProps: {color: 'red', radius: radius, leftSection: <Trash2 size={16}/>},
-                cancelProps: {radius: radius, leftSection: <CloseIcon size={16}/>},
+                labels: { confirm: t('delete'), cancel: t('cancel') },
+                confirmProps: { color: 'red', radius: radius, leftSection: <Trash2 size={16} /> },
+                cancelProps: { radius: radius, leftSection: <CloseIcon size={16} /> },
                 onCancel: () => {
                 },
                 onConfirm: () => onDelete(data),
@@ -128,17 +130,17 @@ export function DataTableWrapper({
         <div className="h-full w-full flex flex-col items-start justify-start gap-4">
             <div className={`${styles.toolbar}`}>
                 <div className="search-filter flex items-center justify-between w-full gap-4">
-                    <div style={{position: 'relative', width: '50%'}}>
+                    <div style={{ position: 'relative', width: '50%' }}>
                         <TextInput
                             type="text"
-                            leftSection={<Search size={16}/>}
-                            disabled={loading}
+                            leftSection={<Search size={16} />}
+                            disabled={loading || !dataSource.length}
                             rightSection={searchQuery && <Tooltip label={t('clearSearch')}><CloseButton onClick={() => setSearchQuery('')} /></Tooltip>}
                             rightSectionWidth={40}
                             placeholder={t('search')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            style={{width: '100%'}}
+                            style={{ width: '100%' }}
                         />
                     </div>
                     <Group gap={1}>
@@ -154,7 +156,7 @@ export function DataTableWrapper({
                                     height: 38,
                                 }}
                             >
-                                {<RefreshCcw size={16}/>}
+                                {<RefreshCcw size={16} />}
                             </ActionIcon>
                         </Tooltip>
                         {showAddButton && (
@@ -168,7 +170,7 @@ export function DataTableWrapper({
                                         height: 38,
                                     }}
                                 >
-                                    <Plus size={16}/>
+                                    <Plus size={16} />
                                 </ActionIcon>
                             </Tooltip>
                         )}
@@ -177,12 +179,12 @@ export function DataTableWrapper({
             </div>
             {loading ? (
                 <Container className="flex-1 flex items-center justify-center">
-                    <Loader/>
+                    <Loader />
                 </Container>
             ) : (
                 <DataTable
                     styles={{
-                        root: {width: '100%'},
+                        root: { width: '100%' },
                     }}
                     idAccessor={id}
                     withTableBorder
@@ -196,15 +198,15 @@ export function DataTableWrapper({
                     totalRecords={filteredData.length}
                     recordsPerPage={pagination.pageSize}
                     page={pagination.page}
-                    onPageChange={(page) => setPagination((prev) => ({...prev, page}))}
+                    onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
                     recordsPerPageOptions={PAGE_SIZES}
                     onRecordsPerPageChange={(pageSize) =>
-                        setPagination((prev) => ({...prev, pageSize}))
+                        setPagination((prev) => ({ ...prev, pageSize }))
                     }
                     sortStatus={pagination.sortStatus}
                     onSortStatusChange={handleSortChange}
                     paginationSize="md"
-                    paginationText={({from, to, totalRecords}) =>
+                    paginationText={({ from, to, totalRecords }) =>
                         `${t('records')} ${from} - ${to} ${t('of')} ${totalRecords}`
                     }
                     paginationWrapBreakpoint="sm"
