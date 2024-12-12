@@ -7,6 +7,7 @@ import { useApiConfig } from "@contexts/ApiConfigContext";
 import { modals } from "@mantine/modals";
 import { openNotificationWithSound } from '@config/Notifications';
 import { AddEditDoctor } from '@modals/AddEditDoctor';
+import { useDocumentTitle } from '@hooks/DocumentTitle';
 
 export default function Doctors() {
     const { t, i18n } = useTranslation();
@@ -16,6 +17,7 @@ export default function Doctors() {
     const { apiConfig } = useApiConfig();
     const http = useHttp();
     const theme = useMantineTheme();
+    useDocumentTitle(t('doctors'))
 
     const _columns = useMemo(() =>
         [
@@ -33,7 +35,7 @@ export default function Doctors() {
             },
             {
                 accessor: 'doctorAddress',
-                title: t('doctorAddress'),
+                title: t('address'),
                 width: 'auto',
                 style: { padding: '10px', flex: 1 },
             },
@@ -67,7 +69,7 @@ export default function Doctors() {
                 title: name,
                 message: message,
                 color: theme.colors.red[6]
-            }, {withSound: false})
+            }, { withSound: false })
 
         } finally {
             setLoading(false);

@@ -8,7 +8,8 @@ import {
     Text,
     TextInput,
     Tooltip,
-    useMantineTheme
+    useMantineTheme,
+    useMantineColorScheme
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { useCallback, useEffect, useState, useMemo } from 'react';
@@ -36,6 +37,8 @@ export function DataTableWrapper({
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredData, setFilteredData] = useState(dataSource);
     const theme = useMantineTheme();
+    const { colorScheme } = useMantineColorScheme();
+    const [themeMode, setThemeMode] = useState(colorScheme);
     const { t } = useTranslation();
     const [rowData, setRowData] = useState({});
 
@@ -56,6 +59,15 @@ export function DataTableWrapper({
     };
 
     useEffect(applyFilters, [searchQuery, dataSource]);
+
+    useEffect(() => {
+        if (colorScheme === 'auto') {
+            const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            setThemeMode(isDarkMode ? 'dark' : 'light');
+        } else {
+            setThemeMode(colorScheme);
+        }
+    }, [colorScheme]);
 
     const handleSortChange = (sortStatus) => {
         const { columnAccessor, direction } = sortStatus;
@@ -81,12 +93,19 @@ export function DataTableWrapper({
             accessor: 'actions',
             title: t('action'),
             width: 100,
+            titleStyle: () => ({
+                backgroundColor: themeMode === 'light' ? theme.white : theme.colors.dark[7],
+                textAlign: 'center'
+            }),
+            cellsStyle: () => ({
+                backgroundColor: themeMode === 'light' ? theme.white : theme.colors.dark[7],
+            }),
             render: (record) => (
-                <div style={{ display: 'flex', gap: '10px' }}>
+                <Group gap={8} wrap='nowrap' justify='center'>
                     <Tooltip label={t('edit')}>
                         <SquarePen
                             size={16}
-                            style={{ cursor: 'pointer', color: theme.primaryColor }}
+                            style={{ cursor: 'pointer' }}
                             onClick={() => handleOnEdit(record)}
                         />
                     </Tooltip>
@@ -100,10 +119,11 @@ export function DataTableWrapper({
                             }}
                         />
                     </Tooltip>
-                </div>
+                </Group>
             ),
         },
     ];
+
 
     const openDeleteModal = useCallback(
         (data) => {
@@ -185,12 +205,15 @@ export function DataTableWrapper({
                 <DataTable
                     styles={{
                         root: { width: '100%' },
+
                     }}
                     idAccessor={id}
-                    withTableBorder
-                    withColumnBorders
+                    withTableBorder={true}
+                    withColumnBorders={true}
+                    storeColumnsKey={id}
                     striped
                     highlightOnHover
+                    pinLastColumn
                     records={filteredData}
                     noRecordsText={t('noRecordsToShow')}
                     recordsPerPageLabel={t('recordsPerPage')}

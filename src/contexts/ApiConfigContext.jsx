@@ -11,6 +11,9 @@ const defaultApiConfig = {
     register: ``,
     getUserDetails: ``
   },
+  clients: {
+    getList: `/ClientPersonalInfo/getClientPersonalInfoList`
+  },
   doctors: {
     getList: `/Doctor/getDoctorList`
   },

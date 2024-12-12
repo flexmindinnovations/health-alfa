@@ -7,6 +7,7 @@ import { useApiConfig } from "@contexts/ApiConfigContext";
 import { modals } from "@mantine/modals";
 import { openNotificationWithSound } from '@config/Notifications';
 import { AddEditTestType } from '@modals/AddEditTestType';
+import { useDocumentTitle } from "@hooks/DocumentTitle";
 
 export default function TestTypes() {
     const { t, i18n } = useTranslation();
@@ -16,6 +17,7 @@ export default function TestTypes() {
     const { apiConfig } = useApiConfig();
     const http = useHttp();
     const theme = useMantineTheme();
+    useDocumentTitle(t('testTypes'));
 
     const _columns = useMemo(() =>
         [

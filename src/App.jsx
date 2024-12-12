@@ -17,7 +17,7 @@ const Doctors = lazy(() => import('@pages/dashboard/Doctors'));
 const PatientVisits = lazy(() => import('@pages/dashboard/PatientVisits'));
 const TestTypes = lazy(() => import('@pages/dashboard/TestTypes'));
 const Allergies = lazy(() => import('@pages/dashboard/Allergies'));
-const Users = lazy(() => import('@pages/dashboard/Users'));
+const Clients = lazy(() => import('@pages/dashboard/Clients'));
 const Documents = lazy(() => import('@pages/dashboard/Documents'));
 const MedicalTests = lazy(() => import('@pages/dashboard/MedicalTests'));
 const HealthConditions = lazy(() => import('@pages/dashboard/HealthConditions'));
@@ -42,7 +42,7 @@ function App() {
             <Routes>
                 <Route path='/app' element={<Layout />}>
                     <Route index element={<Dashboard />} />
-                    <Route path='users' element={<Users />} />
+                    <Route path='clients' element={<Clients />} />
                     <Route path='doctors' element={<Doctors />} />
                     <Route path='patients' element={<PatientVisits />} />
                     <Route path='tests' element={<TestTypes />} />

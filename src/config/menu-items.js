@@ -11,10 +11,10 @@ export const MENU_ITEMS = [
     },
     {
         id: 2,
-        key: 'users',
-        title: 'Users',
+        key: 'clients',
+        title: 'Clients',
         icon: Users,
-        route: '/users',
+        route: '/clients',
         active: false,
     },
     {

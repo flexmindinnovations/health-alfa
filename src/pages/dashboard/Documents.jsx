@@ -24,7 +24,7 @@ export default function Documents() {
         {
             accessor: 'documentTypeId',
             title: t('id'),
-            width: 350,
+            width: 80,
             style: {padding: '10px'},
         },
         {
