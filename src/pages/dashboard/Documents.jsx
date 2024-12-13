@@ -23,8 +23,8 @@ export default function Documents() {
     const _columns = [
         {
             accessor: 'documentTypeId',
-            title: t('documentId'),
-            width: 350,
+            title: t('id'),
+            width: 80,
             style: {padding: '10px'},
         },
         {
@@ -87,8 +87,8 @@ export default function Documents() {
         }
     }
 
-    const onAddEditDone = () => {
-        getDocumentList();
+    const onAddEditDone = async () => {
+        await getDocumentList();
         handleModalClose();
     }
 
@@ -112,7 +112,7 @@ export default function Documents() {
     }
 
     return (
-        <Container m={0} p={0} size='lg' w='100%' maw='100%' h='100%'>
+        <Container>
             <DataTableWrapper
                 loading={loading}
                 showAddButton={true}

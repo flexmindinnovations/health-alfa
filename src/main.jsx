@@ -1,22 +1,23 @@
-import {StrictMode, Suspense} from 'react'
-import {createRoot} from 'react-dom/client'
+import { StrictMode, Suspense } from 'react'
+import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import {BrowserRouter} from 'react-router-dom'
-import {ApiConfigProvider} from '@contexts/ApiConfigContext'
-import {AuthProvider} from '@contexts/AuthContext'
-import {ErrorBoundary} from '@components/ErrorBoundary'
-import {NextUIProvider} from '@nextui-org/react'
-import {DeviceProvider} from '@hooks/device-detector'
+import { BrowserRouter } from 'react-router-dom'
+import { ApiConfigProvider } from '@contexts/ApiConfigContext'
+import { AuthProvider } from '@contexts/AuthContext'
+import { ErrorBoundary } from '@components/ErrorBoundary'
+import { NextUIProvider } from '@nextui-org/react'
+import { DeviceProvider } from '@hooks/device-detector'
 import './i18n'
-import {createTheme, DirectionProvider, Loader, MantineProvider} from '@mantine/core'
-import {Notifications} from '@mantine/notifications'
+import { createTheme, DirectionProvider, Loader, MantineProvider } from '@mantine/core'
+import { Notifications } from '@mantine/notifications'
 import RingLoader from '@components/RingLoader'
 import '@mantine/core/styles.css'
 import 'mantine-datatable/styles.layer.css'
 import '@mantine/notifications/styles.css'
 import '@mantine/carousel/styles.css';
-import {ModalsProvider} from "@mantine/modals";
+import '@mantine/dates/styles.css';
+import { ModalsProvider } from "@mantine/modals";
 
 export const notificationAudio = new Audio('/sounds/notification.wav')
 notificationAudio.load()
@@ -44,7 +45,7 @@ const theme = createTheme({
     components: {
         Loader: Loader.extend({
             defaultProps: {
-                loaders: {...Loader.defaultLoaders, ring: RingLoader},
+                loaders: { ...Loader.defaultLoaders, ring: RingLoader },
                 type: 'ring',
                 size: 'xl'
             }
@@ -68,12 +69,34 @@ const theme = createTheme({
         },
         TextInput: {
             defaultProps: {
-                radius: 'xl'
+                radius: 'xl',
+                mh: '6rem'
             },
             styles: (theme) => ({
                 label: {
                     marginBottom: '4px',
+                    marginLeft: '0.5rem',
+                    fontWeight: 'normal',
+                    fontSize: '14px',
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
                     marginLeft: '0.5rem'
+                },
+            })
+        },
+        NumberInput: {
+            defaultProps: {
+                mh: '6rem'
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem',
+                    fontWeight: 'normal',
+                    fontSize: '14px',
                 },
                 error: {
                     fontSize: '12px',
@@ -85,7 +108,8 @@ const theme = createTheme({
         },
         PasswordInput: {
             defaultProps: {
-                radius: 'xl'
+                radius: 'xl',
+                mh: '6rem'
             },
             styles: (theme) => ({
                 label: {
@@ -97,6 +121,25 @@ const theme = createTheme({
                     color: theme.colors.red[6],
                     marginTop: '4px',
                     marginLeft: '0.7rem'
+                },
+            })
+        },
+        FileInput: {
+            defaultProps: {
+                mh: '6rem'
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem',
+                    fontWeight: 'normal',
+                    fontSize: '12px',
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.5rem'
                 },
             })
         },
@@ -120,8 +163,23 @@ const theme = createTheme({
         Button: {
             defaultProps: {
                 radius: 'xl',
-                loaderProps: {h: '48px', w: '48px'}
+                loaderProps: { h: '48px', w: '48px' }
             },
+        },
+        Tooltip: {
+            defaultProps: {
+                withArrow: true
+            },
+            styles: (theme) => ({
+                tooltip: {
+                    fontSize: '12px'
+                }
+            })
+        },
+        Portal: {
+            defaultProps: {
+                target: '#portalRoot'
+            }
         },
         Modal: {
             defaultProps: {
@@ -134,6 +192,54 @@ const theme = createTheme({
                     }
                 }
             }
+        },
+        Container: {
+            defaultProps: {
+                m: 0,
+                p: 0,
+                max: '100%',
+                w: '100%',
+                h: '100%',
+                size: 'xl'
+            }
+        },
+        Select: {
+            defaultProps: {
+                mh: '6rem'
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem',
+                    fontWeight: 'normal',
+                    fontSize: '14px',
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.5rem'
+                },
+            })
+        },
+        DateInput: {
+            defaultProps: {
+                mh: '6rem'
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem',
+                    fontWeight: 'normal',
+                    fontSize: '14px',
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.5rem'
+                },
+            })
         }
     }
 })
@@ -141,8 +247,12 @@ const theme = createTheme({
 function AppWrapper() {
     return (
 
-        <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
-            <Notifications position='top-right' zIndex={9999}/>
+        <MantineProvider
+            theme={theme}
+            withGlobalStyles
+            withNormalizeCSS
+        >
+            <Notifications position='top-right' zIndex={9999} />
             <ModalsProvider
                 modalProps={{
                     withCloseButton: false,
@@ -151,7 +261,7 @@ function AppWrapper() {
                 }}
             >
                 <Suspense>
-                    <App/>
+                    <App />
                 </Suspense>
             </ModalsProvider>
 
@@ -176,7 +286,7 @@ root.render(
                         <ApiConfigProvider>
                             <AuthProvider>
                                 <DeviceProvider>
-                                    <AppWrapper/>
+                                    <AppWrapper />
                                 </DeviceProvider>
                             </AuthProvider>
                         </ApiConfigProvider>

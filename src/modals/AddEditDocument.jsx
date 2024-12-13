@@ -1,10 +1,9 @@
 import {useCallback, useEffect, useState} from "react";
-import {Button, CloseIcon, Container, Loader, Stack, Group, TextInput} from "@mantine/core";
+import {Button, CloseIcon, Container, Group, Loader, Stack, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import Input from "@components/Input";
 import {z} from "zod";
 import {zodResolver} from "mantine-form-zod-resolver";
-import {Save} from "lucide-react";
+import {Save, SquarePen} from "lucide-react";
 import {useTranslation} from "react-i18next";
 import {useApiConfig} from "@contexts/ApiConfigContext";
 import useHttp from "@hooks/axios-instance";
@@ -132,21 +131,22 @@ export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
                 }}
             />
 
-            <Group gap={20} justify={'right'} className={`flex ${i18n.language === 'en' ? 'justify-end' : 'justify-start'} mt-4`}>
+            <Group gap={20} justify={'right'}
+                   className={`flex ${i18n.language === 'en' ? 'justify-end' : 'justify-start'} mt-4`}>
                 <Button
                     onClick={handleCancel}
                     leftSection={<CloseIcon size={16}/>}
-                    variant="default"
+                    variant="outline"
                 >
                     {t("cancel")}
                 </Button>
                 <Button
                     onClick={handleSubmit}
-                    leftSection={<Save size={16}/>}
+                    leftSection={mode === 'add' ? <Save size={16}/> : <SquarePen size={16}/>}
                     loading={loading}
                     disabled={!form.isValid()}
                 >
-                    {t("submit")}
+                    {mode === 'add' ? t("submit") : t("update")}
                 </Button>
             </Group>
         </Stack>

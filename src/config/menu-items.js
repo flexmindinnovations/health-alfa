@@ -1,4 +1,4 @@
-import {Activity, AlertCircle, FileText, Headset, Heart, Home, Info, Pill, ShieldCheck, Users} from 'lucide-react';
+import { Activity, AlertCircle, FileText, Headset, Heart, Home, Info, Pill, ShieldCheck, Users, Stethoscope, Binoculars, BookUser } from 'lucide-react';
 
 export const MENU_ITEMS = [
     {
@@ -11,14 +11,38 @@ export const MENU_ITEMS = [
     },
     {
         id: 2,
-        key: 'users',
-        title: 'Users',
+        key: 'clients',
+        title: 'Clients',
         icon: Users,
-        route: '/users',
+        route: '/clients',
         active: false,
     },
     {
         id: 3,
+        key: 'doctors',
+        title: 'Doctors',
+        icon: Stethoscope,
+        route: '/doctors',
+        active: false,
+    },
+    {
+        id: 4,
+        key: 'patientVisits',
+        title: 'Patients Visits',
+        icon: BookUser,
+        route: '/patients',
+        active: false,
+    },
+    {
+        id: 5,
+        key: 'testTypes',
+        title: 'Test Types',
+        icon: Binoculars,
+        route: '/tests',
+        active: false,
+    },
+    {
+        id: 6,
         key: 'documents',
         title: 'Documents',
         icon: FileText,
@@ -26,7 +50,7 @@ export const MENU_ITEMS = [
         active: false,
     },
     {
-        id: 4,
+        id: 7,
         key: 'medicalTests',
         title: 'Medical Tests',
         icon: Activity, // Using "Activity" for medical tests
@@ -34,7 +58,7 @@ export const MENU_ITEMS = [
         active: false,
     },
     {
-        id: 5,
+        id: 8,
         key: 'healthConditions',
         title: 'Health Conditions',
         icon: Heart, // Using "Heart" for health conditions
@@ -42,7 +66,7 @@ export const MENU_ITEMS = [
         active: false,
     },
     {
-        id: 6,
+        id: 9,
         key: 'medications',
         title: 'Medications',
         icon: Pill, // Using "Pill" for medications
@@ -50,7 +74,7 @@ export const MENU_ITEMS = [
         active: false,
     },
     {
-        id: 7,
+        id: 10,
         key: 'allergies',
         title: 'Allergies',
         icon: AlertCircle, // Using "AlertCircle" for allergies
@@ -58,7 +82,7 @@ export const MENU_ITEMS = [
         active: false,
     },
     {
-        id: 8,
+        id: 11,
         key: 'immunizations',
         title: 'Immunizations',
         icon: ShieldCheck, // Using "ShieldCheck" for immunizations
@@ -66,7 +90,7 @@ export const MENU_ITEMS = [
         active: false,
     },
     // {
-    //   id: 9,
+    //   id: 12,
     //   key: 'ORDERS',
     //   title: 'Orders',
     //   icon: ShoppingCart,
@@ -74,7 +98,7 @@ export const MENU_ITEMS = [
     //   active: false,
     // }
     {
-        id: 10,
+        id: 13,
         key: 'contactUs',
         title: 'Contact Us',
         icon: Headset,
@@ -82,7 +106,7 @@ export const MENU_ITEMS = [
         active: false,
     },
     {
-        id: 11,
+        id: 14,
         key: 'aboutUs',
         title: 'About Us',
         icon: Info,

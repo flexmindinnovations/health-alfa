@@ -7,13 +7,27 @@ const defaultApiConfig = {
   },
   translate: `http://localhost:5000/translate`,
   auth: {
-    login: '/User/SignIn',
-    register: '',
-    getUserDetails: ''
+    login: `/User/SignIn`,
+    register: ``,
+    getUserDetails: ``
+  },
+  clients: {
+    getList: `/ClientPersonalInfo/getClientPersonalInfoList`,
+    save: `/ClientPersonalInfo/saveClientPersonalInfo`,
+    update: (id) =>  `/ClientPersonalInfo/updateClientPersonalInfo/${id}`
+  },
+  doctors: {
+    getList: `/Doctor/getDoctorList`
+  },
+  patientVisits: {
+    getList: `/PatientVisit/GetPatientVisitList`
+  },
+  testTypes: {
+    getList: `/TestType/getTestTypeList`
   },
   document: {
-    getList: '/DocumentType/GetDocumentTypeList',
-    saveDocument: '/DocumentType/saveDocumentType',
+    getList: `/DocumentType/GetDocumentTypeList`,
+    saveDocument: `/DocumentType/saveDocumentType`,
     updateDocument: documentId =>
       `/DocumentType/updateDocumentType/${documentId}`,
     deleteDocument: documentId => `/DocumentType/deleteDocument/${documentId}`
