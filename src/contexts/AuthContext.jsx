@@ -1,30 +1,43 @@
-import {createContext, useContext, useState} from 'react'
+import { createContext, useContext, useState } from 'react'
 import toast from 'react-hot-toast'
-import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
+import { useApiConfig } from "@contexts/ApiConfigContext.jsx";
 
-const AuthContext = createContext(null)
+const AuthContext = createContext({
+    fetchUserDetails: () => { },
+    setUserDetails: (data) => { },
+    logoutUser: () => { },
+    loginUser: () => { },
+    getToken: () => String,
+    isAuthenticated: () => Boolean
+})
 
-export const AuthProvider = ({children}) => {
-    const apiConfig = useApiConfig();
+export const AuthProvider = ({ children }) => {
+    const { apiConfig } = useApiConfig();
     const [user, setUser] = useState(null)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [error, setError] = useState(null)
 
     const fetchUserDetails = async () => {
-        try {
-            const user = JSON.parse(localStorage.getItem('user') || '{}')
-            const getUserDetails = apiConfig.customer.getCustomerById(user) || "";
-            const response = await http.get(getUserDetails);
-            const {data} = response;
-            if (data) {
-                setUser(data);
-                return data;
-            }
-        } catch (error) {
-            const errorMessage = error.message
-            toast.error(errorMessage)
-            return null
-        }
+        // console.log('called fetchUserDetails');
+
+        // try {
+        //     const user = JSON.parse(localStorage.getItem('user') || '{}');
+        //     console.log('user: ', user);
+
+        //     const getUserDetails = apiConfig.customer.getCustomerById(user) || "";
+        //     console.log('getUserDetails: ', getUserDetails);
+
+        //     const response = await http.get(getUserDetails);
+        //     const { data } = response;
+        //     if (data) {
+        //         setUser(data);
+        //         return data;
+        //     }
+        // } catch (error) {
+        //     const errorMessage = error.message
+        //     toast.error(errorMessage)
+        //     return null
+        // }
     }
 
     const setUserDetails = (userDetails) => {

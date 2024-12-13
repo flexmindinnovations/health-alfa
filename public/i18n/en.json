@@ -79,5 +79,7 @@
   "height": "Height",
   "emergencyContactNumber": "Emergency Number",
   "profileImage": "Profile Image",
-  "updateSuccessfull": "Update Successfull"
+  "success": "Success",
+  "updateSuccessfull": "Update Successfull",
+  "loginSuccessMessage": "You have been successfully verified"
 }
