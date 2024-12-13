@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Layout } from '@pages/Layout.jsx';
 import { useApiConfig } from '@contexts/ApiConfigContext.jsx';
 import { AppLoader } from "@components/AppLoader.jsx";
+import { useAuth } from '@contexts/AuthContext';
 
 const PublicLayout = lazy(() => import('@pages/PublicLayout'));
 const PageNotFound = lazy(() => import('@pages/PageNotFound'));
@@ -30,11 +31,13 @@ function App() {
     const { setDirection } = useDirection();
     const { i18n } = useTranslation();
     const { setPreferences } = useApiConfig();
+    const { fetchUserDetails } = useAuth();
 
     useEffect(() => {
         setPreferences();
         const direction = i18n.dir();
         setDirection(direction);
+        fetchUserDetails();
     }, [i18n.language, setDirection]);
 
     return (

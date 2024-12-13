@@ -13,30 +13,30 @@ import {
     Text,
     useMantineTheme
 } from '@mantine/core'
-import {useDisclosure} from '@mantine/hooks'
-import {useForm} from '@mantine/form'
-import {useState} from 'react';
+import { useDisclosure } from '@mantine/hooks'
+import { useForm } from '@mantine/form'
+import { useState } from 'react';
 import useHttp from '@hooks/axios-instance.js'
-import {useApiConfig} from '@contexts/ApiConfigContext.jsx'
-import {openNotificationWithSound} from '@config/Notifications'
-import {GlobalPhoneInput} from '@components/PhoneInput'
+import { useApiConfig } from '@contexts/ApiConfigContext.jsx'
+import { openNotificationWithSound } from '@config/Notifications'
+import { GlobalPhoneInput } from '@components/PhoneInput'
 import Logo from '/images/logo.png';
-import {zodResolver} from 'mantine-form-zod-resolver';
-import {z} from 'zod';
-import {parsePhoneNumberFromString} from 'libphonenumber-js';
-import {motion} from 'framer-motion'
-import {useNavigate} from 'react-router-dom'
-import {useTranslation} from 'react-i18next';
-import {useDocumentTitle} from '@hooks/DocumentTitle';
-import {useAuth} from "@contexts/AuthContext.jsx";
+import { zodResolver } from 'mantine-form-zod-resolver';
+import { z } from 'zod';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next';
+import { useDocumentTitle } from '@hooks/DocumentTitle';
+import { useAuth } from "@contexts/AuthContext.jsx";
 
-const emailSchema = z.string().min(3, {message: "Atleast 3 chars"});
+const emailSchema = z.string().min(3, { message: "Atleast 3 chars" });
 const phoneNumberSchema = z.string().refine(
     (value) => {
         const phoneNumber = parsePhoneNumberFromString(value);
         return phoneNumber?.isValid() || false;
     },
-    {message: "Please enter a valid phone number"}
+    { message: "Please enter a valid phone number" }
 );
 
 const passwordSchema = z.string().min(3, "Password must be at least 3 characters long.")
@@ -51,7 +51,7 @@ const loginSchema = z.object({
                 return phoneNumberSchema.safeParse(value).success;
             }
         },
-        {message: "Please enter a valid username"}
+        { message: "Please enter a valid username" }
     ),
     userPassword: passwordSchema
 })
@@ -67,18 +67,18 @@ export default function Login() {
         validate: zodResolver(loginSchema)
     });
 
-    const [visible, {toggle}] = useDisclosure(false);
+    const [visible, { toggle }] = useDisclosure(false);
     const theme = useMantineTheme()
-    const {apiConfig} = useApiConfig()
-    const {setUserDetails} = useAuth();
+    const { apiConfig } = useApiConfig()
+    const { setUserDetails } = useAuth();
     const [loading, setLoading] = useState(false);
     const http = useHttp();
     const navigate = useNavigate();
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     useDocumentTitle(t("login"));
 
     const handleCountryChange = (selected) => {
-        const {userName} = form.getValues();
+        const { userName } = form.getValues();
         const formattedValue = userName.trim();
         if (formattedValue) {
             const isPhoneNumber = /^\d|\+/.test(formattedValue);
@@ -95,7 +95,7 @@ export default function Login() {
     };
 
     const handleUsernameChange = (event) => {
-        const {value} = event;
+        const { value } = event;
         form.setFieldValue('userName', value);
         form.validateField('userName');
     }
@@ -104,48 +104,48 @@ export default function Login() {
         event.preventDefault();
         setLoading(true);
         const formValue = form.values;
-        const {userName} = formValue;
+        const { userName } = formValue;
         formValue.userName = userName?.includes('+91') ? userName.replace('+91', '') : userName;
         http.post(apiConfig.auth.login, formValue)
             .then((response) => {
-                const {data} = response;
+                const { data } = response;
                 if (data) {
-                    const {token, clientModel, userId} = data;
+                    const { token, clientModel, userId } = data;
                     localStorage.setItem('user', userId);
                     setUserDetails(JSON.parse((JSON.stringify(clientModel))));
                     localStorage.setItem('token', token);
                     openNotificationWithSound({
-                        title: 'Success',
-                        message: 'You have been successfully verified',
+                        title: t('success'),
+                        message: t('loginSuccessMessage'),
                         color: theme.colors.brand[9]
                     }, 'success')
                     navigate('/')
                 }
             }).catch(error => {
-            openNotificationWithSound({
-                title: error.name,
-                message: error.message,
-                color: theme.colors.red[6]
-            }, 'error')
-        }).finally(() => {
-            setLoading(false);
-        })
+                openNotificationWithSound({
+                    title: error.name,
+                    message: error.message,
+                    color: theme.colors.red[6]
+                }, 'error')
+            }).finally(() => {
+                setLoading(false);
+            })
     }
 
     return (
         <div className={styles.loginPage}>
             <div className={styles.overlay}>
                 <motion.div
-                    whileInView={{opacity: 1, scale: 1}}
-                    initial={{opacity: 0, scale: 0.7}}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, scale: 0.7 }}
                     className={`flex items-center justify-center !rounded-[28px]`}
-                    transition={{duration: 0.3, ease: 'easeInOut'}}
-                    style={{height: 'auto', width: '100%', overflow: 'hidden'}}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    style={{ height: 'auto', width: '100%', overflow: 'hidden' }}
                 >
                     <Card radius={"xl"}
-                          className='!p-0 min-h-80 min-w-96 lg:h-[75vh] lg:w-[60%] lg:min-h-[62vh] flex flex-col lg:!flex-row-reverse'>
+                        className='!p-0 min-h-80 min-w-96 lg:h-[75vh] lg:w-[60%] lg:min-h-[62vh] flex flex-col lg:!flex-row-reverse'>
                         <Card.Section withBorder m={'auto'}
-                                      className={`!flex flex-col ${styles.loginFormSection} flex-1 p-8`}>
+                            className={`!flex flex-col ${styles.loginFormSection} flex-1 p-8`}>
                             <Card.Section className='w-full !mx-auto rounded-md'>
                                 <Stack className='w-full py-2' align='center' gap={0}>
                                     <AspectRatio ratio={16 / 9} className={`flex lg:!hidden xl:!hidden 2xl:!hidden`}>
