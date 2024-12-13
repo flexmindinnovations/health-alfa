@@ -136,7 +136,7 @@ export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
                 <Button
                     onClick={handleCancel}
                     leftSection={<CloseIcon size={16}/>}
-                    variant="default"
+                    variant="outline"
                 >
                     {t("cancel")}
                 </Button>

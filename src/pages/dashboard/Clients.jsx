@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import { Container, useMantineTheme } from '@mantine/core'
 import { useDocumentTitle } from '@hooks/DocumentTitle'
 import { useTranslation } from 'react-i18next'
@@ -50,6 +50,7 @@ export default function Users() {
                             style={{
                                 width: '30px',
                                 height: '30px',
+                                margin: '0 auto',
                                 borderRadius: '50%',
                                 objectFit: 'cover',
                             }}
@@ -140,11 +141,11 @@ export default function Users() {
     useEffect(() => {
         if (i18n.isInitialized) {
             setColumns(_columns);
-            getTestTypeList();
+            getClientList();
         }
-    }, [i18n.language, _columns]);
+    }, [i18n.language]);
 
-    const getTestTypeList = async () => {
+    const getClientList = useCallback(async () => {
         setLoading(true);
         try {
             const response = await http.get(apiConfig.clients.getList);
@@ -160,39 +161,41 @@ export default function Users() {
                 message: message,
                 color: theme.colors.red[6]
             }, { withSound: false })
-
         } finally {
             setLoading(false);
         }
+    }, [])
+
+    const handleAddEdit = (data, mode) => {
+        openAddEditModal({ data, mode });
     }
 
-    const handleOnAdd = (data) => {
-        openAddEditModal({ data, mode: 'add' });
-    }
-
-    const handleEdit = (data) => {
-        openAddEditModal({ data, mode: 'edit' });
-    }
-    const handleDelete = async (data) => {
-
-        closeModals();
-    }
-
-    const closeModals = () => {
+    const closeModals = (data) => {
+        const { refresh } = data;
+        if (refresh) handleOnRefresh();
         modals.closeAll();
     }
 
     const handleOnRefresh = async () => {
-        await getTestTypeList();
+        await getClientList();
     }
 
     const openAddEditModal = ({ data = null, mode = 'add' }) => {
         modals.open({
             title: `${mode === "edit" ? t("edit") : t("add")}` + ` ${t("client")}`,
             centered: true,
+            size: 'xl',
+            styles: {
+                body: {
+                    marginTop: '1rem'
+                }
+            },
             children: (
-                <AddEditClient mode={mode} data={data} onAddEdit={() => onAddEditDone()}
-                    handleCancel={() => closeModals()} />
+                <AddEditClient
+                    mode={mode}
+                    data={data}
+                    handleCancel={(refresh) => closeModals(refresh)}
+                />
             )
         })
     }
@@ -206,9 +209,9 @@ export default function Users() {
                 addTitle={t('testType')}
                 columns={columns}
                 dataSource={dataSource}
-                handleOnAdd={(data) => handleOnAdd(data)}
+                handleOnAdd={(data) => handleAddEdit(data, 'add')}
+                handleOnEdit={data => handleAddEdit(data, 'edit')}
                 handleOnDelete={data => handleDelete(data)}
-                handleOnEdit={data => handleEdit(data)}
                 onRefresh={() => handleOnRefresh()}
             />
         </Container>

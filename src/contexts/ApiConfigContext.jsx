@@ -12,7 +12,9 @@ const defaultApiConfig = {
     getUserDetails: ``
   },
   clients: {
-    getList: `/ClientPersonalInfo/getClientPersonalInfoList`
+    getList: `/ClientPersonalInfo/getClientPersonalInfoList`,
+    save: `/ClientPersonalInfo/saveClientPersonalInfo`,
+    update: (id) =>  `/ClientPersonalInfo/updateClientPersonalInfo/${id}`
   },
   doctors: {
     getList: `/Doctor/getDoctorList`

@@ -48,6 +48,7 @@
   "englishNameIsRequired": "English name is required",
   "arabicNameIsRequired": "Arabic name is required",
   "update": "Update",
+  "save": "Save",
   "search": "Search",
   "refreshData": "Refresh Data",
   "cancel": "Cancel",
@@ -77,5 +78,6 @@
   "bloodType": "Blood Group",
   "height": "Height",
   "emergencyContactNumber": "Emergency Number",
-  "profileImage": "Profile Image"
+  "profileImage": "Profile Image",
+  "updateSuccessfull": "Update Successfull"
 }

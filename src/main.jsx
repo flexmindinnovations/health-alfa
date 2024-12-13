@@ -16,6 +16,7 @@ import '@mantine/core/styles.css'
 import 'mantine-datatable/styles.layer.css'
 import '@mantine/notifications/styles.css'
 import '@mantine/carousel/styles.css';
+import '@mantine/dates/styles.css';
 import { ModalsProvider } from "@mantine/modals";
 
 export const notificationAudio = new Audio('/sounds/notification.wav')
@@ -68,7 +69,64 @@ const theme = createTheme({
         },
         TextInput: {
             defaultProps: {
-                radius: 'xl'
+                radius: 'xl',
+                mh: '6rem'
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem',
+                    fontWeight: 'normal',
+                    fontSize: '14px',
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.5rem'
+                },
+            })
+        },
+        NumberInput: {
+            defaultProps: {
+                mh: '6rem'
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem',
+                    fontWeight: 'normal',
+                    fontSize: '14px',
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.5rem'
+                },
+            })
+        },
+        PasswordInput: {
+            defaultProps: {
+                radius: 'xl',
+                mh: '6rem'
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.7rem'
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.7rem'
+                },
+            })
+        },
+        FileInput: {
+            defaultProps: {
+                mh: '6rem'
             },
             styles: (theme) => ({
                 label: {
@@ -82,23 +140,6 @@ const theme = createTheme({
                     color: theme.colors.red[6],
                     marginTop: '4px',
                     marginLeft: '0.5rem'
-                },
-            })
-        },
-        PasswordInput: {
-            defaultProps: {
-                radius: 'xl'
-            },
-            styles: (theme) => ({
-                label: {
-                    marginBottom: '4px',
-                    marginLeft: '0.7rem'
-                },
-                error: {
-                    fontSize: '12px',
-                    color: theme.colors.red[6],
-                    marginTop: '4px',
-                    marginLeft: '0.7rem'
                 },
             })
         },
@@ -161,6 +202,44 @@ const theme = createTheme({
                 h: '100%',
                 size: 'xl'
             }
+        },
+        Select: {
+            defaultProps: {
+                mh: '6rem'
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem',
+                    fontWeight: 'normal',
+                    fontSize: '14px',
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.5rem'
+                },
+            })
+        },
+        DateInput: {
+            defaultProps: {
+                mh: '6rem'
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem',
+                    fontWeight: 'normal',
+                    fontSize: '14px',
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.5rem'
+                },
+            })
         }
     }
 })
