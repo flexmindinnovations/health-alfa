@@ -81,5 +81,6 @@
   "profileImage": "Profile Image",
   "success": "Success",
   "updateSuccessfull": "Update Successfull",
+  "profileImageUpdateSuccessfull": "Profile Image Updated Successfully",
   "loginSuccessMessage": "You have been successfully verified"
 }

@@ -76,8 +76,10 @@ const schema = z.object({
 });
 
 export function AddEditClient({ data = {}, mode = 'add', handleCancel }) {
-    const [preview, setPreview] = useState(data.profileImagePath || '');
+    const [profileImage, setProfileImage] = useState(null);
+    const [imageUploadProgress, setImageUploadProgress] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
     const { i18n, t } = useTranslation();
     const { apiConfig } = useApiConfig();
     const http = useHttp();
@@ -110,20 +112,62 @@ export function AddEditClient({ data = {}, mode = 'add', handleCancel }) {
     const saveUpdateClient = async (data) => {
         setLoading(true);
         setDisableForm(true);
+        const apiCalls = [];
+        const { clientId, ...rest } = data;
+        if (typeof rest === 'object' && rest.hasOwnProperty('height')) {
+            rest.height = rest.height.toString();
+        }
+        rest['profileImagePath'] = '';
+        const saveUpdate = clientId > 0 ? http.put(apiConfig.clients.update(clientId), rest) : http.post(apiConfig.clients.save, rest);
+        apiCalls.push(saveUpdate);
+        if (profileImage) {
+            const formData = new FormData();
+            formData.append('file', profileImage);
+            const updateProfileImage = http.post(apiConfig.clients.updateUserImage(clientId), formData,
+                {
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                    onUploadProgress: (progressEvent) => {
+                        const percentCompleted = Math.round(
+                            (progressEvent.loaded * 100) / progressEvent.total
+                        )
+                        if (percentCompleted > 0 && percentCompleted < 100) {
+                            setIsUploading(true);
+                        } else {
+                            setIsUploading(false);
+                        }
+                        setImageUploadProgress(percentCompleted);
+                    }
+                }
+            );
+            apiCalls.push(updateProfileImage);
+        }
         try {
-            const { clientId, ...rest } = data;
-            if (typeof rest === 'object' && rest.hasOwnProperty('height')) {
-                rest.height = rest.height.toString();
-            }
-            const response = clientId > 0 ? await http.put(apiConfig.clients.update(clientId), rest) : await http.post(apiConfig.clients.save, rest);
-            if (response?.status === 200) {
-                const data = response.data;
+            const response = await Promise.allSettled(apiCalls);
+            const saveUpdateResponse = response[0];
+
+            if (saveUpdateResponse.status === 'fulfilled' && saveUpdateResponse.value?.status === 200) {
+                const data = saveUpdateResponse.value.data;
                 openNotificationWithSound({
                     title: t('updateSuccessfull'),
                     message: data.message,
                     color: theme.colors.brand[6]
                 }, { withSound: false })
+            } else if (saveUpdateResponse.status === 'rejected') {
+                console.error('Save/Update failed:', saveUpdateResponse.reason);
             }
+
+            const updateProfileImageResponse = response[1];
+            if (updateProfileImageResponse?.status === 'fulfilled' && updateProfileImageResponse.value?.status === 200) {
+                const data = updateProfileImageResponse.value.data;
+                openNotificationWithSound({
+                    title: t('profileImageUpdateSuccessfull'),
+                    message: data.message,
+                    color: theme.colors.brand[6]
+                }, { withSound: false })
+            } else if (updateProfileImageResponse?.status === 'rejected') {
+                console.error('Profile image update failed:', updateProfileImageResponse.reason);
+            }
+
         } catch (error) {
             const { name, message } = error;
             openNotificationWithSound({
@@ -138,16 +182,47 @@ export function AddEditClient({ data = {}, mode = 'add', handleCancel }) {
         }
     }
 
+    const uploadUserImage = async (file) => {
+        setImageUploadProgress(0);
+        const { clientId, ...rest } = form.values;
+        const formData = new FormData();
+        formData.append('file', file);
+        const response = await http.post(apiConfig.clients.updateUserImage(clientId), formData,
+            {
+                headers: { 'Content-Type': 'multipart/form-data' },
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    )
+                    if (percentCompleted > 0 && percentCompleted < 100) {
+                        setIsUploading(true);
+                    } else {
+                        setIsUploading(false);
+                    }
+                    setImageUploadProgress(percentCompleted);
+                }
+            }
+        );
+        const data = response.data;
+        openNotificationWithSound({
+            title: t('profileImageUpdateSuccessfull'),
+            message: data.message,
+            color: theme.colors.brand[6]
+        }, { withSound: false })
+    }
+
     return (
         <Box sx={{ maxWidth: 900, margin: '0 auto' }}>
             <motion.form onSubmit={form.onSubmit(handleSubmit)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-
                 <Grid gutter="md">
                     <Grid.Col span={4} className='flex items-center justify-center'>
                         <ImagePicker
                             disableForm={disableForm}
                             value={form.values.profileImagePath}
-                            onChange={(file) => form.setFieldValue('profileImagePath', file)}
+                            uploadProgress={imageUploadProgress}
+                            isUploading={isUploading}
+                            onChange={(file) => setProfileImage(file)}
+                        // onChange={(file) => uploadUserImage(file)}
                         />
                     </Grid.Col>
                     <Grid.Col span={8}>
