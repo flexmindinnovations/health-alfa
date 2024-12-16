@@ -145,12 +145,36 @@ const theme = createTheme({
         },
         Textarea: {
             defaultProps: {
-                radius: 'xl',
+                radius: 'lg',
             },
             styles: (theme) => ({
                 label: {
                     marginBottom: '4px',
+                    marginLeft: '0.5rem',
+                    fontWeight: 'normal'
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
                     marginLeft: '0.5rem'
+                },
+            })
+        },
+        MultiSelect: {
+            defaultProps: {
+                checkIconPosition: 'right',
+                searchable: true,
+                clearable: true,
+                // hidePickedOptions: true,
+                maxValues: 3,
+                nothingFoundMessage: "Nothing found..."
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem',
+                    fontWeight: 'normal'
                 },
                 error: {
                     fontSize: '12px',
@@ -205,7 +229,11 @@ const theme = createTheme({
         },
         Select: {
             defaultProps: {
-                mh: '6rem'
+                mh: '6rem',
+                checkIconPosition: 'right',
+                searchable: true,
+                clearable: true,
+                nothingFoundMessage: "Nothing found..."
             },
             styles: (theme) => ({
                 label: {

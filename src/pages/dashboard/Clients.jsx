@@ -132,9 +132,9 @@ export default function Users() {
             {
                 accessor: 'clientAddress',
                 title: t('address'),
+                ellipsis: true,
                 width: 'auto',
                 style: { padding: '10px', flex: 1 },
-                ...props
             },
         ], [t])
 

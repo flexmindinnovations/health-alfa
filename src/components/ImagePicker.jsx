@@ -4,18 +4,18 @@ import { motion } from 'framer-motion';
 import { CheckIcon } from 'lucide-react';
 
 export function ImagePicker({ value, onChange, disableForm, isUploading, uploadProgress }) {
-    const [preview, setPreview] = useState(value || '');
+    const placeholderImage = 'https://via.placeholder.com/170';
+    const [preview, setPreview] = useState(value || placeholderImage);
     const [visible, setVisible] = useState(false);
     const [isUploaded, setIsUploaded] = useState(false);
     const [isImageSelected, setIsImageSelected] = useState(false);
     const fileInputRef = useRef(null);
     const theme = useMantineTheme();
-
     useEffect(() => {
         const imageEndpoint = value;
         const host = import.meta.env.VITE_API_URL;
         const imageUrl = `${host}/${imageEndpoint}`.replace('/api', '');
-        if (imageUrl && !isImageSelected) setPreview(imageUrl);
+        if (imageEndpoint && imageUrl && !isImageSelected) setPreview(imageUrl);
         if (isUploading) {
             setIsUploaded(false);
         } else {
@@ -36,7 +36,7 @@ export function ImagePicker({ value, onChange, disableForm, isUploading, uploadP
             };
             reader.readAsDataURL(file);
         } else {
-            setPreview('');
+            setPreview(placeholderImage);
         }
     };
 
@@ -94,7 +94,7 @@ export function ImagePicker({ value, onChange, disableForm, isUploading, uploadP
                 onMouseLeave={() => setVisible(false)}
             >
                 <BackgroundImage
-                    src={preview || 'https://via.placeholder.com/170'}
+                    src={preview}
                     radius="xl"
                     h="100%"
                     styles={{ root: { backgroundSize: 'cover' } }}

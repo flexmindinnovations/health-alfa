@@ -112,6 +112,10 @@ export default function Login() {
                 if (data) {
                     const { token, clientModel, userId } = data;
                     localStorage.setItem('user', userId);
+                    if (typeof clientModel === 'object' && Object.keys(clientModel).length > 0) {
+                        const { profileImagePath } = clientModel;
+                        localStorage.setItem('profile_image', profileImagePath);
+                    }
                     setUserDetails(JSON.parse((JSON.stringify(clientModel))));
                     localStorage.setItem('token', token);
                     openNotificationWithSound({

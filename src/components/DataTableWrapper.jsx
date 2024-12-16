@@ -88,7 +88,7 @@ export function DataTableWrapper({
     };
 
     const enhancedColumns = [
-        ...columns.map((col) => ({ ...col, sortable: true })),
+        ...columns.map((col) => ({ ...col })),
         {
             accessor: 'actions',
             title: t('action'),

@@ -1,0 +1,214 @@
+[
+    {
+        "degree": "MBBS",
+        "specialities": [
+            "General Medicine",
+            "General Surgery",
+            "Pediatrics",
+            "Obstetrics and Gynecology",
+            "Ophthalmology",
+            "Orthopedics"
+        ]
+    },
+    {
+        "degree": "MD",
+        "specialities": [
+            "Internal Medicine",
+            "Dermatology",
+            "Pediatrics",
+            "Psychiatry",
+            "Pathology",
+            "Radiology",
+            "Anesthesiology",
+            "Physiology",
+            "Pharmacology",
+            "Forensic Medicine",
+            "Heart"
+        ]
+    },
+    {
+        "degree": "MS",
+        "specialities": [
+            "General Surgery",
+            "Orthopedics",
+            "ENT (Otorhinolaryngology)",
+            "Ophthalmology",
+            "Obstetrics and Gynecology"
+        ]
+    },
+    {
+        "degree": "MCh",
+        "specialities": [
+            "Cardiothoracic Surgery",
+            "Neurosurgery",
+            "Plastic Surgery",
+            "Pediatric Surgery",
+            "Urology",
+            "Surgical Gastroenterology",
+            "Oncological Surgery"
+        ]
+    },
+    {
+        "degree": "DM",
+        "specialities": [
+            "Cardiology",
+            "Neurology",
+            "Nephrology",
+            "Medical Oncology",
+            "Endocrinology",
+            "Clinical Hematology",
+            "Pulmonary Medicine",
+            "Gastroenterology",
+            "Rheumatology"
+        ]
+    },
+    {
+        "degree": "BDS",
+        "specialities": [
+            "General Dentistry",
+            "Oral Surgery",
+            "Orthodontics",
+            "Endodontics",
+            "Periodontics",
+            "Prosthodontics",
+            "Pedodontics",
+            "Oral and Maxillofacial Pathology"
+        ]
+    },
+    {
+        "degree": "MDS",
+        "specialities": [
+            "Orthodontics",
+            "Oral and Maxillofacial Surgery",
+            "Prosthodontics",
+            "Endodontics",
+            "Periodontics",
+            "Oral Pathology",
+            "Pediatric Dentistry",
+            "Community Dentistry"
+        ]
+    },
+    {
+        "degree": "BAMS",
+        "specialities": [
+            "Ayurvedic Medicine",
+            "Panchakarma",
+            "Kaya Chikitsa",
+            "Shalya Tantra",
+            "Prasuti Tantra and Stree Roga",
+            "Bal Roga",
+            "Dravyaguna"
+        ]
+    },
+    {
+        "degree": "BHMS",
+        "specialities": [
+            "Homeopathy",
+            "Clinical Homeopathy",
+            "Repertory",
+            "Materia Medica",
+            "Organon of Medicine"
+        ]
+    },
+    {
+        "degree": "BPT",
+        "specialities": [
+            "Physiotherapy",
+            "Orthopedic Physiotherapy",
+            "Neurological Physiotherapy",
+            "Sports Physiotherapy",
+            "Pediatric Physiotherapy",
+            "Cardiopulmonary Physiotherapy"
+        ]
+    },
+    {
+        "degree": "MPT",
+        "specialities": [
+            "Orthopedic Physiotherapy",
+            "Neurological Physiotherapy",
+            "Sports Physiotherapy",
+            "Pediatric Physiotherapy",
+            "Cardiopulmonary Physiotherapy"
+        ]
+    },
+    {
+        "degree": "Pharm.D",
+        "specialities": [
+            "Clinical Pharmacy",
+            "Hospital Pharmacy",
+            "Community Pharmacy",
+            "Pharmaceutical Care",
+            "Pharmacovigilance"
+        ]
+    },
+    {
+        "degree": "BSc Nursing",
+        "specialities": [
+            "General Nursing",
+            "Critical Care Nursing",
+            "Pediatric Nursing",
+            "Psychiatric Nursing",
+            "Midwifery"
+        ]
+    },
+    {
+        "degree": "MSc Nursing",
+        "specialities": [
+            "Medical-Surgical Nursing",
+            "Community Health Nursing",
+            "Pediatric Nursing",
+            "Psychiatric Nursing",
+            "Obstetrics and Gynecology Nursing"
+        ]
+    },
+    {
+        "degree": "DNB",
+        "specialities": [
+            "Internal Medicine",
+            "Pediatrics",
+            "General Surgery",
+            "Orthopedics",
+            "ENT",
+            "Radiology",
+            "Dermatology",
+            "Anesthesiology",
+            "Psychiatry",
+            "Cardiology",
+            "Neurology",
+            "Gastroenterology",
+            "Urology",
+            "Plastic Surgery"
+        ]
+    },
+    {
+        "degree": "Fellowship (FIAMS/FICS/FAIS)",
+        "specialities": [
+            "Cardiology",
+            "Neurology",
+            "Surgery",
+            "Pediatrics",
+            "Oncology",
+            "Anesthesiology",
+            "Reproductive Medicine"
+        ]
+    },
+    {
+        "degree": "MBChB",
+        "specialities": [
+            "General Medicine",
+            "General Surgery",
+            "Pediatrics",
+            "Obstetrics and Gynecology"
+        ]
+    },
+    {
+        "degree": "DO (Doctor of Osteopathy)",
+        "specialities": [
+            "Osteopathic Medicine",
+            "Family Medicine",
+            "Internal Medicine",
+            "Emergency Medicine",
+            "Neurology"
+        ]
+    }
+]
