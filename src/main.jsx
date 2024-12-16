@@ -167,7 +167,7 @@ const theme = createTheme({
                 searchable: true,
                 clearable: true,
                 // hidePickedOptions: true,
-                maxValues: 3,
+                // maxValues: 3,
                 nothingFoundMessage: "Nothing found..."
             },
             styles: (theme) => ({

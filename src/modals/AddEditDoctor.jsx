@@ -246,6 +246,7 @@ export function AddEditDoctor({ data = {}, mode = 'add', handleCancel }) {
                                 data={mappedDegrees}
                                 value={selectedDegrees}
                                 onChange={handleDegreeChange}
+                                // maxValues={5}
                                 {...form.getInputProps('qualification')}
                             />
                         </Grid.Col>
