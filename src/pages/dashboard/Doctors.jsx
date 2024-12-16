@@ -76,21 +76,20 @@ export default function Doctors() {
         }
     }
 
-    const handleOnAdd = (data) => {
-        openAddEditModal({ data, mode: 'add' });
+    const handleAddEdit = (data, mode) => {
+        openAddEditModal({ data, mode });
     }
 
-    const handleEdit = (data) => {
-        openAddEditModal({ data, mode: 'edit' });
-    }
     const handleDelete = async (data) => {
-
         closeModals();
     }
 
-    const closeModals = () => {
+    const closeModals = (data = null) => {
+        const { refresh } = data;
+        if (refresh) handleOnRefresh();
         modals.closeAll();
     }
+
 
     const handleOnRefresh = async () => {
         await getDoctorList();
@@ -98,11 +97,20 @@ export default function Doctors() {
 
     const openAddEditModal = ({ data = null, mode = 'add' }) => {
         modals.open({
-            title: mode === "edit" ? `${t("edit")}` : `${t("add")}` + ` ${t("doctor")}`,
+            title: mode === "edit" ? `${t("edit")}: ${data?.doctorName}` : `${t("add")}` + ` ${t("doctor")}`,
             centered: true,
+            size: 'xl',
+            styles: {
+                title: {
+                    fontWeight: '500',
+                    fontSize: '14px'
+                }
+            },
             children: (
-                <AddEditDoctor mode={mode} data={data} onAddEdit={() => onAddEditDone()}
-                    handleCancel={() => closeModals()} />
+                <AddEditDoctor
+                    mode={mode}
+                    data={data}
+                    handleCancel={(refresh) => closeModals(refresh)} />
             )
         })
     }
@@ -111,14 +119,14 @@ export default function Doctors() {
         <Container>
             <DataTableWrapper
                 loading={loading}
-                showAddButton={true}
+                showAddButton={false}
                 id={'doctorId'}
                 addTitle={t('doctor')}
                 columns={columns}
                 dataSource={dataSource}
-                handleOnAdd={(data) => handleOnAdd(data)}
+                handleOnAdd={(data) => handleAddEdit(data, 'add')}
+                handleOnEdit={data => handleAddEdit(data, 'edit')}
                 handleOnDelete={data => handleDelete(data)}
-                handleOnEdit={data => handleEdit(data)}
                 onRefresh={() => handleOnRefresh()}
             />
         </Container>

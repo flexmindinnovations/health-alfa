@@ -1,14 +1,14 @@
-import {forwardRef} from 'react'
-import {Avatar, Group, Menu, UnstyledButton} from '@mantine/core'
-import {LogOutIcon, SettingsIcon} from 'lucide-react'
-import {useTranslation} from 'react-i18next'
-import {useAuth} from "@contexts/AuthContext.jsx";
-import {useNavigate} from "react-router-dom";
-import {modals} from "@mantine/modals";
+import { forwardRef, useState, useEffect } from 'react'
+import { Avatar, Group, Menu, UnstyledButton } from '@mantine/core'
+import { LogOutIcon, SettingsIcon } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { useAuth } from "@contexts/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
+import { modals } from "@mantine/modals";
 import Settings from "@components/Settings.jsx";
 
 // eslint-disable-next-line react/display-name
-const UserButton = forwardRef(({image, name, email, ...others}, ref) => (
+const UserButton = forwardRef(({ image, name, email, ...others }, ref) => (
     <UnstyledButton
         ref={ref}
         style={{
@@ -18,15 +18,24 @@ const UserButton = forwardRef(({image, name, email, ...others}, ref) => (
         {...others}
     >
         <Group>
-            <Avatar src={image} radius='xl'/>
+            <Avatar src={image} radius='xl' />
         </Group>
     </UnstyledButton>
 ))
 
-export function UserMenu({showHideSettingsModel}) {
-    const {i18n, t} = useTranslation();
-    const {logoutUser} = useAuth();
+export function UserMenu({ showHideSettingsModel }) {
+    const { i18n, t } = useTranslation();
+    const { logoutUser, user } = useAuth();
     const navigate = useNavigate();
+    const [profileImage, setProfileImage] = useState('');
+
+
+    useEffect(() => {
+        const _profileImage = localStorage.getItem('profile_image') || '';
+        const host = import.meta.env.VITE_API_URL;
+        const imageUrl = `${host}/${_profileImage}`.replace('/api', '');
+        setProfileImage(imageUrl);
+    }, [])
 
     const handleLogout = () => {
         logoutUser();
@@ -46,7 +55,7 @@ export function UserMenu({showHideSettingsModel}) {
             <Menu shadow='md' width={250} radius='md' withArrow>
                 <Menu.Target>
                     <UserButton
-                        image='https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png'
+                        image={profileImage}
                         name='Harriette Spoonlicker'
                         email='hspoonlicker@outlook.com'
                     />
@@ -59,15 +68,15 @@ export function UserMenu({showHideSettingsModel}) {
                             <p className='font-light text-xs'>zoey@example.com</p>
                         </div>
                     </Menu.Item>
-                    <Menu.Divider/>
+                    <Menu.Divider />
                     <Menu.Item
-                        leftSection={<SettingsIcon size={14}/>}
+                        leftSection={<SettingsIcon size={14} />}
                         onClick={() => handleMenuItemClicked('settings')}
                     >
                         {t('settings')}
                     </Menu.Item>
-                    <Menu.Divider/>
-                    <Menu.Item color='red' onClick={handleLogout} leftSection={<LogOutIcon size={14}/>}>
+                    <Menu.Divider />
+                    <Menu.Item color='red' onClick={handleLogout} leftSection={<LogOutIcon size={14} />}>
                         {t('logout')}
                     </Menu.Item>
                 </Menu.Dropdown>
