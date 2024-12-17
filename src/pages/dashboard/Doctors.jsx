@@ -96,6 +96,7 @@ export default function Doctors() {
     }
 
     const openAddEditModal = ({ data = null, mode = 'add' }) => {
+        modals.closeAll();
         modals.open({
             title: mode === "edit" ? `${t("edit")}: ${data?.doctorName}` : `${t("add")}` + ` ${t("doctor")}`,
             centered: true,

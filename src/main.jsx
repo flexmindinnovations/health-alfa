@@ -288,7 +288,6 @@ function AppWrapper() {
             <ModalsProvider
                 modalProps={{
                     withCloseButton: false,
-                    trapFocus: false,
                     radius: 'lg',
                 }}
             >

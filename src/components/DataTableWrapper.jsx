@@ -127,6 +127,7 @@ export function DataTableWrapper({
 
     const openDeleteModal = useCallback(
         (data) => {
+            modals.closeAll();
             modals.openConfirmModal({
                 title: t('deleteConfirm'),
                 centered: true,

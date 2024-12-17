@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useForm } from '@mantine/form';
+import { useMediaQuery } from '@mantine/hooks';
 import { TextInput, Button, Group, Box, Select, Grid, Textarea, MultiSelect, ScrollArea, Stack, CloseIcon } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { zodResolver } from 'mantine-form-zod-resolver';
@@ -60,6 +61,7 @@ export function AddEditDoctor({ data = {}, mode = 'add', handleCancel }) {
     const { apiConfig } = useApiConfig();
     const http = useHttp();
     const [disableForm, setDisableForm] = useState(false);
+    const isSmallScreen = useMediaQuery('(max-width: 768px)');
 
     const form = useForm({
         initialValues: {
@@ -156,7 +158,13 @@ export function AddEditDoctor({ data = {}, mode = 'add', handleCancel }) {
             <Box sx={{ maxWidth: 900, margin: '0 auto' }}>
                 <motion.form onSubmit={form.onSubmit(handleSubmit)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                     <Stack>
-                        <ScrollArea scrollbars={'y'}>
+                        <ScrollArea scrollbars={'y'}
+                            styles={{
+                                root: {
+                                    padding: isSmallScreen ? '0' : '0 20px'
+                                }
+                            }}
+                        >
                             <Stack className="flex-1 max-h-[30rem] mx-auto">
                                 <Grid
                                     gutter="md"
@@ -244,7 +252,7 @@ export function AddEditDoctor({ data = {}, mode = 'add', handleCancel }) {
                                 </Grid>
                             </Stack>
                         </ScrollArea>
-                        <Group position="right" justify='flex-end'>
+                        <Group position="right" justify='flex-end' px={isSmallScreen ? 0 : 20}>
                             <Button
                                 disabled={disableForm}
                                 leftSection={<CloseIcon size={16} />}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TextInput, Button, Select, Group, Box, NumberInput, Stack, Grid, Textarea, CloseIcon, useMantineTheme, ScrollArea } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
+import { useMediaQuery } from '@mantine/hooks';
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { z } from 'zod';
 import { motion } from 'framer-motion';
@@ -85,6 +86,7 @@ export function AddEditClient({ data = {}, mode = 'add', handleCancel }) {
     const http = useHttp();
     const theme = useMantineTheme();
     const [disableForm, setDisableForm] = useState(false);
+    const isSmallScreen = useMediaQuery('(max-width: 768px)');
 
     const form = useForm({
         mode: 'uncontrolled',
@@ -224,7 +226,13 @@ export function AddEditClient({ data = {}, mode = 'add', handleCancel }) {
             <Box sx={{ maxWidth: 900, margin: '0 auto' }}>
                 <motion.form onSubmit={form.onSubmit(handleSubmit)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                     <Stack>
-                        <ScrollArea scrollbars={'y'}>
+                        <ScrollArea scrollbars={'y'}
+                            styles={{
+                                root: {
+                                    padding: isSmallScreen ? '0' : '0 20px'
+                                }
+                            }}
+                        >
                             <Stack className="flex-1 max-h-[30rem] mx-auto">
                                 <Grid gutter="md">
                                     <Grid.Col span={{ base: 12, md: 4, lg: 4 }} className='flex items-center justify-center'>
@@ -322,7 +330,7 @@ export function AddEditClient({ data = {}, mode = 'add', handleCancel }) {
                             </Stack>
                         </ScrollArea>
                         {/* Buttons */}
-                        <Group position="right" justify='flex-end'>
+                        <Group position="right" justify='flex-end' px={isSmallScreen ? 0 : 20}>
                             <Button variant="outline"
                                 leftSection={<CloseIcon size={16} />}
                                 onClick={() => handleCancel({ refresh: false })}
