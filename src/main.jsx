@@ -20,11 +20,12 @@ import '@mantine/dates/styles.css';
 import { ModalsProvider } from "@mantine/modals";
 
 export const notificationAudio = new Audio('/sounds/notification.wav')
-notificationAudio.load()
+notificationAudio.load();
+const defaultFize = '12px'
 
 const theme = createTheme({
-    // fontFamily: `'Poppins', sans-serif`,
-    // headings: { fontFamily: `'Poppins', sans-serif` },
+    fontFamily: `'Poppins', sans-serif`,
+    headings: { fontFamily: `'Poppins', sans-serif` },
     colors: {
         brand: [
             '#effafc', '#d6f1f7', '#b2e4ef', '#7dcee3', '#41b0cf',
@@ -53,6 +54,7 @@ const theme = createTheme({
         Input: {
             defaultProps: {
                 radius: 'xl',
+                fz: defaultFize
             },
             styles: (theme) => ({
                 label: {
@@ -69,15 +71,15 @@ const theme = createTheme({
         },
         TextInput: {
             defaultProps: {
-                radius: 'xl',
-                mh: '6rem'
+                mh: '6rem',
+                fz: defaultFize
             },
             styles: (theme) => ({
                 label: {
                     marginBottom: '4px',
                     marginLeft: '0.5rem',
                     fontWeight: 'normal',
-                    fontSize: '14px',
+                    fontSize: defaultFize,
                 },
                 error: {
                     fontSize: '12px',
@@ -96,7 +98,7 @@ const theme = createTheme({
                     marginBottom: '4px',
                     marginLeft: '0.5rem',
                     fontWeight: 'normal',
-                    fontSize: '14px',
+                    fontSize: defaultFize,
                 },
                 error: {
                     fontSize: '12px',
@@ -151,7 +153,8 @@ const theme = createTheme({
                 label: {
                     marginBottom: '4px',
                     marginLeft: '0.5rem',
-                    fontWeight: 'normal'
+                    fontWeight: 'normal',
+                    fontSize: defaultFize
                 },
                 error: {
                     fontSize: '12px',
@@ -174,7 +177,8 @@ const theme = createTheme({
                 label: {
                     marginBottom: '4px',
                     marginLeft: '0.5rem',
-                    fontWeight: 'normal'
+                    fontWeight: 'normal',
+                    fontSize: defaultFize
                 },
                 error: {
                     fontSize: '12px',
@@ -240,7 +244,7 @@ const theme = createTheme({
                     marginBottom: '4px',
                     marginLeft: '0.5rem',
                     fontWeight: 'normal',
-                    fontSize: '14px',
+                    fontSize: defaultFize,
                 },
                 error: {
                     fontSize: '12px',
@@ -259,7 +263,7 @@ const theme = createTheme({
                     marginBottom: '4px',
                     marginLeft: '0.5rem',
                     fontWeight: 'normal',
-                    fontSize: '14px',
+                    fontSize: defaultFize,
                 },
                 error: {
                     fontSize: '12px',

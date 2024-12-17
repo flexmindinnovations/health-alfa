@@ -1,5 +1,5 @@
 import { forwardRef, useState, useEffect } from 'react'
-import { Avatar, Group, Menu, UnstyledButton } from '@mantine/core'
+import { Avatar, Group, Menu, useMantineTheme } from '@mantine/core'
 import { LogOutIcon, SettingsIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from "@contexts/AuthContext.jsx";
@@ -9,18 +9,17 @@ import Settings from "@components/Settings.jsx";
 
 // eslint-disable-next-line react/display-name
 const UserButton = forwardRef(({ image, name, email, ...others }, ref) => (
-    <UnstyledButton
+    <Avatar
         ref={ref}
-        style={{
-            color: 'var(--mantine-color-text)',
-            borderRadius: 'var(--mantine-radius-sm)'
-        }}
+        size={'sm'}
+        radius={'xl'}
+
         {...others}
     >
         <Group>
             <Avatar src={image} radius='xl' />
         </Group>
-    </UnstyledButton>
+    </Avatar>
 ))
 
 export function UserMenu({ showHideSettingsModel }) {
@@ -28,6 +27,7 @@ export function UserMenu({ showHideSettingsModel }) {
     const { logoutUser, user } = useAuth();
     const navigate = useNavigate();
     const [profileImage, setProfileImage] = useState('');
+    const theme = useMantineTheme();
 
 
     useEffect(() => {
@@ -52,12 +52,29 @@ export function UserMenu({ showHideSettingsModel }) {
 
     return (
         <div>
-            <Menu shadow='md' width={250} radius='md' withArrow>
+            <Menu shadow='md' width={250} radius='md' withArrow
+            arrowSize={15}
+            transitionProps={{
+                transition: 'scale'
+            }}
+            >
                 <Menu.Target>
-                    <UserButton
+                    {/* <UserButton
                         image={profileImage}
                         name='Harriette Spoonlicker'
                         email='hspoonlicker@outlook.com'
+                    /> */}
+                    <Avatar size={'md'} className='!flex items-center justify-center' src={profileImage} radius='xl'
+                        styles={{
+                            root: {
+                                border: `2px solid ${theme.colors.brand[9]}`,
+                                cursor: 'pointer',
+                                padding: 2
+                            },
+                            image: {
+                                borderRadius: theme.radius.xl
+                            }
+                        }}
                     />
                 </Menu.Target>
                 <Menu.Dropdown>

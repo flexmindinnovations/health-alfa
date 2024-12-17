@@ -36,40 +36,43 @@ const data = [
     },
 ];
 
-export function HeroCarousel({ height }) {
+export function HeroCarousel({ height, animateAllSlides = false }) {
     const autoplay = useRef(Autoplay({ delay: 2500 }));
-    const [scrollIndex, setScrollIndex] = useState(0);
     const carouselRef = useRef(null);
 
     const slides = data.map((item, index) => (
-        <Carousel.Slide key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Carousel.Slide key={index}>
             <CarouselCard {...item} />
         </Carousel.Slide>
     ));
 
     useEffect(() => {
-        const indicators = document.querySelectorAll(
-            '.mantine-Carousel-indicator'
-        );
+        const indicators = document.querySelectorAll('.mantine-Carousel-indicator');
         indicators.forEach((indicator) => {
-            indicator.removeAttribute('aria-hidden');
-            indicator.setAttribute('aria-label', 'Carousel indicator'); // Optional: Add meaningful label
+            indicator.setAttribute('aria-label', 'Carousel indicator');
         });
     }, []);
 
     return (
-        <div ref={carouselRef} className={`h-full w-full`}>
+        <div ref={carouselRef} className="w-full h-full">
             <Carousel
                 plugins={[autoplay.current]}
-                orientation="vertical"
+                height={height}
                 withControls={false}
                 withIndicators
-                height={height}
-                slidesToScroll={1}
-                value={isNaN(scrollIndex) ? 0 : scrollIndex}
-                onChange={setScrollIndex}
-                loop={false}
-                style={{ height: '100%', width: '100%', overflow: 'hidden' }}
+                slideGap="md"
+                loop
+                align="start"
+                transitionTimingFunction="ease-in-out"
+                orientation={animateAllSlides ? "horizontal" : "vertical"}
+                styles={{
+                    indicators: {
+                        position: "absolute",
+                        bottom: "10px",
+                        display: "flex",
+                        justifyContent: "center",
+                    },
+                }}
             >
                 {slides}
             </Carousel>

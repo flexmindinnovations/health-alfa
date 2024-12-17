@@ -147,7 +147,13 @@ export default function Login() {
                     style={{ height: 'auto', width: '100%', overflow: 'hidden' }}
                 >
                     <Card radius={"xl"}
-                        className='!p-0 min-h-80 min-w-96 lg:h-[75vh] lg:w-[60%] lg:min-h-[62vh] flex flex-col lg:!flex-row-reverse'>
+                        className='!p-0 min-h-80 min-w-96 lg:h-[75vh] md:w-[80%] lg:w-[60%] lg:min-h-[62vh] flex flex-col lg:!flex-row-reverse'
+                        styles={{
+                            root: {
+                                width: theme.breakpoints.md ? '80%' : theme.breakpoints.lg || theme.breakpoints.xl ? '60%' : '100%'
+                            }
+                        }}
+                        >
                         <Card.Section withBorder m={'auto'}
                             className={`!flex flex-col ${styles.loginFormSection} flex-1 p-8`}>
                             <Card.Section className='w-full !mx-auto rounded-md'>
