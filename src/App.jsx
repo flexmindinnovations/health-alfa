@@ -27,6 +27,7 @@ const Immunizations = lazy(() => import('@pages/dashboard/Immunizations'));
 const AboutUs = lazy(() => import('@pages/AboutUs'));
 const ContactUs = lazy(() => import('@pages/ContactUs'));
 const Availability = lazy(() => import('@dashboard/Availability.jsx'));
+const Roles = lazy(() => import('@dashboard/Roles.jsx'));
 
 function App() {
     const {setDirection} = useDirection();
@@ -50,6 +51,7 @@ function App() {
                     <Route path='doctors' element={<Doctors/>}/>
                     <Route path='availability' element={<Availability/>}/>
                     <Route path='patients' element={<PatientVisits/>}/>
+                    <Route path='roles' element={<Roles/>}/>
                     <Route path='tests' element={<TestTypes/>}/>
                     <Route path='documents' element={<Documents/>}/>
                     <Route path='medical-tests' element={<MedicalTests/>}/>
