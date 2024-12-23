@@ -20,5 +20,5 @@
 /*}*/
 
 .input::selection {
-  background-color: red !important;
+  background-color: white !important;
 }
