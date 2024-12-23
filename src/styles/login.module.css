@@ -1,34 +1,6 @@
 .loginPage {
-  /* background: linear-gradient(
-    45deg,
-    #143345,
-    #224557,
-    #227798,
-    #2594b5,
-    #245066,
-    #22617c,
-    #227798,
-    #224557,
-    #143345
-  );
-  background-size: 1200% 1200%; */
-  /* background-color: #143345; */
-  /* background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)),
-  url('../assets/images/box.svg'); */
   background-image: url('../assets/images/login_bg.svg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  /* animation: gradientAnimation 12s ease infinite; */
-  height: 100vh;
-  width: 100vw;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Arial, sans-serif;
-  color: white;
-  @apply p-2 lg:p-0 xl:p-0 2xl:p-0;
+  @apply h-screen w-screen p-0 bg-no-repeat bg-center bg-cover !mx-auto lg:!pb-40 lg:!pl-40 lg:!pr-40;
 }
 
 @keyframes gradientAnimation {
@@ -52,10 +24,31 @@
 }
 
 .loginInfoSection {
-  background-image: 
-    url('../assets/images/bubbles.svg');
+  background-image: url('../assets/images/bubbles.svg');
 }
 .loginFormSection {
   background-image: url('../assets/images/login_form.svg');
   @apply bg-auto bg-no-repeat bg-right lg:bg-center xl:bg-center 2xl:bg-center shadow-lg h-full;
 }
+
+.visibilityToggle {
+  color: white;
+}
+
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active{
+  /*-webkit-box-shadow: 0 0 0 30px transparent inset !important;*/
+}
+
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active{
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: white;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px #23232329;
+}
+

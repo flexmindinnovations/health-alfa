@@ -181,6 +181,7 @@ export default function Users() {
     }
 
     const openAddEditModal = ({ data = null, mode = 'add' }) => {
+        modals.closeAll();
         modals.open({
             title: mode === "edit" ? `${t("edit")}: ${data?.firstName}` : `${t("add")}` + ` ${t("client")}`,
             centered: true,

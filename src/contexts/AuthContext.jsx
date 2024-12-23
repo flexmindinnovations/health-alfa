@@ -1,53 +1,87 @@
-import { createContext, useContext, useState } from 'react'
-import toast from 'react-hot-toast'
-import { useApiConfig } from "@contexts/ApiConfigContext.jsx";
+import {createContext, useContext, useEffect, useState} from 'react';
+import {useEncrypt} from "@hooks/EncryptData.js";
+import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
+import {usePermissions} from "@contexts/Permission.jsx";
+import useHttp from "@hooks/axios-instance.js";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext({
-    fetchUserDetails: () => { },
-    setUserDetails: (data) => { },
-    logoutUser: () => { },
-    loginUser: () => { },
-    getToken: () => String,
-    isAuthenticated: () => Boolean
+    fetchUserDetails: () => {
+    }, setUserDetails: (data) => {
+    }, logoutUser: () => {
+    }, loginUser: () => {
+    }, getToken: () => String, isAuthenticated: () => Boolean
 })
 
-export const AuthProvider = ({ children }) => {
-    const { apiConfig } = useApiConfig();
+export const AuthProvider = ({children}) => {
+    const {apiConfig} = useApiConfig();
     const [user, setUser] = useState(null)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [error, setError] = useState(null)
+    const [error, setError] = useState(null);
+    const {getEncryptedData} = useEncrypt();
+    const [userRole, setUserRole] = useState(null);
+    const {permissions} = usePermissions();
+    const http = useHttp();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isAuthenticated()) {
+            logoutUser();
+            navigate('/');
+        }
+        const role = getEncryptedData('roles');
+        if (role) setUserRole(role.toLowerCase());
+    }, [userRole])
 
     const fetchUserDetails = async () => {
-        // console.log('called fetchUserDetails');
+        const userId = await getEncryptedData('user');
+        const role = userRole || getEncryptedData('roles')?.toLowerCase();
+        const endpoint = await getUserDetailsEndpoint(userId, role);
+        if (role === 'doctor') {
+            try {
+                if (endpoint) {
+                    const response = await http.get(endpoint);
+                    const {data} = response;
+                    if (data) {
+                        setUser(data);
+                        return data;
+                    }
+                }
+            } catch (error) {
+                const errorMessage = error.message
+                toast.error(errorMessage)
+                return null
+            }
+        }
+    }
 
-        // try {
-        //     const user = JSON.parse(localStorage.getItem('user') || '{}');
-        //     console.log('user: ', user);
+    const getUserDetailsEndpoint = async (userId, role) => {
+        let endpoint = '';
+        switch (role) {
+            case "admin":
+                endpoint = '';
+                break;
+            case "client":
+                endpoint = '';
+                break;
+            case "doctor":
+                endpoint = apiConfig.doctors.getDoctorInfoById(userId);
+                break;
+        }
 
-        //     const getUserDetails = apiConfig.customer.getCustomerById(user) || "";
-        //     console.log('getUserDetails: ', getUserDetails);
-
-        //     const response = await http.get(getUserDetails);
-        //     const { data } = response;
-        //     if (data) {
-        //         setUser(data);
-        //         return data;
-        //     }
-        // } catch (error) {
-        //     const errorMessage = error.message
-        //     toast.error(errorMessage)
-        //     return null
-        // }
+        return endpoint;
     }
 
     const setUserDetails = (userDetails) => {
-        console.log('userDetails: ', userDetails)
         setUser(userDetails);
     }
 
-    const logoutUser = async () => {
-        localStorage.removeItem('user')
-        localStorage.removeItem('token')
+    const logoutUser = () => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        localStorage.removeItem('profile_image');
+        localStorage.removeItem('roles');
         setIsLoggedIn(false)
     }
 
@@ -63,7 +97,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const isAuthenticated = () => {
-        const userString = localStorage.getItem('user');
+        const userString = getEncryptedData('user');
         let _user = null;
         if (userString) {
             try {
@@ -78,21 +112,13 @@ export const AuthProvider = ({ children }) => {
         return !!localStorage.getItem('token');
     };
 
-    return (
-        <AuthContext.Provider
-            value={{
-                user,
-                getToken,
-                setUserDetails,
-                fetchUserDetails,
-                logoutUser,
-                loginUser,
-                isAuthenticated
-            }}
-        >
-            {children}
-        </AuthContext.Provider>
-    )
+    return (<AuthContext.Provider
+        value={{
+            user, getToken, setUserDetails, fetchUserDetails, logoutUser, loginUser, isAuthenticated
+        }}
+    >
+        {children}
+    </AuthContext.Provider>)
 }
 
 export const useAuth = () => {

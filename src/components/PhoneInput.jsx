@@ -6,7 +6,7 @@ import {ComboBoxComponent as ComboBox} from '@components/ComboBox';
 import {useForm} from '@mantine/form';
 import {zodResolver} from 'mantine-form-zod-resolver';
 import {z} from 'zod';
-import '@styles/Input.module.css'
+import classes from '@styles/Input.module.css'
 
 const countries = [
     {id: 'US-1', label: '+1', value: 'US', flag: 'US', maxDigits: 10},
@@ -36,6 +36,8 @@ export function GlobalPhoneInput({
                                      onChange,
                                      onCountryChange,
                                      props,
+                                     labelProps,
+                                     required = false,
                                  }) {
     const theme = useMantineTheme();
     const [countryList, setCountryList] = useState([]);
@@ -140,8 +142,9 @@ export function GlobalPhoneInput({
 
     return (
         <div className='phoneInput min-h-[5.5rem]' style={{width: '100%'}}>
-            <Text component="label" htmlFor="phoneInput" size="sm" style={{display: 'block', marginBottom: 4}}>
-                {label}
+            <Text component="label" {...labelProps} htmlFor="phoneInput" size="sm"
+                  style={{display: 'block', marginBottom: 4}}>
+                {label}{required ? <span className={`text-red-500`}>&nbsp;*</span> : ''}
             </Text>
             <Box
                 style={{
@@ -178,6 +181,7 @@ export function GlobalPhoneInput({
                                 dataSource={countryList}
                                 defaultValue={selectedCountry}
                                 onValueChange={handleCountryChange}
+                                labelProps={labelProps}
                                 styles={{
                                     dropdown: {
                                         zIndex: 9999,
@@ -212,6 +216,7 @@ export function GlobalPhoneInput({
                     maxLength={isEmail ? 50 : selectedCountry?.maxDigits || 15}
                     error={null}
                     size={'md'}
+                    className={classes.input}
                     styles={{
                         error: {
                             display: 'none'
@@ -219,14 +224,16 @@ export function GlobalPhoneInput({
                         input: {
                             border: 'none',
                             padding: '0 10px',
-                            background: 'transparent !important',
+                            backgroundColor: 'transparent',
                             height: 'auto',
                             width: '100%',
                             flex: '1',
                             fontSize: '0.8rem',
+                            color: theme.white,
                         },
                         root: {
                             width: '100%',
+                            background: 'transparent'
                         },
                     }}
                 />

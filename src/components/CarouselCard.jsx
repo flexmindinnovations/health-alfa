@@ -40,9 +40,9 @@ export function CarouselCard({ image, title, category }) {
                 initial="hidden"
                 animate={isInView ? "visible" : "hidden"}
                 variants={fadeVariant}
-                className="absolute inset-0 bg-gradient-to-r from-tb-950/95 via-tb-800/90 to-transparent"
+                className={`absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-r xl:bg-gradient-to-r 2xl:bg-gradient-to-r from-tb-950/95 via-tb-800/90 to-transparent`}
             ></motion.div>
-            <div className="relative w-full h-full flex items-start justify-center flex-col gap-5 p-20">
+            <div className="relative w-full h-full flex items-start justify-start lg:justify-center xl:justify-center 2x:justify-center flex-col gap-5 p-10 md:p-10 lg:p-20 xl:p-20 2xl:p-20">
                 <motion.div
                     initial="hidden"
                     animate={isInView ? "visible" : "hidden"}
@@ -52,7 +52,7 @@ export function CarouselCard({ image, title, category }) {
                     <Title order={1} size={1} className={classes.title}>
                         {title}
                     </Title>
-                    <Text className={classes.category} size="lg">
+                    <Text className={classes.category} size="sm">
                         {category}
                     </Text>
                     <Button variant="white" color="dark">

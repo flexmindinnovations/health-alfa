@@ -10,9 +10,11 @@ import {UserMenu} from '@components/UserMenu.jsx'
 import logo from '/images/logo.png'
 import {AnimatePresence, motion} from 'framer-motion';
 import {modals} from "@mantine/modals";
+import {usePermissions} from "@contexts/Permission.jsx";
+import {useEncrypt} from "@hooks/EncryptData.js";
 
 export function Layout() {
-    const {t} = useTranslation()
+    const {t, i18n} = useTranslation()
     const [menuItems, setMenuItems] = useState([])
     const [publicItems, setPublicItems] = useState([])
     const [opened, {toggle}] = useDisclosure()
@@ -21,19 +23,28 @@ export function Layout() {
     const [hoveredIndex, setHoveredIndex] = useState(null);
     const theme = useMantineTheme();
     const isSmallScreen = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
+    const {getEncryptedData} = useEncrypt();
 
     useEffect(() => {
-        const updatedMenuItems = MENU_ITEMS.map(item => ({
-            ...item,
-            active: `/app${item.route}` === pathname
-        }))
-        const publicItems = updatedMenuItems.slice(
-            MENU_ITEMS.length - 2,
-            MENU_ITEMS.length
-        )
-        setPublicItems(publicItems)
-        setMenuItems(updatedMenuItems)
-    }, [pathname])
+        const userRole = getEncryptedData('roles')?.toUpperCase();
+        const updatedMenuItems = userRole ?
+            MENU_ITEMS.filter((item) => item.roles.includes(userRole))
+                .map(item => ({
+                    ...item,
+                    active: `/app${item.route}` === pathname
+                }))
+            :
+            MENU_ITEMS.map(item => ({
+                ...item,
+                active: `/app${item.route}` === pathname
+            }))
+        // const publicItems = updatedMenuItems.slice(
+        //     MENU_ITEMS.length - 2,
+        //     MENU_ITEMS.length
+        // )
+        // setPublicItems(publicItems)
+        setMenuItems(updatedMenuItems);
+    }, [pathname, i18n])
 
     const handleNavClick = menuItem => {
         const publicLinkItemIndex = publicItems.findIndex(
@@ -130,7 +141,7 @@ export function Layout() {
                         initial="hidden"
                         animate="visible"
                     >
-                        {menuItems.slice(0, menuItems.length - 2).map((item, index) => (
+                        {menuItems.map((item, index) => (
                             <motion.li
                                 key={item.key}
                                 className={styles.navbarItemWrapper}

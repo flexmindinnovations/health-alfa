@@ -97,7 +97,7 @@ export function ImagePicker({ value, onChange, disableForm, isUploading, uploadP
                     src={preview}
                     radius="xl"
                     h="100%"
-                    styles={{ root: { backgroundSize: 'cover' } }}
+                    styles={{ root: { backgroundSize: '100% 100%' } }}
                 >
                     <Center className="flex w-full h-full">
                         {visible && !isUploading && !isUploaded && <Overlay color={theme.colors.dark[5]} opacity={0.85} />}
