@@ -1,18 +1,16 @@
 import {
     Activity,
     AlertCircle,
-    FileText,
-    Headset,
-    Heart,
-    Home,
-    Info,
-    Pill,
-    ShieldCheck,
-    Users,
-    Stethoscope,
     Binoculars,
     BookUser,
-    Calendar
+    Calendar,
+    FileText,
+    Heart,
+    Home,
+    Pill,
+    ShieldCheck,
+    Stethoscope,
+    Users
 } from 'lucide-react';
 
 export const MENU_ITEMS = [
@@ -124,8 +122,17 @@ export const MENU_ITEMS = [
         active: false,
         roles: ['ADMIN', 'CLIENT'],
     },
+    {
+        id: 13,
+        key: 'roles',
+        title: 'Roles',
+        icon: Users,
+        route: '/roles',
+        active: false,
+        roles: ['ADMIN'],
+    },
     // {
-    //     id: 13,
+    //     id: 14,
     //     key: 'contactUs',
     //     title: 'Contact Us',
     //     icon: Headset,
@@ -134,7 +141,7 @@ export const MENU_ITEMS = [
     //     roles: ['ADMIN', 'CLIENT'],
     // },
     // {
-    //     id: 14,
+    //     id: 15,
     //     key: 'aboutUs',
     //     title: 'About Us',
     //     icon: Info,

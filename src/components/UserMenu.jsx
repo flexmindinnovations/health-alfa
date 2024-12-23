@@ -14,6 +14,7 @@ export function UserMenu({showHideSettingsModel}) {
     const [profileImage, setProfileImage] = useState('');
     const theme = useMantineTheme();
     const {getEncryptedData} = useEncrypt();
+    const [isAdmin, setIsAdmin] = useState(false);
 
 
     useEffect(() => {
@@ -22,6 +23,9 @@ export function UserMenu({showHideSettingsModel}) {
         const imageUrl = `${host}/${_profileImage}`.replace('/api', '');
         setProfileImage(imageUrl);
         const role = getEncryptedData('roles')?.toLowerCase();
+        if (role === 'admin') {
+            setIsAdmin(true)
+        }
         if (user && role) {
             processUserDetails(role);
         }
@@ -62,7 +66,7 @@ export function UserMenu({showHideSettingsModel}) {
     }
 
     return (<div>
-        {!user ? <Skeleton circle width={40} height={40}/> :
+        {!user && !isAdmin ? <Skeleton circle width={40} height={40}/> :
 
             <Menu shadow='md' width={250} radius='md' withArrow
                   arrowSize={15}
@@ -86,8 +90,8 @@ export function UserMenu({showHideSettingsModel}) {
                     <Menu.Item className='pointer-events-none'>
                         <Stack gap={0} className='flex flex-col items-start justify-start'>
                             <Text size={'xs'} className='opacity-50 text-sm'>{t('signedInAs')}</Text>
-                            <Title size={18} className='font-semibold !my-0.5'>{userDetails.username || 'Guest'}</Title>
-                            <p className='font-light text-xs'>{userDetails.email || 'email@test.com'}</p>
+                            <Title size={18} className='font-semibold !my-0.5'>{userDetails.username || isAdmin ? 'Admin' : 'Guest'}</Title>
+                            <p className='font-light text-xs'>{userDetails.email || isAdmin ? `admin@${t('brandEmail')}.com` : 'email@test.com'}</p>
                             <p className='font-light text-xs'>{userDetails.mobileNumber || '+xx-xxxxxxxx'}</p>
                         </Stack>
                     </Menu.Item>
