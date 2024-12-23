@@ -15,7 +15,8 @@ export function ComboBoxComponent({
                                       withinPortal = false,
                                       left,
                                       isPhoneInput = false,
-                                      minWidth
+                                      minWidth,
+                                      labelProps
                                   }) {
     const {t} = useTranslation()
     const [animating, setAnimating] = useState(false)
@@ -61,7 +62,7 @@ export function ComboBoxComponent({
                     {item.icon && typeof item.icon === 'string'
                         ? createElement(item.icon, {size: 14})
                         : item.icon}
-                    <span> {item.label}</span>
+                    <span style={{...labelProps}}> {item.label}</span>
                 </div>
             )
         } else {

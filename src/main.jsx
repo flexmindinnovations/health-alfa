@@ -1,31 +1,34 @@
-import { StrictMode, Suspense } from 'react'
-import { createRoot } from 'react-dom/client'
+import {StrictMode, Suspense} from 'react'
+import {createRoot} from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import { BrowserRouter } from 'react-router-dom'
-import { ApiConfigProvider } from '@contexts/ApiConfigContext'
-import { AuthProvider } from '@contexts/AuthContext'
-import { ErrorBoundary } from '@components/ErrorBoundary'
-import { NextUIProvider } from '@nextui-org/react'
-import { DeviceProvider } from '@hooks/device-detector'
+import {BrowserRouter} from 'react-router-dom'
+import {ApiConfigProvider} from '@contexts/ApiConfigContext'
+import {AuthProvider} from '@contexts/AuthContext'
+import {ErrorBoundary} from '@components/ErrorBoundary'
+import {NextUIProvider} from '@nextui-org/react'
+import {DeviceProvider} from '@hooks/device-detector'
 import './i18n'
-import { createTheme, DirectionProvider, Loader, MantineProvider } from '@mantine/core'
-import { Notifications } from '@mantine/notifications'
+import {createTheme, DirectionProvider, Loader, MantineProvider} from '@mantine/core'
+import {Notifications} from '@mantine/notifications'
 import RingLoader from '@components/RingLoader'
 import '@mantine/core/styles.css'
 import 'mantine-datatable/styles.layer.css'
 import '@mantine/notifications/styles.css'
 import '@mantine/carousel/styles.css';
 import '@mantine/dates/styles.css';
-import { ModalsProvider } from "@mantine/modals";
+import {ModalsProvider} from "@mantine/modals";
+import {PermissionsProvider} from "@contexts/Permission.jsx";
 
 export const notificationAudio = new Audio('/sounds/notification.wav')
 notificationAudio.load();
-const defaultFize = '12px'
+const defaultSize = '12px';
+const defaultRadius = 'lg';
+const defaultRadiusTextArea = 'lg';
 
 const theme = createTheme({
     fontFamily: `'Poppins', sans-serif`,
-    headings: { fontFamily: `'Poppins', sans-serif` },
+    headings: {fontFamily: `'Poppins', sans-serif`},
     colors: {
         brand: [
             '#effafc', '#d6f1f7', '#b2e4ef', '#7dcee3', '#41b0cf',
@@ -42,19 +45,18 @@ const theme = createTheme({
     },
     primaryColor: 'brand',
     primaryShade: 9,
-    defaultRadius: 'lg',
+    defaultRadius,
     components: {
         Loader: Loader.extend({
             defaultProps: {
-                loaders: { ...Loader.defaultLoaders, ring: RingLoader },
+                loaders: {...Loader.defaultLoaders, ring: RingLoader},
                 type: 'ring',
                 size: 'xl'
             }
         }),
         Input: {
             defaultProps: {
-                radius: 'xl',
-                fz: defaultFize
+                fz: defaultSize
             },
             styles: (theme) => ({
                 label: {
@@ -72,14 +74,14 @@ const theme = createTheme({
         TextInput: {
             defaultProps: {
                 mh: '6rem',
-                fz: defaultFize
+                fz: defaultSize
             },
             styles: (theme) => ({
                 label: {
                     marginBottom: '4px',
                     marginLeft: '0.5rem',
                     fontWeight: 'normal',
-                    fontSize: defaultFize,
+                    fontSize: defaultSize,
                 },
                 error: {
                     fontSize: '12px',
@@ -98,7 +100,7 @@ const theme = createTheme({
                     marginBottom: '4px',
                     marginLeft: '0.5rem',
                     fontWeight: 'normal',
-                    fontSize: defaultFize,
+                    fontSize: defaultSize,
                 },
                 error: {
                     fontSize: '12px',
@@ -110,7 +112,6 @@ const theme = createTheme({
         },
         PasswordInput: {
             defaultProps: {
-                radius: 'xl',
                 mh: '6rem'
             },
             styles: (theme) => ({
@@ -147,14 +148,14 @@ const theme = createTheme({
         },
         Textarea: {
             defaultProps: {
-                radius: 'lg',
+                radius: defaultRadiusTextArea,
             },
             styles: (theme) => ({
                 label: {
                     marginBottom: '4px',
                     marginLeft: '0.5rem',
                     fontWeight: 'normal',
-                    fontSize: defaultFize
+                    fontSize: defaultSize
                 },
                 error: {
                     fontSize: '12px',
@@ -178,7 +179,7 @@ const theme = createTheme({
                     marginBottom: '4px',
                     marginLeft: '0.5rem',
                     fontWeight: 'normal',
-                    fontSize: defaultFize
+                    fontSize: defaultSize
                 },
                 error: {
                     fontSize: '12px',
@@ -191,14 +192,14 @@ const theme = createTheme({
         Button: {
             defaultProps: {
                 radius: 'xl',
-                loaderProps: { h: '48px', w: '48px' }
+                loaderProps: {h: '48px', w: '48px'}
             },
         },
         Tooltip: {
             defaultProps: {
                 withArrow: true
             },
-            styles: (theme) => ({
+            styles: () => ({
                 tooltip: {
                     fontSize: '12px'
                 }
@@ -244,7 +245,7 @@ const theme = createTheme({
                     marginBottom: '4px',
                     marginLeft: '0.5rem',
                     fontWeight: 'normal',
-                    fontSize: defaultFize,
+                    fontSize: defaultSize,
                 },
                 error: {
                     fontSize: '12px',
@@ -263,7 +264,26 @@ const theme = createTheme({
                     marginBottom: '4px',
                     marginLeft: '0.5rem',
                     fontWeight: 'normal',
-                    fontSize: defaultFize,
+                    fontSize: defaultSize,
+                },
+                error: {
+                    fontSize: '12px',
+                    color: theme.colors.red[6],
+                    marginTop: '4px',
+                    marginLeft: '0.5rem'
+                },
+            })
+        },
+        TimeInput: {
+            defaultProps: {
+                mh: '6rem'
+            },
+            styles: (theme) => ({
+                label: {
+                    marginBottom: '4px',
+                    marginLeft: '0.5rem',
+                    fontWeight: 'normal',
+                    fontSize: defaultSize,
                 },
                 error: {
                     fontSize: '12px',
@@ -278,13 +298,12 @@ const theme = createTheme({
 
 function AppWrapper() {
     return (
-
         <MantineProvider
             theme={theme}
             withGlobalStyles
             withNormalizeCSS
         >
-            <Notifications position='top-right' zIndex={9999} />
+            <Notifications position='top-right' zIndex={9999}/>
             <ModalsProvider
                 modalProps={{
                     withCloseButton: false,
@@ -292,10 +311,9 @@ function AppWrapper() {
                 }}
             >
                 <Suspense>
-                    <App />
+                    <App/>
                 </Suspense>
             </ModalsProvider>
-
         </MantineProvider>
     )
 }
@@ -315,11 +333,13 @@ root.render(
                 <NextUIProvider className='!h-full'>
                     <ErrorBoundary>
                         <ApiConfigProvider>
-                            <AuthProvider>
-                                <DeviceProvider>
-                                    <AppWrapper />
-                                </DeviceProvider>
-                            </AuthProvider>
+                            <PermissionsProvider>
+                                <AuthProvider>
+                                    <DeviceProvider>
+                                        <AppWrapper/>
+                                    </DeviceProvider>
+                                </AuthProvider>
+                            </PermissionsProvider>
                         </ApiConfigProvider>
                     </ErrorBoundary>
                 </NextUIProvider>

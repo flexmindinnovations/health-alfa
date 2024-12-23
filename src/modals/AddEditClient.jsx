@@ -154,7 +154,7 @@ export function AddEditClient({ data = {}, mode = 'add', handleCancel }) {
             if (saveUpdateResponse.status === 'fulfilled' && saveUpdateResponse.value?.status === 200) {
                 const data = saveUpdateResponse.value.data;
                 openNotificationWithSound({
-                    title: t('updateSuccessfull'),
+                    title: t('updatedSuccessfully'),
                     message: data.message,
                     color: theme.colors.brand[6]
                 }, { withSound: false })
@@ -166,7 +166,7 @@ export function AddEditClient({ data = {}, mode = 'add', handleCancel }) {
             if (updateProfileImageResponse?.status === 'fulfilled' && updateProfileImageResponse.value?.status === 200) {
                 const data = updateProfileImageResponse.value.data;
                 openNotificationWithSound({
-                    title: t('profileImageUpdateSuccessfull'),
+                    title: t('profileImageUpdatedSuccessfully'),
                     message: data.message,
                     color: theme.colors.brand[6]
                 }, { withSound: false })
@@ -211,7 +211,7 @@ export function AddEditClient({ data = {}, mode = 'add', handleCancel }) {
         );
         const data = response.data;
         openNotificationWithSound({
-            title: t('profileImageUpdateSuccessfull'),
+            title: t('profileImageUpdatedSuccessfully'),
             message: data.message,
             color: theme.colors.brand[6]
         }, { withSound: false })

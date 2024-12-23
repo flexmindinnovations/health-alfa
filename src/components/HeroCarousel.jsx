@@ -63,7 +63,6 @@ export function HeroCarousel({ height, animateAllSlides = false }) {
                 slideGap="md"
                 loop
                 align="start"
-                transitionTimingFunction="ease-in-out"
                 orientation={animateAllSlides ? "horizontal" : "vertical"}
                 styles={{
                     indicators: {

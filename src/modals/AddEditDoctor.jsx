@@ -1,26 +1,38 @@
-import { useState, useEffect } from 'react';
-import { useForm } from '@mantine/form';
-import { useMediaQuery } from '@mantine/hooks';
-import { TextInput, Button, Group, Box, Select, Grid, Textarea, MultiSelect, ScrollArea, Stack, CloseIcon } from '@mantine/core';
-import { DateInput } from '@mantine/dates';
-import { zodResolver } from 'mantine-form-zod-resolver';
-import { z } from 'zod';
-import { motion } from 'framer-motion';
-import { SquarePen, Save, X } from 'lucide-react';
-import { ImagePicker } from '@components/ImagePicker';
-import { useApiConfig } from '@contexts/ApiConfigContext';
+import {useState, useEffect} from 'react';
+import {useForm} from '@mantine/form';
+import {useMediaQuery} from '@mantine/hooks';
+import {
+    TextInput,
+    Button,
+    Group,
+    Box,
+    Select,
+    Grid,
+    Textarea,
+    MultiSelect,
+    ScrollArea,
+    Stack,
+    CloseIcon
+} from '@mantine/core';
+import {DateInput} from '@mantine/dates';
+import {zodResolver} from 'mantine-form-zod-resolver';
+import {z} from 'zod';
+import {motion} from 'framer-motion';
+import {SquarePen, Save} from 'lucide-react';
+import {ImagePicker} from '@components/ImagePicker';
+import {useApiConfig} from '@contexts/ApiConfigContext';
 import useHttp from '@hooks/axios-instance';
-import { openNotificationWithSound } from '@config/Notifications';
-import { useTranslation } from 'react-i18next';
+import {openNotificationWithSound} from '@config/Notifications';
+import {useTranslation} from 'react-i18next';
 import degreeMaster from '../assets/data/degree-master.json';
 
 const genderOptions = [
-    { title: 'Male', value: 'Male' },
-    { title: 'Female', value: 'Female' },
-    { title: 'Other', value: 'Other' },
+    {title: 'Male', value: 'Male'},
+    {title: 'Female', value: 'Female'},
+    {title: 'Other', value: 'Other'},
 ];
 
-const mappedDegrees = degreeMaster.map(({ degree }) => ({ value: degree, label: degree }));
+const mappedDegrees = degreeMaster.map(({degree}) => ({value: degree, label: degree}));
 
 const normalizeField = (field) =>
     Array.isArray(field)
@@ -33,16 +45,16 @@ const doctorSchema = z.object({
     doctorId: z.number().optional(),
     doctorName: z.string().min(1, 'Doctor name is required'),
     mobileNo: z.string().optional(),
-    dateOfBirth: z.date({ required_error: 'Date of birth is required' }),
+    dateOfBirth: z.date({required_error: 'Date of birth is required'}),
     gender: z
         .string()
         .optional()
-        .refine((value) => genderOptions.some(({ value: v }) => v === value), 'Gender is required'),
+        .refine((value) => genderOptions.some(({value: v}) => v === value), 'Gender is required'),
     qualification: z.array(z.string()).nonempty('At least one qualification is required'),
     speciality: z.array(z.string()).optional(),
     medicalRegistrationNumber: z.string().optional(),
     medicalCouncil: z.string().optional(),
-    registerDate: z.date({ required_error: 'Registration date is required' }),
+    registerDate: z.date({required_error: 'Registration date is required'}),
     emailId: z.string().optional(),
     doctorAddress: z.string().optional(),
     doctorProfileImagePath: z
@@ -51,14 +63,14 @@ const doctorSchema = z.object({
         .optional(),
 });
 
-export function AddEditDoctor({ data = {}, mode = 'add', handleCancel }) {
+export function AddEditDoctor({data = {}, mode = 'add', handleCancel}) {
     const [profileImage, setProfileImage] = useState(null);
     const [imageUploadProgress, setImageUploadProgress] = useState(0);
     const [loading, setLoading] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [specialtyOptions, setSpecialtyOptions] = useState([]);
-    const { i18n, t } = useTranslation();
-    const { apiConfig } = useApiConfig();
+    const {i18n, t} = useTranslation();
+    const {apiConfig} = useApiConfig();
     const http = useHttp();
     const [disableForm, setDisableForm] = useState(false);
     const isSmallScreen = useMediaQuery('(max-width: 768px)');
@@ -79,7 +91,7 @@ export function AddEditDoctor({ data = {}, mode = 'add', handleCancel }) {
             emailId: data?.emailId || '',
             doctorProfileImagePath: data?.doctorProfileImagePath || '',
         },
-        enhanceGetInputProps: () => ({ disabled: disableForm }),
+        enhanceGetInputProps: () => ({disabled: disableForm}),
         validateInputOnBlur: true,
         validateInputOnChange: true,
         validate: zodResolver(doctorSchema),
@@ -88,10 +100,10 @@ export function AddEditDoctor({ data = {}, mode = 'add', handleCancel }) {
     useEffect(() => {
         if (form.values.qualification.length > 0) {
             const specialties = degreeMaster
-                .filter(({ degree }) => form.values.qualification.includes(degree))
-                .flatMap(({ specialities }) => specialities)
+                .filter(({degree}) => form.values.qualification.includes(degree))
+                .flatMap(({specialities}) => specialities)
                 .filter((value, index, self) => self.indexOf(value) === index);
-            setSpecialtyOptions(specialties.map((specialty) => ({ value: specialty, label: specialty })));
+            setSpecialtyOptions(specialties.map((specialty) => ({value: specialty, label: specialty})));
         }
     }, [form.values.qualification]);
 
@@ -114,8 +126,8 @@ export function AddEditDoctor({ data = {}, mode = 'add', handleCancel }) {
             formData.append('file', profileImage);
             apiCalls.push(
                 http.post(apiConfig.doctors.updateDoctorImage(values.doctorId), formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' },
-                    onUploadProgress: ({ loaded, total }) => {
+                    headers: {'Content-Type': 'multipart/form-data'},
+                    onUploadProgress: ({loaded, total}) => {
                         const progress = Math.round((loaded * 100) / total);
                         setImageUploadProgress(progress);
                         setIsUploading(progress > 0 && progress < 100);
@@ -130,46 +142,48 @@ export function AddEditDoctor({ data = {}, mode = 'add', handleCancel }) {
 
             if (saveResponse.status === 'fulfilled' && saveResponse.value.status === 200) {
                 openNotificationWithSound({
-                    title: t('updateSuccessfull'),
+                    title: t('updatedSuccessfully'),
                     message: saveResponse.value.data.message,
-                });
+                }, {withSound: false});
             }
 
             if (imageResponse?.status === 'fulfilled' && imageResponse.value.status === 200) {
                 openNotificationWithSound({
-                    title: t('profileImageUpdateSuccessfull'),
+                    title: t('profileImageUpdatedSuccessfully'),
                     message: imageResponse.value.data.message,
-                });
+                }, {withSound: false});
             }
         } catch (error) {
             openNotificationWithSound({
                 title: error.name,
                 message: error.message,
                 color: 'red',
-            });
+            }, {withSound: false});
         } finally {
             setLoading(false);
-            handleCancel({ refresh: true });
+            handleCancel({refresh: true});
         }
     };
 
     return (
-        <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }}>
-            <Box sx={{ maxWidth: 900, margin: '0 auto' }}>
-                <motion.form onSubmit={form.onSubmit(handleSubmit)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <motion.div initial={{opacity: 0, y: 50}} animate={{opacity: 1, y: 0}} exit={{opacity: 0, y: 50}}>
+            <Box sx={{maxWidth: 900, margin: '0 auto'}}>
+                <motion.form onSubmit={form.onSubmit(handleSubmit)} initial={{opacity: 0}} animate={{opacity: 1}}
+                             exit={{opacity: 0}}>
                     <Stack>
                         <ScrollArea scrollbars={'y'}
-                            styles={{
-                                root: {
-                                    padding: isSmallScreen ? '0' : '0 20px'
-                                }
-                            }}
+                                    styles={{
+                                        root: {
+                                            padding: isSmallScreen ? '0' : '0 20px'
+                                        }
+                                    }}
                         >
                             <Stack className="flex-1 max-h-[30rem] mx-auto">
                                 <Grid
                                     gutter="md"
                                 >
-                                    <Grid.Col span={{ base: 12, md: 4, lg: 4 }} className="flex items-center justify-center">
+                                    <Grid.Col span={{base: 12, md: 4, lg: 4}}
+                                              className="flex items-center justify-center">
                                         <ImagePicker
                                             disableForm={loading}
                                             value={form.values.doctorProfileImagePath}
@@ -178,16 +192,20 @@ export function AddEditDoctor({ data = {}, mode = 'add', handleCancel }) {
                                             onChange={setProfileImage}
                                         />
                                     </Grid.Col>
-                                    <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
+                                    <Grid.Col span={{base: 12, md: 8, lg: 8}}>
                                         <Grid gutter="md">
                                             <Grid.Col span={6}>
-                                                <TextInput label="Doctor Name" placeholder="Enter doctor name" {...form.getInputProps('doctorName')} />
+                                                <TextInput label="Doctor Name"
+                                                           placeholder="Enter doctor name" {...form.getInputProps('doctorName')} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <TextInput label="Mobile Number" placeholder="Enter mobile number" {...form.getInputProps('mobileNo')} disabled />
+                                                <TextInput label="Mobile Number"
+                                                           placeholder="Enter mobile number" {...form.getInputProps('mobileNo')}
+                                                           disabled/>
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DateInput label="Date of Birth" placeholder="Select date" {...form.getInputProps('dateOfBirth')} />
+                                                <DateInput label="Date of Birth"
+                                                           placeholder="Select date" {...form.getInputProps('dateOfBirth')} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
                                                 <Select
@@ -224,19 +242,23 @@ export function AddEditDoctor({ data = {}, mode = 'add', handleCancel }) {
 
                                 <Grid mt={5} gutter="md">
                                     <Grid.Col span={6}>
-                                        <TextInput label="Medical Registration Number" placeholder="Enter registration number" {...form.getInputProps('medicalRegistrationNumber')} />
+                                        <TextInput label="Medical Registration Number"
+                                                   placeholder="Enter registration number" {...form.getInputProps('medicalRegistrationNumber')} />
                                     </Grid.Col>
                                     <Grid.Col span={6}>
-                                        <TextInput label="Medical Council" placeholder="Enter medical council" {...form.getInputProps('medicalCouncil')} />
+                                        <TextInput label="Medical Council"
+                                                   placeholder="Enter medical council" {...form.getInputProps('medicalCouncil')} />
                                     </Grid.Col>
                                 </Grid>
 
                                 <Grid mt={5} gutter="md">
                                     <Grid.Col span={6}>
-                                        <DateInput label="Register Date" placeholder="Pick date" {...form.getInputProps('registerDate')} />
+                                        <DateInput label="Register Date"
+                                                   placeholder="Pick date" {...form.getInputProps('registerDate')} />
                                     </Grid.Col>
                                     <Grid.Col span={6}>
-                                        <TextInput label="Email ID" placeholder="Enter email address" {...form.getInputProps('emailId')} />
+                                        <TextInput label="Email ID"
+                                                   placeholder="Enter email address" {...form.getInputProps('emailId')} />
                                     </Grid.Col>
                                 </Grid>
 
@@ -255,9 +277,9 @@ export function AddEditDoctor({ data = {}, mode = 'add', handleCancel }) {
                         <Group position="right" justify='flex-end' px={isSmallScreen ? 0 : 20}>
                             <Button
                                 disabled={disableForm}
-                                leftSection={<CloseIcon size={16} />}
+                                leftSection={<CloseIcon size={16}/>}
                                 variant="outline"
-                                onClick={() => handleCancel({ refresh: false })}>
+                                onClick={() => handleCancel({refresh: false})}>
                                 Cancel
                             </Button>
                             <Button
@@ -265,7 +287,7 @@ export function AddEditDoctor({ data = {}, mode = 'add', handleCancel }) {
                                 loading={loading}
                                 className='min-w-24'
                                 leftSection={
-                                    mode === 'add' ? <Save size={16} /> : <SquarePen size={16} />
+                                    mode === 'add' ? <Save size={16}/> : <SquarePen size={16}/>
                                 }
                             >
                                 {mode === 'add' ? 'Save' : 'Update'}
