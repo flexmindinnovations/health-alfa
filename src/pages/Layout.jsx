@@ -3,14 +3,13 @@ import {AppShell, AspectRatio, Burger, Group, Image, UnstyledButton, useMantineT
 import {useDisclosure, useMediaQuery} from '@mantine/hooks'
 import styles from '@styles/layout.module.css'
 import {createElement, useEffect, useState} from 'react'
-import {MENU_ITEMS} from '../config/menu-items.js'
+import {MENU_ITEMS} from '@config/MenuItems.js'
 import Settings from '@components/Settings.jsx'
 import {useTranslation} from 'react-i18next'
 import {UserMenu} from '@components/UserMenu.jsx'
 import logo from '/images/logo.png'
 import {AnimatePresence, motion} from 'framer-motion';
 import {modals} from "@mantine/modals";
-import {usePermissions} from "@contexts/Permission.jsx";
 import {useEncrypt} from "@hooks/EncryptData.js";
 
 export function Layout() {

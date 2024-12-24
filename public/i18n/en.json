@@ -106,5 +106,6 @@
   "evening": "Evening",
   "availabilityUpdated": "Availability updated successfully",
   "error": "Error",
-  "roles": "Roles"
+  "roles": "Roles",
+  "role": "Role"
 }

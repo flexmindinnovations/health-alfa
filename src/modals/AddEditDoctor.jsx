@@ -21,7 +21,7 @@ import {motion} from 'framer-motion';
 import {SquarePen, Save} from 'lucide-react';
 import {ImagePicker} from '@components/ImagePicker';
 import {useApiConfig} from '@contexts/ApiConfigContext';
-import useHttp from '@hooks/axios-instance';
+import useHttp from '@hooks/AxiosInstance.js';
 import {openNotificationWithSound} from '@config/Notifications';
 import {useTranslation} from 'react-i18next';
 import degreeMaster from '../assets/data/degree-master.json';

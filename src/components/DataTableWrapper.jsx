@@ -1,19 +1,18 @@
 import {DataTable} from 'mantine-datatable';
 import {
     ActionIcon,
-    CloseButton, CloseIcon,
-    Container,
+    CloseButton,
+    CloseIcon,
     Group,
-    Loader,
     Text,
     TextInput,
     Tooltip,
-    useMantineTheme,
-    useMantineColorScheme
+    useMantineColorScheme,
+    useMantineTheme
 } from '@mantine/core';
 import {useTranslation} from 'react-i18next';
-import {useCallback, useEffect, useState, useMemo} from 'react';
-import {Plus, RefreshCcw, Search, SquarePen, Trash2, X} from 'lucide-react';
+import {useCallback, useEffect, useState} from 'react';
+import {Plus, RefreshCcw, Search, SquarePen, Trash2} from 'lucide-react';
 import styles from '@styles/DataTableWrapper.module.css';
 import {modals} from "@mantine/modals";
 
@@ -199,44 +198,39 @@ export function DataTableWrapper({
                     </Group>
                 </div>
             </div>
-            {loading ? (
-                <Container className="flex-1 flex items-center justify-center">
-                    <Loader/>
-                </Container>
-            ) : (
-                <DataTable
-                    styles={{
-                        root: {width: '100%'},
+            <DataTable
+                styles={{
+                    root: {width: '100%'},
 
-                    }}
-                    idAccessor={id}
-                    withTableBorder={true}
-                    withColumnBorders={true}
-                    storeColumnsKey={id}
-                    striped
-                    highlightOnHover
-                    pinLastColumn
-                    records={filteredData}
-                    noRecordsText={t('noRecordsToShow')}
-                    recordsPerPageLabel={t('recordsPerPage')}
-                    columns={enhancedColumns}
-                    totalRecords={filteredData.length}
-                    recordsPerPage={pagination.pageSize}
-                    page={pagination.page}
-                    onPageChange={(page) => setPagination((prev) => ({...prev, page}))}
-                    recordsPerPageOptions={PAGE_SIZES}
-                    onRecordsPerPageChange={(pageSize) =>
-                        setPagination((prev) => ({...prev, pageSize}))
-                    }
-                    sortStatus={pagination.sortStatus}
-                    onSortStatusChange={handleSortChange}
-                    paginationSize="md"
-                    paginationText={({from, to, totalRecords}) =>
-                        `${t('records')} ${from} - ${to} ${t('of')} ${totalRecords}`
-                    }
-                    paginationWrapBreakpoint="sm"
-                />
-            )}
+                }}
+                idAccessor={id}
+                withTableBorder={true}
+                withColumnBorders={true}
+                storeColumnsKey={id}
+                striped
+                fetching={loading}
+                highlightOnHover
+                pinLastColumn
+                records={filteredData}
+                noRecordsText={t('noRecordsToShow')}
+                recordsPerPageLabel={t('recordsPerPage')}
+                columns={enhancedColumns}
+                totalRecords={filteredData.length}
+                recordsPerPage={pagination.pageSize}
+                page={pagination.page}
+                onPageChange={(page) => setPagination((prev) => ({...prev, page}))}
+                recordsPerPageOptions={PAGE_SIZES}
+                onRecordsPerPageChange={(pageSize) =>
+                    setPagination((prev) => ({...prev, pageSize}))
+                }
+                sortStatus={pagination.sortStatus}
+                onSortStatusChange={handleSortChange}
+                paginationSize="md"
+                paginationText={({from, to, totalRecords}) =>
+                    `${t('records')} ${from} - ${to} ${t('of')} ${totalRecords}`
+                }
+                paginationWrapBreakpoint="sm"
+            />
         </div>
     );
 }

@@ -18,7 +18,7 @@ import {
 import {useDisclosure} from '@mantine/hooks'
 import {useForm} from '@mantine/form'
 import {useState} from 'react';
-import useHttp from '@hooks/axios-instance.js'
+import useHttp from '@hooks/AxiosInstance.js'
 import {useApiConfig} from '@contexts/ApiConfigContext.jsx'
 import {openNotificationWithSound} from '@config/Notifications'
 import classes from '@styles/login.module.css';

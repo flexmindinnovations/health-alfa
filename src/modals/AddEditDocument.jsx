@@ -6,7 +6,7 @@ import {zodResolver} from "mantine-form-zod-resolver";
 import {Save, SquarePen} from "lucide-react";
 import {useTranslation} from "react-i18next";
 import {useApiConfig} from "@contexts/ApiConfigContext";
-import useHttp from "@hooks/axios-instance";
+import useHttp from "@hooks/AxiosInstance.js";
 import _ from "underscore";
 
 export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
