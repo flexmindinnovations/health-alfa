@@ -23,9 +23,7 @@ export function UserMenu({showHideSettingsModel}) {
         const imageUrl = `${host}/${_profileImage}`.replace('/api', '');
         setProfileImage(imageUrl);
         const role = getEncryptedData('roles')?.toLowerCase();
-        if (role === 'admin') {
-            setIsAdmin(true)
-        }
+        setIsAdmin(() => role === 'admin');
         if (user && role) {
             processUserDetails(role);
         }
@@ -88,11 +86,17 @@ export function UserMenu({showHideSettingsModel}) {
                 </Menu.Target>
                 <Menu.Dropdown>
                     <Menu.Item className='pointer-events-none'>
-                        <Stack gap={0} className='flex flex-col items-start justify-start'>
-                            <Text size={'xs'} className='opacity-50 text-sm'>{t('signedInAs')}</Text>
-                            <Title size={18} className='font-semibold !my-0.5'>{userDetails.username || isAdmin ? 'Admin' : 'Guest'}</Title>
-                            <p className='font-light text-xs'>{userDetails.email || isAdmin ? `admin@${t('brandEmail')}.com` : 'email@test.com'}</p>
-                            <p className='font-light text-xs'>{userDetails.mobileNumber || '+xx-xxxxxxxx'}</p>
+                        <Stack gap={0} className="flex flex-col items-start justify-start">
+                            <Text size="xs" className="opacity-50 text-sm">
+                                {t('signedInAs')}
+                            </Text>
+                            <Title size={18} className="font-semibold !my-0.5">
+                                {isAdmin ? 'Admin' : userDetails.username || 'Guest'}
+                            </Title>
+                            <p className="font-light text-xs">
+                                {isAdmin ? `admin@${t('brandEmail')}.com` : userDetails.email || 'email@test.com'}
+                            </p>
+                            <p className="font-light text-xs">{userDetails.mobileNumber || '+xx-xxxxxxxx'}</p>
                         </Stack>
                     </Menu.Item>
                     <Menu.Divider/>
