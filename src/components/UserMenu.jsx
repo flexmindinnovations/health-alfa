@@ -24,9 +24,7 @@ export function UserMenu({showHideSettingsModel}) {
         setProfileImage(imageUrl);
         const role = getEncryptedData('roles')?.toLowerCase();
         setIsAdmin(() => role === 'admin');
-        if (user && role) {
-            processUserDetails(role);
-        }
+        if (user && role) processUserDetails(role);
     }, [user])
 
     const processUserDetails = (role) => {
