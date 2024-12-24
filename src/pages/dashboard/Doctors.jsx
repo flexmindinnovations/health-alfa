@@ -6,7 +6,7 @@ import {useApiConfig} from "@contexts/ApiConfigContext";
 import {useDocumentTitle} from '@hooks/DocumentTitle';
 import {useListManager} from "@hooks/ListManager.jsx";
 import {useModal} from "@hooks/AddEditModal.jsx";
-import {AddEditDocument} from "@modals/AddEditDocument.jsx";
+import {AddEditDoctor} from "@modals/AddEditDoctor.jsx";
 
 export default function Doctors() {
     const {t} = useTranslation();
@@ -52,7 +52,7 @@ export default function Doctors() {
 
     const openAddEditModal = ({data = null, mode = 'add'}) => {
         openModal({
-            Component: AddEditDocument,
+            Component: AddEditDoctor,
             data,
             mode,
             title: t("doctor"),
