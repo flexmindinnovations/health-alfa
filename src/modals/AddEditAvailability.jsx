@@ -8,7 +8,7 @@ import {TimeInput} from '@mantine/dates';
 import {Clock4Icon, Save, SquarePen, Trash2} from 'lucide-react';
 import {useTranslation} from "react-i18next";
 import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
-import useHttp from "@hooks/AxiosInstance.js";
+import useHttp from "@hooks/AxiosInstance.jsx";
 import {openNotificationWithSound} from "@config/Notifications.js";
 
 const schema = z.object({

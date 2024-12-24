@@ -1,5 +1,5 @@
 import {createContext, useContext, useEffect, useState} from "react";
-import {useEncrypt} from "@hooks/EncryptData.js";
+import {useEncrypt} from "@hooks/EncryptData.jsx";
 
 const roles = {
     Doctor: ['DASHBOARD', 'CLIENTS', 'AVAILABILITY']

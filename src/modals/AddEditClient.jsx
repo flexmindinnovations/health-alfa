@@ -23,7 +23,7 @@ import {Save, SquarePen} from 'lucide-react';
 import {ImagePicker} from '@components/ImagePicker';
 import {useTranslation} from 'react-i18next';
 import {useApiConfig} from '@contexts/ApiConfigContext.jsx';
-import useHttp from '@hooks/AxiosInstance.js';
+import useHttp from '@hooks/AxiosInstance.jsx';
 import {openNotificationWithSound} from '@config/Notifications';
 
 const bloodGroupTypes = [

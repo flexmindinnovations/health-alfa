@@ -18,7 +18,7 @@ import {
 import {useDisclosure} from '@mantine/hooks'
 import {useForm} from '@mantine/form'
 import {useState} from 'react';
-import useHttp from '@hooks/AxiosInstance.js'
+import useHttp from '@hooks/AxiosInstance.jsx'
 import {useApiConfig} from '@contexts/ApiConfigContext.jsx'
 import {openNotificationWithSound} from '@config/Notifications'
 import classes from '@styles/login.module.css';
@@ -31,7 +31,7 @@ import {useDocumentTitle} from '@hooks/DocumentTitle';
 import {useAuth} from "@contexts/AuthContext.jsx";
 import Logo from '../assets/images/logo.png';
 import {GlobalPhoneInput} from "@components/PhoneInput.jsx";
-import {useEncrypt} from '@hooks/EncryptData.js';
+import {useEncrypt} from '@hooks/EncryptData.jsx';
 
 const emailSchema = z.string().min(3, {message: "Atleast 3 chars"});
 const phoneNumberSchema = z.string().refine(

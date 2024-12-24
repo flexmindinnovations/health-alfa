@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
-import useHttp from "@hooks/AxiosInstance.js";
+import useHttp from "@hooks/AxiosInstance.jsx";
 import {useMantineTheme} from "@mantine/core";
 import {openNotificationWithSound} from "@config/Notifications.js";
 

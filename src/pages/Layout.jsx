@@ -10,7 +10,7 @@ import {UserMenu} from '@components/UserMenu.jsx'
 import logo from '/images/logo.png'
 import {AnimatePresence, motion} from 'framer-motion';
 import {modals} from "@mantine/modals";
-import {useEncrypt} from "@hooks/EncryptData.js";
+import {useEncrypt} from "@hooks/EncryptData.jsx";
 
 export function Layout() {
     const {t, i18n} = useTranslation()
