@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { Container, useMantineTheme } from "@mantine/core";
 import { DataTableWrapper } from "@components/DataTableWrapper";
 import { useTranslation } from "react-i18next";
-import useHttp from "@hooks/axios-instance";
+import useHttp from "@hooks/AxiosInstance.jsx";
 import { useApiConfig } from "@contexts/ApiConfigContext";
 import { modals } from "@mantine/modals";
 import { openNotificationWithSound } from '@config/Notifications';

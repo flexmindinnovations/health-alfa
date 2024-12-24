@@ -1,8 +1,8 @@
 import {createContext, useContext, useEffect, useState} from 'react';
-import {useEncrypt} from "@hooks/EncryptData.js";
+import {useEncrypt} from "@hooks/EncryptData.jsx";
 import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
 import {usePermissions} from "@contexts/Permission.jsx";
-import useHttp from "@hooks/axios-instance.js";
+import useHttp from "@hooks/AxiosInstance.jsx";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 

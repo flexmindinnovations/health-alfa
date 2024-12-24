@@ -4,7 +4,7 @@ import {LogOutIcon, SettingsIcon} from 'lucide-react'
 import {useTranslation} from 'react-i18next'
 import {useAuth} from "@contexts/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
-import {useEncrypt} from "@hooks/EncryptData.js";
+import {useEncrypt} from "@hooks/EncryptData.jsx";
 
 export function UserMenu({showHideSettingsModel}) {
     const {i18n, t} = useTranslation();
