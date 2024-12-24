@@ -3,11 +3,11 @@ import {Container} from '@mantine/core'
 import {useDocumentTitle} from '@hooks/DocumentTitle'
 import {useTranslation} from 'react-i18next'
 import {DataTableWrapper} from '@components/DataTableWrapper'
-import {AddEditClient} from '@modals/AddEditClient'
 import {useApiConfig} from '@contexts/ApiConfigContext.jsx'
 import dayjs from 'dayjs';
 import {useListManager} from "@hooks/ListManager.jsx";
 import {useModal} from "@hooks/AddEditModal.jsx";
+import {AddEditDocument} from "@modals/AddEditDocument.jsx";
 
 export default function Users() {
     const {t} = useTranslation();
@@ -145,8 +145,13 @@ export default function Users() {
     }
 
     const openAddEditModal = ({data = {}, mode = 'add'}) => {
-        const title = mode === "edit" ? `${t("edit")}: ${data?.firstName}` : `${t("add")}` + ` ${t("client")}`;
-        openModal({Component: AddEditClient, data, mode, title});
+        openModal({
+            Component: AddEditDocument,
+            data,
+            mode,
+            title: t("client"),
+            handleRefresh: handleRefresh
+        });
     }
 
     return (

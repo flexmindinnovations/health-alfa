@@ -18,35 +18,35 @@ export default function Availability() {
     const {t} = useTranslation();
     const [tableData, setTableData] = useState([]);
     const {apiConfig} = useApiConfig();
-    const {openModal} = useModal();
     useDocumentTitle(t('doctors'));
-
-    const columns = useMemo(() => [{
-        accessor: 'doctorTimingId', title: t('id'), width: 80, style: {padding: '10px'},
-    }, {
-        accessor: 'doctorName', title: t('doctorName'), width: 'auto', style: {padding: '10px', flex: 1},
-    }, {
-        accessor: 'dayOfWeek', title: t('dayOfWeek'), width: 'auto', style: {padding: '10px', flex: 1},
-    }, {
-        accessor: 'slotType', title: t('slotType'), width: 'auto', style: {padding: '10px', flex: 1},
-    }, {
-        accessor: 'startTime',
-        title: t('startTime'),
-        width: 'auto',
-        style: {padding: '10px', flex: 1},
-        render: (record) => getFormattedTime(record.startTime),
-    }, {
-        accessor: 'endTime',
-        title: t('endTime'),
-        width: 'auto',
-        style: {padding: '10px', flex: 1},
-        render: (record) => getFormattedTime(record.endTime),
-    },], [t])
+    const columns = useMemo(() => [
+        {
+            accessor: 'doctorTimingId', title: t('id'), width: 80, style: {padding: '10px'},
+        }, {
+            accessor: 'doctorName', title: t('doctorName'), width: 'auto', style: {padding: '10px', flex: 1},
+        }, {
+            accessor: 'dayOfWeek', title: t('dayOfWeek'), width: 'auto', style: {padding: '10px', flex: 1},
+        }, {
+            accessor: 'slotType', title: t('slotType'), width: 'auto', style: {padding: '10px', flex: 1},
+        }, {
+            accessor: 'startTime',
+            title: t('startTime'),
+            width: 'auto',
+            style: {padding: '10px', flex: 1},
+            render: (record) => getFormattedTime(record.startTime),
+        }, {
+            accessor: 'endTime',
+            title: t('endTime'),
+            width: 'auto',
+            style: {padding: '10px', flex: 1},
+            render: (record) => getFormattedTime(record.endTime),
+        },], [t])
     let {
         loading, dataSource, handleRefresh
     } = useListManager({
         apiEndpoint: apiConfig.doctors.getAvailability,
     });
+    const {openModal} = useModal();
 
     useEffect(() => {
         if (dataSource && dataSource.length > 0) {
@@ -66,8 +66,13 @@ export default function Availability() {
 
     const openAddEditModal = ({data = null, mode = 'add'}) => {
         const inputData = mode === 'add' ? data : tableData.filter((each) => each.dayOfWeek === data.dayOfWeek);
-        const title = `${mode === "edit" ? t("update") : t("add")}` + ` ${t("availability")}`;
-        openModal({Component: AddEditAvailability, data: inputData, mode, title});
+        openModal({
+            Component: AddEditAvailability,
+            data: inputData,
+            mode,
+            title: t("availability"),
+            handleRefresh: handleRefresh
+        });
     }
 
     return (<Container>

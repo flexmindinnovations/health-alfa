@@ -5,8 +5,8 @@ import {useTranslation} from "react-i18next";
 import {useApiConfig} from "@contexts/ApiConfigContext";
 import {useDocumentTitle} from '@hooks/DocumentTitle';
 import {useListManager} from "@hooks/ListManager.jsx";
-import {AddEditDoctor} from "@modals/AddEditDoctor.jsx";
 import {useModal} from "@hooks/AddEditModal.jsx";
+import {AddEditDocument} from "@modals/AddEditDocument.jsx";
 
 export default function Doctors() {
     const {t} = useTranslation();
@@ -51,8 +51,13 @@ export default function Doctors() {
     });
 
     const openAddEditModal = ({data = null, mode = 'add'}) => {
-        const title = mode === "edit" ? `${t("edit")}: ${data?.doctorName}` : `${t("add")} ${t("doctor")}`;
-        openModal({Component: AddEditDoctor, data, mode, title});
+        openModal({
+            Component: AddEditDocument,
+            data,
+            mode,
+            title: t("doctor"),
+            handleRefresh: handleRefresh
+        });
     };
 
     const handleDelete = (data) => {

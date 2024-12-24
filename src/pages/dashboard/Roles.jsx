@@ -3,15 +3,16 @@ import {useTranslation} from "react-i18next";
 import {useMemo} from "react";
 import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
 import {useDocumentTitle} from "@hooks/DocumentTitle.jsx";
-import {modals} from "@mantine/modals";
 import {AddEditRole} from "@modals/AddEditRole.jsx";
 import {DataTableWrapper} from "@components/DataTableWrapper.jsx";
 import {useListManager} from "@hooks/ListManager.jsx";
+import {useModal} from "@hooks/AddEditModal.jsx";
 
 export default function Roles() {
     const {t} = useTranslation();
     const {apiConfig} = useApiConfig();
     useDocumentTitle(t('roles'));
+    const {openModal} = useModal();
 
     const columns = useMemo(() => [
         {accessor: 'doctorId', title: t('id'), width: 80, style: {padding: '10px'}},
@@ -29,23 +30,12 @@ export default function Roles() {
     });
 
     const openAddEditModal = ({data = null, mode = 'add'}) => {
-        modals.closeAll();
-        modals.open({
-            title: mode === "edit" ? `${t("edit")}: ${data?.doctorName}` : `${t("add")} ${t("doctor")}`,
-            centered: true,
-            size: 'xl',
-            styles: {title: {fontWeight: '500', fontSize: '14px'}},
-            children: (
-                <AddEditRole
-                    mode={mode}
-                    data={data}
-                    handleCancel={(event) => {
-                        const {refresh} = event;
-                        modals.closeAll();
-                        refresh && handleRefresh();
-                    }}
-                />
-            )
+        openModal({
+            Component: AddEditRole,
+            data,
+            mode,
+            title: t("role"),
+            handleRefresh: handleRefresh
         });
     };
 

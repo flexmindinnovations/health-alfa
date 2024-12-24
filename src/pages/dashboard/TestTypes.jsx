@@ -3,15 +3,16 @@ import {Container} from "@mantine/core";
 import {DataTableWrapper} from "@components/DataTableWrapper";
 import {useTranslation} from "react-i18next";
 import {useApiConfig} from "@contexts/ApiConfigContext";
-import {modals} from "@mantine/modals";
 import {AddEditTestType} from '@modals/AddEditTestType';
 import {useDocumentTitle} from "@hooks/DocumentTitle";
 import {useListManager} from "@hooks/ListManager.jsx";
+import {useModal} from "@hooks/AddEditModal.jsx";
 
 export default function TestTypes() {
     const {t} = useTranslation();
     const {apiConfig} = useApiConfig();
     useDocumentTitle(t('testTypes'));
+    const {openModal} = useModal();
 
     const columns = useMemo(() =>
         [
@@ -48,21 +49,14 @@ export default function TestTypes() {
     }
 
     const openAddEditModal = ({data = null, mode = 'add'}) => {
-        modals.open({
-            title: mode === "edit" ? `${t("edit")}` : `${t("add")}` + ` ${t("testTypes")}`,
-            centered: true,
-            children: (
-                <AddEditTestType
-                    mode={mode}
-                    data={data}
-                    handleCancel={(event) => {
-                        const {refresh} = event;
-                        modals.closeAll();
-                        refresh && handleRefresh();
-                    }}
-                />
-            )
-        })
+        openModal({
+            Component: AddEditTestType,
+            data,
+            mode,
+            title: t("testTypes"),
+            handleRefresh: handleRefresh
+        });
+
     }
 
 

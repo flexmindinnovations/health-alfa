@@ -1,13 +1,15 @@
 import {useCallback} from 'react';
 import {modals} from "@mantine/modals";
+import {useTranslation} from "react-i18next";
 
 export function useModal(handleRefresh) {
+    const {t} = useTranslation();
     const openModal = useCallback((
-        {Component, data = [] | {} | null, mode = 'add', title = 'Add '}
+        {Component, data = [] | {} | null, mode = 'add', title = 'Add ', handleRefresh}
     ) => {
         modals.closeAll();
         modals.open({
-            title: title,
+            title: `${mode === "edit" ? t("update") : t("add")}` + ` ${title}`,
             centered: true,
             trapFocus: false,
             size: 'xl',
@@ -25,7 +27,7 @@ export function useModal(handleRefresh) {
                     handleCancel={(event) => {
                         const {refresh} = event;
                         modals.closeAll();
-                        refresh && handleRefresh();
+                        refresh && handleRefresh({refresh});
                     }}
                 />
             ),
