@@ -1,9 +1,21 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { FileInput, Center, Card, BackgroundImage, Overlay, Text, useMantineTheme, RingProgress, ActionIcon, rem, Stack } from '@mantine/core';
-import { motion } from 'framer-motion';
-import { CheckIcon } from 'lucide-react';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+    ActionIcon,
+    BackgroundImage,
+    Card,
+    Center,
+    FileInput,
+    Overlay,
+    rem,
+    RingProgress,
+    Stack,
+    Text,
+    useMantineTheme
+} from '@mantine/core';
+import {motion} from 'framer-motion';
+import {CheckIcon} from 'lucide-react';
 
-export function ImagePicker({ value, onChange, disableForm, isUploading, uploadProgress }) {
+export function ImagePicker({value, onChange, disableForm, isUploading, uploadProgress}) {
     const placeholderImage = 'https://via.placeholder.com/170';
     const [preview, setPreview] = useState(value || placeholderImage);
     const [visible, setVisible] = useState(false);
@@ -51,11 +63,11 @@ export function ImagePicker({ value, onChange, disableForm, isUploading, uploadP
     };
 
     return (
-        <Center style={{ position: 'relative', width: 180, height: 180 }}>
+        <Center style={{position: 'relative', width: 180, height: 180}}>
             <motion.div
-                initial={{ value: 0 }}
-                animate={{ value: uploadProgress }}
-                transition={{ duration: 0.5, ease: 'easeInOut' }}
+                initial={{value: 0}}
+                animate={{value: uploadProgress}}
+                transition={{duration: 0.5, ease: 'easeInOut'}}
                 style={{
                     position: 'absolute',
                     top: '50%',
@@ -70,7 +82,7 @@ export function ImagePicker({ value, onChange, disableForm, isUploading, uploadP
                     roundCaps
                     rootColor={theme.colors.gray[2]}
                     transitionDuration={1000}
-                    sections={[{ value: uploadProgress, color: getProgressColor() }]}
+                    sections={[{value: uploadProgress, color: getProgressColor()}]}
                     style={{
                         position: 'relative',
                     }}
@@ -97,10 +109,11 @@ export function ImagePicker({ value, onChange, disableForm, isUploading, uploadP
                     src={preview}
                     radius="xl"
                     h="100%"
-                    styles={{ root: { backgroundSize: '100% 100%' } }}
+                    styles={{root: {backgroundSize: '100% 100%'}}}
                 >
                     <Center className="flex w-full h-full">
-                        {visible && !isUploading && !isUploaded && <Overlay color={theme.colors.dark[5]} opacity={0.85} />}
+                        {visible && !isUploading && !isUploaded &&
+                            <Overlay color={theme.colors.dark[5]} opacity={0.85}/>}
                         {visible && !isUploading && (
                             <Text
                                 c={theme.white}
@@ -126,16 +139,16 @@ export function ImagePicker({ value, onChange, disableForm, isUploading, uploadP
                         )}
                         {!isUploading && isUploaded && (
                             <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.5, ease: 'easeInOut' }}
+                                initial={{opacity: 0}}
+                                animate={{opacity: 1}}
+                                exit={{opacity: 0}}
+                                transition={{duration: 0.5, ease: 'easeInOut'}}
                                 className="bg-white/90 !w-full !h-full"
                             >
                                 <Stack className="!h-full !w-full">
-                                    <Center styles={{ root: { height: '100%', width: '100%' } }}>
+                                    <Center styles={{root: {height: '100%', width: '100%'}}}>
                                         <ActionIcon color="teal" variant="light" radius="xl" size="xl">
-                                            <CheckIcon style={{ width: rem(22), height: rem(22) }} />
+                                            <CheckIcon style={{width: rem(22), height: rem(22)}}/>
                                         </ActionIcon>
                                     </Center>
                                 </Stack>
@@ -143,7 +156,7 @@ export function ImagePicker({ value, onChange, disableForm, isUploading, uploadP
                         )}
                         <FileInput
                             accept="image/*"
-                            style={{ display: 'none' }}
+                            style={{display: 'none'}}
                             onChange={handleFileChange}
                             ref={fileInputRef}
                         />
