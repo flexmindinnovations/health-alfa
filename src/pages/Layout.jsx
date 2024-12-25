@@ -1,10 +1,10 @@
 import {Link, Outlet, useLocation} from 'react-router-dom'
-import {AppShell, AspectRatio, Burger, Group, Image, UnstyledButton, useMantineTheme} from '@mantine/core'
+import {AppShell, AspectRatio, Burger, Group, Image, Text, UnstyledButton, useMantineTheme} from '@mantine/core'
 import {useDisclosure, useMediaQuery} from '@mantine/hooks'
 import styles from '@styles/layout.module.css'
 import {createElement, useEffect, useState} from 'react'
 import {MENU_ITEMS} from '@config/MenuItems.js'
-import Settings from '@components/Settings.jsx'
+import {Settings} from '@components/Settings.jsx'
 import {useTranslation} from 'react-i18next'
 import {UserMenu} from '@components/UserMenu.jsx'
 import logo from '/images/logo.png'
@@ -64,15 +64,32 @@ export function Layout() {
     }
 
     const openSettings = () => {
+        const renderTitle = (tab) => (
+            <Group position="apart" style={{width: '100%', minHeight: '2rem'}} justify="space-between">
+                <Text size="md" style={{fontWeight: 600}}>
+                    {t('settings')}
+                </Text>
+            </Group>
+        );
+
         modals.open({
-            title: t('settings'),
-            size: 'lg',
+            title: renderTitle('profile'),
+            transitionProps: {duration: 100, timingFunction: 'linear'},
+            size: 'xl',
             withCloseButton: true,
-            fullScreen: isSmallScreen ? true : false,
+            fullScreen: isSmallScreen,
             centered: true,
-            children: <Settings/>
-        })
-    }
+            styles: {
+                title: {width: '100%'},
+                content: {overflow: 'hidden'},
+                body: {minHeight: '50vh', padding: 0}
+            },
+            children: (
+                <Settings/>
+            ),
+        });
+    };
+
 
     return (
         <AppShell

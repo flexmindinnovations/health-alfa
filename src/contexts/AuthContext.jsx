@@ -4,7 +4,7 @@ import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
 import {usePermissions} from "@contexts/Permission.jsx";
 import useHttp from "@hooks/AxiosInstance.jsx";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const AuthContext = createContext({
     fetchUserDetails: () => {
@@ -82,6 +82,8 @@ export const AuthProvider = ({children}) => {
         localStorage.removeItem('token');
         localStorage.removeItem('profile_image');
         localStorage.removeItem('roles');
+        localStorage.clear();
+        sessionStorage.clear();
         setIsLoggedIn(false)
     }
 

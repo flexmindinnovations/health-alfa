@@ -1,24 +1,24 @@
-import {useState, useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useForm} from '@mantine/form';
 import {useMediaQuery} from '@mantine/hooks';
 import {
-    TextInput,
-    Button,
-    Group,
     Box,
-    Select,
+    Button,
+    CloseIcon,
     Grid,
-    Textarea,
+    Group,
     MultiSelect,
     ScrollArea,
+    Select,
     Stack,
-    CloseIcon
+    Textarea,
+    TextInput
 } from '@mantine/core';
 import {DateInput} from '@mantine/dates';
 import {zodResolver} from 'mantine-form-zod-resolver';
 import {z} from 'zod';
 import {motion} from 'framer-motion';
-import {SquarePen, Save} from 'lucide-react';
+import {Save, SquarePen} from 'lucide-react';
 import {ImagePicker} from '@components/ImagePicker';
 import {useApiConfig} from '@contexts/ApiConfigContext';
 import useHttp from '@hooks/AxiosInstance.jsx';
@@ -38,7 +38,7 @@ const normalizeField = (field) =>
     Array.isArray(field)
         ? field
         : typeof field === 'string' && field.includes(',')
-            ? field.split(',').map((item) => item.trim())
+            ? field.split(',').map((item) => item?.trim())
             : [field];
 
 const doctorSchema = z.object({
@@ -63,7 +63,7 @@ const doctorSchema = z.object({
         .optional(),
 });
 
-export function AddEditDoctor({data = {}, mode = 'add', handleCancel}) {
+export function AddEditDoctor({data = {}, mode = 'add', showCancel = true, handleCancel}) {
     const [profileImage, setProfileImage] = useState(null);
     const [imageUploadProgress, setImageUploadProgress] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -74,7 +74,6 @@ export function AddEditDoctor({data = {}, mode = 'add', handleCancel}) {
     const http = useHttp();
     const [disableForm, setDisableForm] = useState(false);
     const isSmallScreen = useMediaQuery('(max-width: 768px)');
-
     const form = useForm({
         initialValues: {
             doctorId: data?.doctorId || 0,
@@ -178,7 +177,7 @@ export function AddEditDoctor({data = {}, mode = 'add', handleCancel}) {
                                         }
                                     }}
                         >
-                            <Stack className="flex-1 max-h-[30rem] mx-auto">
+                            <Stack className="flex-1 max-h-[32rem] mx-auto">
                                 <Grid
                                     gutter="md"
                                 >
@@ -275,13 +274,13 @@ export function AddEditDoctor({data = {}, mode = 'add', handleCancel}) {
                             </Stack>
                         </ScrollArea>
                         <Group position="right" justify='flex-end' px={isSmallScreen ? 0 : 20}>
-                            <Button
+                            {showCancel && <Button
                                 disabled={disableForm}
                                 leftSection={<CloseIcon size={16}/>}
                                 variant="outline"
                                 onClick={() => handleCancel({refresh: false})}>
                                 Cancel
-                            </Button>
+                            </Button>}
                             <Button
                                 type="submit"
                                 loading={loading}

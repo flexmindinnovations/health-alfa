@@ -107,5 +107,7 @@
   "availabilityUpdated": "Availability updated successfully",
   "error": "Error",
   "roles": "Roles",
-  "role": "Role"
+  "role": "Role",
+  "updateDetails": "Update Details",
+  "viewDetails": "View Details"
 }

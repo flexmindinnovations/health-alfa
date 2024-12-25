@@ -1,68 +1,79 @@
 import {createElement, useEffect, useState} from 'react';
-import {Container, Tabs, useMantineTheme} from '@mantine/core';
+import {Button, Container, Group, Loader, Stack, Tabs} from '@mantine/core';
 import {ProfileComponent} from './Profile';
 import {PreferenceComponent} from './Preference';
-import {SlidersHorizontal, UserCog2Icon} from 'lucide-react';
-import {useTranslation} from "react-i18next";
+import {EyeIcon, SlidersHorizontal, SquarePen, UserCog2Icon} from 'lucide-react';
+import {useTranslation} from 'react-i18next';
+import {useEncrypt} from "@hooks/EncryptData.jsx";
 
 const SETTING_ITEMS = [
-    {id: 1, key: "profile", title: "Profile", icon: UserCog2Icon, component: ProfileComponent, active: false},
-    {
-        id: 2,
-        key: "preference",
-        title: "Preference",
-        icon: SlidersHorizontal,
-        component: PreferenceComponent,
-        active: false
-    }
+    {id: 1, key: 'profile', title: 'Profile', icon: UserCog2Icon, component: ProfileComponent},
+    {id: 2, key: 'preference', title: 'Preference', icon: SlidersHorizontal, component: PreferenceComponent},
 ];
 
-
-function Settings() {
+export const Settings = () => {
     const {t} = useTranslation();
-    const [settingOptions, setSettingOptions] = useState([]);
+    const [settingItems, setSettingItems] = useState([]);
     const [activeTab, setActiveTab] = useState('profile');
-    const theme = useMantineTheme();
+    const [isViewMode, setIsViewMode] = useState(false);
+    const {getEncryptedData} = useEncrypt();
 
     useEffect(() => {
-        setSettingOptions(SETTING_ITEMS);
-    }, []);
+        const userType = getEncryptedData('roles')?.toLowerCase();
+        const newSettings = userType === 'admin'
+            ? SETTING_ITEMS.filter((item) => item.id !== 1)
+            : SETTING_ITEMS;
+        setActiveTab(() => newSettings[0].key);
+        setSettingItems(newSettings);
+    }, [])
 
     return (
-        <Container p={0} m={0}>
-            <Tabs
-                style={{height: '100%'}}
-                value={activeTab}
-                orientation={"horizontal"}
-                onChange={setActiveTab}
-            >
-                <Tabs.List>
-                    {settingOptions.map((item) => (
-                        <Tabs.Tab
-                            key={item.id}
-                            leftSection={createElement(item.icon, {size: 16})}
-                            value={item.key}
-                            active={activeTab.key}
-                            sx={{
-                                backgroundColor: activeTab === item.key ? 'blue' : 'transparent',
-                                '&:hover': {
-                                    backgroundColor: 'lightblue',
-                                },
-                            }}
-                        >
-                            {t(item.key)}
-                        </Tabs.Tab>
-                    ))}
-                </Tabs.List>
-                {settingOptions.map((item) => (
-                    <Tabs.Panel mih="25rem" className='py-5 px-0 md:!p-5 lg:!p-5 xl:!p-5' key={item.id}
-                                value={item.key}>
-                        <item.component/>
-                    </Tabs.Panel>
-                ))}
-            </Tabs>
+        <Container style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+            {
+                settingItems.length ?
+                    <Tabs
+                        value={activeTab}
+                        onChange={setActiveTab}
+                    >
+                        <Tabs.List justify={'center'}>
+                            {settingItems.map((item) => (
+                                <Tabs.Tab
+                                    key={item.id}
+                                    value={item.key}
+                                    leftSection={createElement(item.icon, {size: 16})}
+                                >
+                                    {t(item.key)}
+                                </Tabs.Tab>
+                            ))}
+                        </Tabs.List>
+
+                        {settingItems.map((item) => (
+                            <Tabs.Panel key={item.id} value={item.key} p={20}
+                                        style={{flexGrow: 1, display: 'flex', height: '100%', flexDirection: 'column'}}>
+                                <Stack style={{height: '100%', flexGrow: 1}} gap={0}>
+                                    {activeTab === 'profile' && (
+                                        <Group justify="end" style={{padding: '5px 0'}}>
+                                            <Button
+                                                leftSection={isViewMode ? <EyeIcon size={14}/> : <SquarePen size={14}/>}
+                                                onClick={() => setIsViewMode((prev) => !prev)}
+                                                size="compact-sm"
+                                                style={{
+                                                    fontSize: '12px',
+                                                    fontWeight: 'normal',
+                                                }}
+                                            >
+                                                {isViewMode ? t('viewDetails') : t('updateDetails')}
+                                            </Button>
+                                        </Group>
+                                    )}
+                                    <item.component data={{showEditForm: isViewMode}}/>
+                                </Stack>
+                            </Tabs.Panel>
+                        ))}
+                    </Tabs>
+                    :
+                    <Loader/>
+            }
         </Container>
     );
-}
-
-export default Settings;
+};
