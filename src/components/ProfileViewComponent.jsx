@@ -99,10 +99,11 @@ export function ProfileView({data = {}}) {
 
     return (
         <motion.div initial={{opacity: 0, y: 50}} animate={{opacity: 1, y: 0}} exit={{opacity: 0, y: 50}}>
-            <Stack gap={0} p={20}
+            <Stack gap={0} p={10}
             styles={{
                 root: {
                     maxHeight: '70vh',
+                    overflowX: 'hidden',
                     overflowY: 'auto',
                 }
             }}

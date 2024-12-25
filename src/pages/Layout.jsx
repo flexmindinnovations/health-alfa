@@ -75,7 +75,7 @@ export function Layout() {
         modals.open({
             title: renderTitle('profile'),
             transitionProps: {duration: 100, timingFunction: 'linear'},
-            size: 'lg',
+            size: 'xl',
             withCloseButton: true,
             fullScreen: isSmallScreen,
             centered: true,
