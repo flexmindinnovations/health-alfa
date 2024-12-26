@@ -1,5 +1,5 @@
 import {motion} from 'framer-motion';
-import {Box, Button, CloseIcon, Group} from '@mantine/core';
+import {Box, Button, CloseIcon, Group, Stack} from '@mantine/core';
 import {Save, SquarePen} from "lucide-react";
 import {useForm} from "react-hook-form";
 import {useTranslation} from "react-i18next";
@@ -28,7 +28,10 @@ export function AddEditRole({data = {}, mode = 'add', handleCancel}) {
         >
             <Box sx={{maxWidth: 900, margin: '0 auto'}}>
                 <form>
-                    <Group position="right" mt="xl" align="center" justify="end">
+                    <Stack p={20}>
+
+                    </Stack>
+                    <Group p={20} position="right" mt="xl" align="center" justify="end">
                         <Button variant="outline" leftSection={<CloseIcon size={16}/>}
                                 onClick={() => handleCancel({refresh: false})}>
                             {t('cancel')}

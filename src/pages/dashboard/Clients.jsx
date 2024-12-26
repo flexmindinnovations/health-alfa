@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import {useListManager} from "@hooks/ListManager.jsx";
 import {useModal} from "@hooks/AddEditModal.jsx";
 import {AddEditDocument} from "@modals/AddEditDocument.jsx";
+import {AddEditClient} from "@modals/AddEditClient.jsx";
 
 export default function Users() {
     const {t} = useTranslation();
@@ -146,7 +147,7 @@ export default function Users() {
 
     const openAddEditModal = ({data = {}, mode = 'add'}) => {
         openModal({
-            Component: AddEditDocument,
+            Component: AddEditClient,
             data,
             mode,
             title: t("client"),

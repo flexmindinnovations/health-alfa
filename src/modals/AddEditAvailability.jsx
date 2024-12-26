@@ -143,14 +143,15 @@ export function AddEditAvailability({data, mode = 'add', handleCancel}) {
 
     const isSaveEnabled = slotList.every(shift => shift.slotType && shift.startTime && shift.endTime);
 
-    return (<motion.div initial={{opacity: 0, y: 50}} animate={{opacity: 1, y: 0}} exit={{opacity: 0, y: 50}}>
+    return (
+        <motion.div initial={{opacity: 0, y: 50}} animate={{opacity: 1, y: 0}} exit={{opacity: 0, y: 50}}>
         <Box mw={600} mx="auto">
-            <Group px={8} py={10}>
+            <Group className={`px-4`} py={10}>
                 <Title size={12} fw={'600'}>
                     {t('doctorName')}: {data.doctorName}
                 </Title>
             </Group>
-            <form>
+            <motion.form className={`p-4`}>
                 <Controller
                     name="dayOfWeek"
                     control={control}
@@ -235,7 +236,7 @@ export function AddEditAvailability({data, mode = 'add', handleCancel}) {
                         {mode === 'add' ? t('save') : t('update')}
                     </Button>
                 </Group>
-            </form>
+            </motion.form>
         </Box>
     </motion.div>);
 }

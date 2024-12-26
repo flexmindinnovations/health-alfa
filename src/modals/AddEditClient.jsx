@@ -6,7 +6,6 @@ import {
     Grid,
     Group,
     NumberInput,
-    ScrollArea,
     Select,
     Stack,
     Textarea,
@@ -208,141 +207,133 @@ export function AddEditClient({data = {}, mode = 'add', handleCancel}) {
             exit={{opacity: 0, y: 50}}
         >
             <Box sx={{maxWidth: 900, margin: '0 auto'}}>
-                <motion.form onSubmit={form.onSubmit(handleSubmit)} initial={{opacity: 0}} animate={{opacity: 1}}
+                <motion.form onSubmit={form.onSubmit(handleSubmit)} initial={{opacity: 0}}
+                             animate={{opacity: 1}}
                              exit={{opacity: 0}}>
-                    <Stack>
-                        <ScrollArea scrollbars='y'
-                                    styles={{
-                                        root: {
-                                            padding: isSmallScreen ? '0' : '0 20px'
-                                        }
-                                    }}
-                        >
-                            <Stack className="flex-1 max-h-[30rem] mx-auto">
-                                <Grid gutter="md">
-                                    <Grid.Col span={{base: 12, md: 4, lg: 4}}
-                                              className='flex items-center justify-center'>
-                                        <ImagePicker
-                                            disableForm={disableForm}
-                                            value={form.values.profileImagePath}
-                                            uploadProgress={imageUploadProgress}
-                                            isUploading={isUploading}
-                                            onChange={(file) => setProfileImage(file)}
-                                            // onChange={(file) => uploadUserImage(file)}
-                                        />
-                                    </Grid.Col>
-                                    <Grid.Col span={{base: 12, md: 8, lg: 8}}>
-                                        <Grid gutter="md">
-                                            <Grid.Col span={6}>
-                                                <TextInput label="First Name"
-                                                           placeholder="Enter first name" {...form.getInputProps('firstName')} />
-                                            </Grid.Col>
-                                            <Grid.Col span={6}>
-                                                <TextInput label="Middle Name"
-                                                           placeholder="Enter middle name" {...form.getInputProps('middleName')} />
-                                            </Grid.Col>
-                                            <Grid.Col span={6}>
-                                                <TextInput label="Last Name"
-                                                           placeholder="Enter last name" {...form.getInputProps('lastName')} />
-                                            </Grid.Col>
-                                            <Grid.Col span={6}>
-                                                <TextInput label="Mobile Number"
-                                                           placeholder="Enter mobile number" {...form.getInputProps('mobileNo')} />
-                                            </Grid.Col>
-                                        </Grid>
-                                    </Grid.Col>
-                                </Grid>
-
-                                <Grid mt={5} gutter="md">
-                                    <Grid.Col span={6}>
-                                        <TextInput label="Email ID"
-                                                   placeholder="Enter email" {...form.getInputProps('emailId')} />
-                                    </Grid.Col>
-                                    <Grid.Col span={6}>
-                                        <Select
-                                            label="Gender"
-                                            placeholder="Select gender"
-                                            checkIconPosition='right'
-                                            data={genderOptions}
-                                            searchable
-                                            clearable
-                                            {...form.getInputProps('gender')}
-                                        />
-                                    </Grid.Col>
-
-                                </Grid>
+                    <Stack
+                        p={20}
+                        className="form-container flex-1 max-h-[560px] overflow-hidden overflow-y-auto h-full mx-auto">
+                        <Grid gutter="md">
+                            <Grid.Col span={{base: 12, md: 4, lg: 4}}
+                                      className='flex items-center justify-center'>
+                                <ImagePicker
+                                    disableForm={disableForm}
+                                    value={form.values.profileImagePath}
+                                    uploadProgress={imageUploadProgress}
+                                    isUploading={isUploading}
+                                    onChange={(file) => setProfileImage(file)}
+                                    // onChange={(file) => uploadUserImage(file)}
+                                />
+                            </Grid.Col>
+                            <Grid.Col span={{base: 12, md: 8, lg: 8}}>
                                 <Grid gutter="md">
                                     <Grid.Col span={6}>
-                                        <DateInput label="Date of Birth"
-                                                   placeholder="Select date" {...form.getInputProps('dateOfBirth')} />
+                                        <TextInput label="First Name"
+                                                   placeholder="Enter first name" {...form.getInputProps('firstName')} />
                                     </Grid.Col>
                                     <Grid.Col span={6}>
-                                        <NumberInput label="Height"
-                                                     hideControls
-                                                     placeholder="Enter height"
-                                                     {...form.getInputProps('height')}
-                                        />
+                                        <TextInput label="Middle Name"
+                                                   placeholder="Enter middle name" {...form.getInputProps('middleName')} />
+                                    </Grid.Col>
+                                    <Grid.Col span={6}>
+                                        <TextInput label="Last Name"
+                                                   placeholder="Enter last name" {...form.getInputProps('lastName')} />
+                                    </Grid.Col>
+                                    <Grid.Col span={6}>
+                                        <TextInput label="Mobile Number"
+                                                   placeholder="Enter mobile number" {...form.getInputProps('mobileNo')} />
                                     </Grid.Col>
                                 </Grid>
-                                <Grid gutter="md">
-                                    <Grid.Col span={6}>
-                                        <Select
-                                            label="Blood Group"
-                                            placeholder="Select blood group"
-                                            data={bloodGroupTypes}
-                                            title='title'
-                                            checkIconPosition='right'
-                                            searchable
-                                            clearable
-                                            {...form.getInputProps('bloodType')}
-                                        />
-                                    </Grid.Col>
-                                    <Grid.Col span={6}>
-                                        <TextInput label="Emergency Contact"
-                                                   placeholder="Enter emergency contact" {...form.getInputProps('emergencyContactNumber')} />
-                                    </Grid.Col>
-                                </Grid>
+                            </Grid.Col>
+                        </Grid>
 
-                                {/* Address */}
-                                <Grid mt="md">
-                                    <Grid.Col span={12}>
-                                        <Textarea rows={3} label="Address"
-                                                  radius={'lg'}
-                                                  styles={{
-                                                      label: {
-                                                          fontWeight: 'normal',
-                                                          fontSize: '14px'
-                                                      },
-                                                      input: {
-                                                          paddingLeft: '10px'
-                                                      }
-                                                  }}
-                                                  placeholder="Enter address" {...form.getInputProps('clientAddress')} />
-                                    </Grid.Col>
-                                </Grid>
-                            </Stack>
-                        </ScrollArea>
-                        {/* Buttons */}
-                        <Group position="right" justify='flex-end' px={isSmallScreen ? 0 : 20}>
-                            <Button variant="outline"
-                                    leftSection={<CloseIcon size={16}/>}
-                                    onClick={() => handleCancel({refresh: false})}
-                                    disabled={loading}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                type="submit"
-                                leftSection={
-                                    mode === 'add' ? <Save size={16}/> : <SquarePen size={16}/>
-                                }
-                                loading={loading}
-                                disabled={loading || !form.isValid()}>
-                                {mode === 'add' ? t('save') : t('update')}
-                            </Button>
-                        </Group>
+                        <Grid mt={5} gutter="md">
+                            <Grid.Col span={6}>
+                                <TextInput label="Email ID"
+                                           placeholder="Enter email" {...form.getInputProps('emailId')} />
+                            </Grid.Col>
+                            <Grid.Col span={6}>
+                                <Select
+                                    label="Gender"
+                                    placeholder="Select gender"
+                                    checkIconPosition='right'
+                                    data={genderOptions}
+                                    searchable
+                                    clearable
+                                    {...form.getInputProps('gender')}
+                                />
+                            </Grid.Col>
+
+                        </Grid>
+                        <Grid gutter="md">
+                            <Grid.Col span={6}>
+                                <DateInput label="Date of Birth"
+                                           placeholder="Select date" {...form.getInputProps('dateOfBirth')} />
+                            </Grid.Col>
+                            <Grid.Col span={6}>
+                                <NumberInput label="Height"
+                                             hideControls
+                                             placeholder="Enter height"
+                                             {...form.getInputProps('height')}
+                                />
+                            </Grid.Col>
+                        </Grid>
+                        <Grid gutter="md">
+                            <Grid.Col span={6}>
+                                <Select
+                                    label="Blood Group"
+                                    placeholder="Select blood group"
+                                    data={bloodGroupTypes}
+                                    title='title'
+                                    checkIconPosition='right'
+                                    searchable
+                                    clearable
+                                    {...form.getInputProps('bloodType')}
+                                />
+                            </Grid.Col>
+                            <Grid.Col span={6}>
+                                <TextInput label="Emergency Contact"
+                                           placeholder="Enter emergency contact" {...form.getInputProps('emergencyContactNumber')} />
+                            </Grid.Col>
+                        </Grid>
+
+                        {/* Address */}
+                        <Grid mt="md">
+                            <Grid.Col span={12}>
+                                <Textarea rows={3} label="Address"
+                                          radius={'lg'}
+                                          styles={{
+                                              label: {
+                                                  fontWeight: 'normal',
+                                                  fontSize: '14px'
+                                              },
+                                              input: {
+                                                  paddingLeft: '10px'
+                                              }
+                                          }}
+                                          placeholder="Enter address" {...form.getInputProps('clientAddress')} />
+                            </Grid.Col>
+                        </Grid>
                     </Stack>
-
+                    {/* Buttons */}
+                    <Group position="right" justify='flex-end' p={isSmallScreen ? 0 : 20}>
+                        <Button variant="outline"
+                                leftSection={<CloseIcon size={16}/>}
+                                onClick={() => handleCancel({refresh: false})}
+                                disabled={loading}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            leftSection={
+                                mode === 'add' ? <Save size={16}/> : <SquarePen size={16}/>
+                            }
+                            loading={loading}
+                            disabled={loading || !form.isValid()}>
+                            {mode === 'add' ? t('save') : t('update')}
+                        </Button>
+                    </Group>
                 </motion.form>
             </Box>
         </motion.div>

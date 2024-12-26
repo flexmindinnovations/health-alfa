@@ -56,7 +56,8 @@ export default function Doctors() {
             data,
             mode,
             title: t("doctor"),
-            handleRefresh: handleRefresh
+            handleRefresh: handleRefresh,
+            props: `min-h-[630px]`
         });
     };
 

@@ -21,27 +21,27 @@ export function AddEditAppointment(
         <motion.div initial={{opacity: 0, y: 50}} animate={{opacity: 1, y: 0}} exit={{opacity: 0, y: 50}}>
             <Box>
                 <motion.form>
-                    <Stack>
-                        <Group position="right" justify='flex-end' px={isSmallScreen ? 0 : 20}>
-                            {showCancel && <Button
-                                disabled={disableForm}
-                                leftSection={<CloseIcon size={16}/>}
-                                variant="outline"
-                                onClick={() => handleCancel({refresh: false})}>
-                                Cancel
-                            </Button>}
-                            <Button
-                                type="submit"
-                                loading={loading}
-                                className='min-w-24'
-                                leftSection={
-                                    mode === 'add' ? <Save size={16}/> : <SquarePen size={16}/>
-                                }
-                            >
-                                {mode === 'add' ? 'Save' : 'Update'}
-                            </Button>
-                        </Group>
+                    <Stack p={20}>
                     </Stack>
+                    <Group position="right" justify='flex-end' px={isSmallScreen ? 0 : 20}>
+                        {showCancel && <Button
+                            disabled={disableForm}
+                            leftSection={<CloseIcon size={16}/>}
+                            variant="outline"
+                            onClick={() => handleCancel({refresh: false})}>
+                            Cancel
+                        </Button>}
+                        <Button
+                            type="submit"
+                            loading={loading}
+                            className='min-w-24'
+                            leftSection={
+                                mode === 'add' ? <Save size={16}/> : <SquarePen size={16}/>
+                            }
+                        >
+                            {mode === 'add' ? 'Save' : 'Update'}
+                        </Button>
+                    </Group>
                 </motion.form>
             </Box>
         </motion.div>
