@@ -4,13 +4,18 @@ import {useMantineTheme} from "@mantine/core";
 import {openNotificationWithSound} from "@config/Notifications.js";
 
 export function useListManager({apiEndpoint, onRefreshCallback}) {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [dataSource, setDataSource] = useState([]);
     const http = useHttp();
     const theme = useMantineTheme();
 
-
     const fetchData = useCallback(async () => {
+        if (!apiEndpoint) {
+            console.warn("API endpoint is not defined. Skipping fetch.");
+            setDataSource([]);
+            return;
+        }
+
         setLoading(true);
         try {
             const response = await http.get(apiEndpoint);
@@ -20,15 +25,18 @@ export function useListManager({apiEndpoint, onRefreshCallback}) {
         } catch (err) {
             setDataSource([]);
             const {name, message} = err;
-            openNotificationWithSound({
-                title: name,
-                message: message,
-                color: theme.colors.red[6]
-            }, {withSound: false});
+            openNotificationWithSound(
+                {
+                    title: name || "Error",
+                    message: message || "An unexpected error occurred.",
+                    color: theme.colors.red[6],
+                },
+                {withSound: false}
+            );
         } finally {
             setLoading(false);
         }
-    }, [apiEndpoint]);
+    }, [apiEndpoint, http, theme]);
 
     const handleRefresh = useCallback(() => {
         fetchData().then(() => {
@@ -37,8 +45,10 @@ export function useListManager({apiEndpoint, onRefreshCallback}) {
     }, [fetchData, onRefreshCallback]);
 
     useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+        if (apiEndpoint) {
+            fetchData();
+        }
+    }, [apiEndpoint]);
 
     return {
         loading,

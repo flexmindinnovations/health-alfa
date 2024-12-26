@@ -303,7 +303,7 @@ function AppWrapper() {
             withGlobalStyles
             withNormalizeCSS
         >
-            <Notifications position='top-right' zIndex={9999}/>
+            <Notifications position='top-center' zIndex={9999}/>
             <ModalsProvider
                 modalProps={{
                     withCloseButton: false,

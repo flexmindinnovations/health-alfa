@@ -145,7 +145,7 @@ export default function Login() {
 
     return (
         <Card radius={0} shadow={0} pb={0} className={classes.loginPage}>
-            <Paper pos={'relative'} className={`h-full flex !bg-tb-800/90 w-full !rounded-t-none`}
+            <Paper pos={'relative'} className={`h-full flex w-full !rounded-t-none`}
                    styles={{
                        root: {
                            borderBottomLeftRadius: theme.radius.xl,
@@ -155,8 +155,8 @@ export default function Login() {
             >
                 <Overlay
                     blur={'20px'}
-                    color={theme.colors.brand[5]}
-                    opacity={0.8}
+                    bg={theme.colors.brand[9]}
+                    opacity={1}
                     className={`lg:!rounded-b-[30px] xl:!rounded-b-[30px] 2xl:!rounded-b-[30px] !backdrop-blur-md`}>
                     <Grid grow gutter={0} className={`h-full w-full
                     lg:!rounded-b-full xl:!rounded-b-full 2xl:!rounded-b-full
@@ -213,6 +213,7 @@ export default function Login() {
                                             <PasswordInput
                                                 {...form.getInputProps('userPassword')}
                                                 label='Password'
+                                                radius={'xl'}
                                                 autoComplete="off"
                                                 withAsterisk
                                                 size='md'
@@ -220,6 +221,7 @@ export default function Login() {
                                                     visibilityToggle: classes.visibilityToggle
                                                 }}
                                                 onVisibilityChange={toggle}
+                                                varient={'outlined'}
                                                 className={`min-h-[5.5rem] ${classes.input}`}
                                                 styles={{
                                                     label: {
@@ -255,6 +257,7 @@ export default function Login() {
                                             <Button
                                                 disabled={!form.isValid()}
                                                 size='md'
+                                                variant={"white"}
                                                 my={20}
                                                 loading={loading}
                                                 onClick={handleFormSubmit}

@@ -59,6 +59,6 @@ input:-webkit-autofill:active{
   --input-bd-focus: var(--mantine-primary-color-filled);
 }
 input::selection {
-  background-color: red !important;
-  color: red !important;
+  background-color: gray !important;
+  color: gray !important;
 }

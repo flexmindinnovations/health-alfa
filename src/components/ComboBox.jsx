@@ -3,6 +3,7 @@ import cx from 'clsx'
 import {useTranslation} from 'react-i18next'
 import {createElement, useEffect, useState} from 'react'
 import classes from '@styles/ComboBox.module.css'
+import theme from "tailwindcss/defaultTheme.js";
 
 export function ComboBoxComponent({
                                       loading,
@@ -55,14 +56,14 @@ export function ComboBoxComponent({
         })
         : dataSource
 
-    const getLabel = item => {
+    const getLabel = (item, src) => {
         if (item) {
             return (
                 <div className='flex items-center justify-start gap-2'>
                     {item.icon && typeof item.icon === 'string'
                         ? createElement(item.icon, {size: 14})
                         : item.icon}
-                    <span style={{...labelProps}}> {item.label}</span>
+                    <span style={{color: src === 'base' ? 'white' : "black"}}> {item.label}</span>
                 </div>
             )
         } else {
@@ -78,7 +79,7 @@ export function ComboBoxComponent({
             style={{animationDelay: `${index * 50}ms`, width: '100%'}}
         >
             <Group flex justify='space-between' className='min-w-10'>
-                <div className='flex items-center justify-start gap-2'>
+                <div className='flex items-center justify-start gap-2 text-tb-900'>
                     {getLabel(item)}
                     {isPhoneInput && item.value}
                 </div>
@@ -126,9 +127,9 @@ export function ComboBoxComponent({
                     rightSection={loading ? <Loader size={14}/> : <Combobox.Chevron/>}
                     onClick={() => combobox.openDropdown()}
                     rightSectionPointerEvents='none'
-                    styles={{...styles}}
+                    styles={{...styles, color: 'white'}}
                 >
-                    {getLabel(selectedItem) || (
+                    {getLabel(selectedItem, 'base') || (
                         <Input.Placeholder>
                             {t('selectOrTypePlaceholder')}
                         </Input.Placeholder>
