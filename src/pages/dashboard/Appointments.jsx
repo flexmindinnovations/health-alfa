@@ -51,15 +51,17 @@ export default function Appointments() {
             {
                 accessor: 'appointmentStatus',
                 title: t('status'),
-                width: 'auto',
-                style: {padding: '10px', flex: 1},
+                width: '120px',
+                style: {padding: '10px'},
                 render: (record) => (
-                    <Card p={0} className={`
-                        ${record.appointmentStatus === 'Booked'  ? 
-                        '!bg-teal-500 flex items-center justify-center !p-1 !font-semibold !text-white' : 
-                        ''} 
-                    `}>
-                        <Text size={"xs"}>{record.appointmentStatus}</Text>
+                    <Card p={0} shadow>
+                        <Text
+                            className={`
+                        ${record.appointmentStatus === 'Booked' ?
+                                '!bg-teal-500 flex items-center justify-center !p-1 !font-semibold !text-white' :
+                                ''} 
+                    `}
+                            size={"xs"}>{record.appointmentStatus}</Text>
                     </Card>
                 )
             },
