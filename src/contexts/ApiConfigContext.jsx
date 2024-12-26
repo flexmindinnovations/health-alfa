@@ -35,7 +35,10 @@ const defaultApiConfig = {
         update: (id) => `/Doctor/UpdateDoctorPersonalInfo/${id}`
     },
     patientVisits: {
-        getList: `/PatientVisit/GetPatientVisitList`
+        getList: `/PatientVisit/GetPatientVisitList`,
+        getPatientVisitInfoByVisitId: (id) => `/api/PatientVisit/getPatientVisitInfoByVisitId/${id}`,
+        savePatientVisit: `/PatientVisit/SavePatientVisit`,
+        updatePatientVisit: (visitId) => `/api/PatientVisit/updatePatientVisit/${visitId}`
     },
     testTypes: {
         getList: `/TestType/getTestTypeList`

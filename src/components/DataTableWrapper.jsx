@@ -12,7 +12,7 @@ import {
 } from '@mantine/core';
 import {useTranslation} from 'react-i18next';
 import {useCallback, useEffect, useState} from 'react';
-import {ChevronRightIcon, Plus, RefreshCcw, Search, SquarePen, Trash2} from 'lucide-react';
+import {ChevronRightIcon, Plus, RefreshCcw, Search, SquarePen, Trash2, Stethoscope} from 'lucide-react';
 import styles from '@styles/DataTableWrapper.module.css';
 import {modals} from "@mantine/modals";
 import clsx from "clsx";
@@ -135,13 +135,14 @@ export function DataTableWrapper({
     enhancedColumns[nestedTableConfigIndex] = {
         ...enhancedColumns[nestedTableConfigIndex],
         render: (record) => (
-            <Group>
+            <Group gap={5}>
                 <ChevronRightIcon
                     size={16}
                     className={clsx(styles.icon, styles.expandIcon, {
                         [styles.expandIconRotated]: expandedRowIds.includes(record[id]),
                     })}
                 />
+                <Stethoscope size={14} />
                 <span>{record[nestedTableConfig]}</span>
             </Group>
         )
@@ -153,6 +154,7 @@ export function DataTableWrapper({
             modals.openConfirmModal({
                 title: t('deleteConfirm'),
                 centered: true,
+                withOverlay: true,
                 children: (
                     <Text size="sm">{t('areYouSureToDelete')}?</Text>
                 ),
@@ -163,7 +165,7 @@ export function DataTableWrapper({
                 },
                 onConfirm: () => onDelete(data),
             })
-        }, [rowData])
+        }, [])
 
     const onDelete = (data) => {
         handleOnDelete(data);
@@ -249,17 +251,30 @@ export function DataTableWrapper({
                 </div>
             </div>
             <DataTable
-                styles={{
-                    root: {width: '100%'},
-                    header: {
+                withTableBorder
+                withColumnBorders
+                storeColumnsKey={id}
+                striped
+                borderRadius={theme.radius.lg}
+                classNames={{
+                    pagination: {
                         fontSize: theme.fontSizes.xs,
                     }
                 }}
+                styles={{
+                    root: {
+                        // border: `1px solid var(--mantine-datatable-border-color)`,
+                        width: '100%',
+
+                    },
+                    header: {
+                        fontSize: theme.fontSizes.xs,
+                    },
+                    pagination: {
+                        fontSize: theme.fontSizes.xs,
+                    },
+                }}
                 idAccessor={id}
-                withTableBorder={true}
-                withColumnBorders={true}
-                storeColumnsKey={id}
-                striped
                 fetching={loading}
                 highlightOnHover
                 pinLastColumn
