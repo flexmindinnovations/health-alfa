@@ -58,8 +58,8 @@ export default function Appointments() {
                         <Text
                             className={`
                         ${record.appointmentStatus === 'Booked' ?
-                                '!bg-teal-500 flex items-center justify-center !p-1 !font-semibold !text-white' :
-                                ''} 
+                                `!bg-tb-900 flex items-center justify-center !p-1 !font-semibold !text-white` :
+                                ``} 
                     `}
                             size={"xs"}>{record.appointmentStatus}</Text>
                     </Card>
