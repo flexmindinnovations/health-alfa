@@ -38,7 +38,7 @@ export const AuthProvider = ({children}) => {
         const userId = await getEncryptedData('user');
         const role = userRole || getEncryptedData('roles')?.toLowerCase();
         const endpoint = await getUserDetailsEndpoint(userId, role);
-        if (role === 'doctor') {
+        if (role === 'admin' || role === 'doctor') {
             try {
                 if (endpoint) {
                     const response = await http.get(endpoint);
@@ -60,7 +60,7 @@ export const AuthProvider = ({children}) => {
         let endpoint = '';
         switch (role) {
             case "admin":
-                endpoint = '';
+                endpoint = apiConfig.admin.getAdminInfoById(userId);
                 break;
             case "client":
                 endpoint = '';

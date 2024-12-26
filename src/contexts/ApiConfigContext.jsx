@@ -12,6 +12,9 @@ const defaultApiConfig = {
         register: ``,
         getUserDetails: ``
     },
+    admin: {
+        getAdminInfoById: (id) => `/Admin/getAdminInfoById/${id}`
+    },
     clients: {
         getList: `/ClientPersonalInfo/getClientPersonalInfoList`,
         updateUserImage: (id) => `/ClientPersonalInfo/UpdateProfileImage?ClientId=${id}`,
@@ -43,6 +46,13 @@ const defaultApiConfig = {
         updateDocument: documentId =>
             `/DocumentType/updateDocumentType/${documentId}`,
         deleteDocument: documentId => `/DocumentType/deleteDocument/${documentId}`
+    },
+    appointment: {
+        getList: `/Appointment/GetAppointmentList`,
+        getAppointmentDetailsById: (appointmentId) => `/Appointment/GetAppointmentDetailsById/${appointmentId}`,
+        getAppointmentListByPatientIdId: (patientId) => `/Appointment/GetAppointmentListByPatientIdWise/${patientId}`,
+        getAppointmentListByDoctorId: (doctorId) => `/Appointment/GetAppointmentListByDoctorIdWise/${doctorId}`,
+        bookAppointment: `/Appointment/BookAppointment`,
     }
 }
 

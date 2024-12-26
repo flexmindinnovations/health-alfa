@@ -83,10 +83,11 @@ export function PreferenceComponent() {
                     data={themeList.map(item => ({
                         value: item.value, label: (<div
                             className='flex items-center justify-center gap-2 text-xs md:text-sm lg:text-sm xl:text-sm'>
-                            {createElement(item.icon, {size: 14})}
+                            {createElement(item.icon, {size: 16})}
                             {t(item.value)}
                         </div>)
                     }))}
+                    radius={'xl'}
                     withItemsBorders
                     onChange={handleColorSchemeChange}
                     value={theme}

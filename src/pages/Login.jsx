@@ -221,6 +221,7 @@ export default function Login() {
                                                     visibilityToggle: classes.visibilityToggle
                                                 }}
                                                 onVisibilityChange={toggle}
+                                                varient={'outlined'}
                                                 className={`min-h-[5.5rem] ${classes.input}`}
                                                 styles={{
                                                     label: {

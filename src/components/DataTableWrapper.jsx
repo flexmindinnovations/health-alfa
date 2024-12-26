@@ -12,9 +12,10 @@ import {
 } from '@mantine/core';
 import {useTranslation} from 'react-i18next';
 import {useCallback, useEffect, useState} from 'react';
-import {Plus, RefreshCcw, Search, SquarePen, Trash2} from 'lucide-react';
+import {ChevronRightIcon, Plus, RefreshCcw, Search, SquarePen, Trash2} from 'lucide-react';
 import styles from '@styles/DataTableWrapper.module.css';
 import {modals} from "@mantine/modals";
+import clsx from "clsx";
 
 export function DataTableWrapper({
                                      loading,
@@ -27,6 +28,12 @@ export function DataTableWrapper({
                                      handleOnEdit,
                                      handleOnDelete,
                                      onRefresh,
+                                     nestedTableConfig = null,
+                                     hasNestedTable = false,
+                                     nestedTableAccessor = '',
+                                     nestedColumns = [],
+                                     nestedTableAccessorId,
+                                     showActions = true
                                  }) {
     const [pagination, setPagination] = useState({
         page: 1,
@@ -40,6 +47,7 @@ export function DataTableWrapper({
     const [themeMode, setThemeMode] = useState(colorScheme);
     const {t, i18n} = useTranslation();
     const [rowData, setRowData] = useState({});
+    const [expandedRowIds, setExpandedRowIds] = useState([]);
 
     const PAGE_SIZES = [10, 15, 20];
     const radius = theme.radius.xl;
@@ -86,7 +94,7 @@ export function DataTableWrapper({
         setPagination((prev) => ({...prev, sortStatus}));
     };
 
-    const enhancedColumns = [
+    const enhancedColumns = showActions ? [
         ...columns.map((col) => ({...col})),
         {
             accessor: 'actions',
@@ -121,8 +129,23 @@ export function DataTableWrapper({
                 </Group>
             ),
         },
-    ];
+    ] : [...columns.map((col) => ({...col}))];
 
+    const nestedTableConfigIndex = enhancedColumns.findIndex((col) => col.accessor === nestedTableConfig);
+    enhancedColumns[nestedTableConfigIndex] = {
+        ...enhancedColumns[nestedTableConfigIndex],
+        render: (record) => (
+            <Group>
+                <ChevronRightIcon
+                    size={16}
+                    className={clsx(styles.icon, styles.expandIcon, {
+                        [styles.expandIconRotated]: expandedRowIds.includes(record[id]),
+                    })}
+                />
+                <span>{record[nestedTableConfig]}</span>
+            </Group>
+        )
+    }
 
     const openDeleteModal = useCallback(
         (data) => {
@@ -145,6 +168,33 @@ export function DataTableWrapper({
     const onDelete = (data) => {
         handleOnDelete(data);
     }
+
+    const rowExpansionConfig = hasNestedTable
+        ? {
+            allowMultiple: false,
+            expanded: {recordIds: expandedRowIds, onRecordIdsChange: setExpandedRowIds},
+            content: (nested) => (
+                <Group justify={'center'} align={'center'} width={'100%'}>
+                    <DataTable
+                        idAccessor={nestedTableAccessorId}
+                        styles={{
+                            root: {width: '50%'},
+                            header: {
+                                fontSize: theme.fontSizes.xs,
+                            },
+                        }}
+                        noRecordsText={t('noRecordsToShow')}
+                        columns={nestedColumns}
+                        records={nested.record[nestedTableAccessor]}
+                        rowStyle={(record, index) => ({
+                            fontSize: theme.fontSizes.xs,
+                            borderBottom: index === nested.record[nestedTableAccessor].length - 1 ? 'none' : '',
+                        })}
+                    />
+                </Group>
+            ),
+        }
+        : undefined;
 
     return (
         <div className="h-full w-full flex flex-col items-start justify-start gap-4">
@@ -201,7 +251,9 @@ export function DataTableWrapper({
             <DataTable
                 styles={{
                     root: {width: '100%'},
-
+                    header: {
+                        fontSize: theme.fontSizes.xs,
+                    }
                 }}
                 idAccessor={id}
                 withTableBorder={true}
@@ -229,7 +281,11 @@ export function DataTableWrapper({
                 paginationText={({from, to, totalRecords}) =>
                     `${t('records')} ${from} - ${to} ${t('of')} ${totalRecords}`
                 }
+                rowStyle={(record, index) => ({
+                    fontSize: theme.fontSizes.xs,
+                })}
                 paginationWrapBreakpoint="sm"
+                rowExpansion={rowExpansionConfig}
             />
         </div>
     );

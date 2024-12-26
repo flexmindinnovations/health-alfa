@@ -3,13 +3,14 @@ import {z} from 'zod';
 import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {zodResolver} from "mantine-form-zod-resolver";
 import {motion} from "framer-motion";
-import {ActionIcon, Box, Button, CloseIcon, Group, Select, Stack, useMantineTheme} from '@mantine/core';
+import {ActionIcon, Box, Button, CloseIcon, Group, Select, Stack, Title, useMantineTheme} from '@mantine/core';
 import {TimeInput} from '@mantine/dates';
 import {Clock4Icon, Save, SquarePen, Trash2} from 'lucide-react';
 import {useTranslation} from "react-i18next";
 import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
 import useHttp from "@hooks/AxiosInstance.jsx";
 import {openNotificationWithSound} from "@config/Notifications.js";
+import dayjs from "dayjs";
 
 const schema = z.object({
     dayOfWeek: z.string().min(1, {message: 'Please select a day of week'}), slotList: z.array(z.object({
@@ -18,6 +19,11 @@ const schema = z.object({
         endTime: z.string().min(1, {message: 'Select end time'}).regex(/^([0-9]{2}):([0-9]{2})$/, 'End time must be in HH:mm format')
     })).nonempty({message: 'At least one shift is required'}),
 });
+
+const convertTimeFormat = (inputTime) => {
+    const currentDate = dayjs().format("YYYY-MM-DD");
+    return dayjs(`${currentDate} ${inputTime}`, "h:mm A").format("HH:mm:ss");
+}
 
 export function AddEditAvailability({data, mode = 'add', handleCancel}) {
     const {t} = useTranslation();
@@ -47,11 +53,11 @@ export function AddEditAvailability({data, mode = 'add', handleCancel}) {
     const [availableShifts, setAvailableShifts] = useState(shiftsMaster);
     const {handleSubmit, watch, getValues, formState: {errors, isSubmitting}, control} = useForm({
         mode: 'onChange', defaultValues: {
-            dayOfWeek: shiftsData?.[0]?.dayOfWeek.toLowerCase() || '', slotList: shiftsData?.map(item => ({
-                dayOfWeek: item?.dayOfWeek || '',
-                slotType: item.slotType.toLowerCase() || '',
-                startTime: item.startTime || '',
-                endTime: item.endTime || ''
+            dayOfWeek: data?.dayOfWeek?.toLowerCase() || '',
+            slotList: data?.slotList?.map(item => ({
+                slotType: item.slotType?.toLowerCase() || '',
+                startTime: convertTimeFormat(item.startTime) || '',
+                endTime: convertTimeFormat(item.endTime) || ''
             })) || [{dayOfWeek: '', slotType: '', startTime: '', endTime: ''}]
         }, resolver: zodResolver(schema),
     });
@@ -101,11 +107,11 @@ export function AddEditAvailability({data, mode = 'add', handleCancel}) {
         event.preventDefault();
         const values = getValues();
         const formData = {
-            doctorId: data[0]?.doctorId || 2,
-            doctorName: data[0]?.doctorName || '',
+            doctorId: data?.doctorId || 2,
+            doctorName: data?.doctorName || '',
             dayOfWeek: values.dayOfWeek,
             slotList: values.slotList.map((shift, index) => ({
-                doctorTimingId: shiftsData[index]?.doctorTimingId || 0,
+                doctorTimingId: data.slotList[index]?.doctorTimingId || 0,
                 startTime: shift.startTime,
                 endTime: shift.endTime,
                 slotType: shift.slotType
@@ -138,93 +144,98 @@ export function AddEditAvailability({data, mode = 'add', handleCancel}) {
     const isSaveEnabled = slotList.every(shift => shift.slotType && shift.startTime && shift.endTime);
 
     return (<motion.div initial={{opacity: 0, y: 50}} animate={{opacity: 1, y: 0}} exit={{opacity: 0, y: 50}}>
-            <Box mw={600} mx="auto">
-                <form>
-                    <Controller
-                        name="dayOfWeek"
-                        control={control}
-                        render={({field}) => (<Select
-                                label={t('selectDayOfWeek')}
-                                placeholder={t('selectDayOfWeek')}
-                                data={availableDays}
-                                {...field}
-                                mb="lg"
-                            />)}
-                    />
-                    {selectedDay && (<Stack>
-                            {fields.map((field, index) => (
-                                <Group align="end" justify="space-between" key={field.id} gap={5}>
-                                    <Controller
-                                        control={control}
-                                        name={`slotList.${index}.slotType`}
-                                        render={({field}) => (<Select
-                                                {...field}
-                                                label={t('slotType')}
-                                                data={availableShifts}
-                                                value={getValues(`slotList.${index}.slotType`) || ''}
-                                                onChange={(value) => handleShiftChange(field, value, index)}
-                                                error={errors.slotList?.[index]?.slotType?.message}
-                                            />)}
-                                    />
-                                    <Controller
-                                        control={control}
-                                        name={`slotList.${index}.startTime`}
-                                        render={({field}) => (<TimeInput
-                                                {...field}
-                                                label={t('startTime')}
-                                                withSeconds
-                                                ref={(ref) => {
-                                                    fromRef.current[index] = ref;
-                                                }}
-                                                rightSection={<ActionIcon variant="subtle" color="gray"
-                                                                          onClick={() => fromRef.current[index]?.showPicker()}>
-                                                    <Clock4Icon size={16}/>
-                                                </ActionIcon>}
-                                                error={errors.slotList?.[index]?.startTime?.message}
-                                            />)}
-                                    />
-                                    <Controller
-                                        control={control}
-                                        name={`slotList.${index}.endTime`}
-                                        render={({field}) => (<TimeInput
-                                                {...field}
-                                                withSeconds
-                                                label={t('endTime')}
-                                                ref={(ref) => {
-                                                    toRef.current[index] = ref;
-                                                }}
-                                                rightSection={<ActionIcon variant="subtle" color="gray"
-                                                                          onClick={() => toRef.current[index]?.showPicker()}>
-                                                    <Clock4Icon size={16}/>
-                                                </ActionIcon>}
-                                                error={errors.slotList?.[index]?.endTime?.message}
-                                            />)}
-                                    />
-                                    <Button color="red" leftSection={<Trash2 size={16}/>}
-                                            onClick={() => removeShift(index)}>
-                                        {t('remove')}
-                                    </Button>
-                                </Group>))}
-                            {shiftCount < 3 && (
-                                <Button mt="md" onClick={addShift} disabled={availableShifts.length === 0}>
-                                    {t('addSlot')}
-                                </Button>)}
-                        </Stack>)}
-                    <Group position="right" mt="xl" align="center" justify="end">
-                        <Button variant="outline" leftSection={<CloseIcon size={16}/>}
-                                onClick={() => handleCancel({refresh: false})}>
-                            {t('cancel')}
-                        </Button>
-                        <Button
-                            onClick={onSubmit}
-                            disabled={!isSaveEnabled}
-                            loading={isSubmitting || loading}
-                            leftSection={mode === 'add' ? <Save size={16}/> : <SquarePen size={16}/>}
-                        >
-                            {mode === 'add' ? t('save') : t('update')}
-                        </Button>
-                    </Group>
-                </form>
-            </Box>
-        </motion.div>);
+        <Box mw={600} mx="auto">
+            <Group px={8} py={10}>
+                <Title size={12} fw={'600'}>
+                    {t('doctorName')}: {data.doctorName}
+                </Title>
+            </Group>
+            <form>
+                <Controller
+                    name="dayOfWeek"
+                    control={control}
+                    render={({field}) => (<Select
+                        label={t('selectDayOfWeek')}
+                        placeholder={t('selectDayOfWeek')}
+                        data={availableDays}
+                        {...field}
+                        mb="lg"
+                    />)}
+                />
+                {selectedDay && (<Stack>
+                    {fields.map((field, index) => (
+                        <Group align="end" justify="space-between" key={field.id} gap={5}>
+                            <Controller
+                                control={control}
+                                name={`slotList.${index}.slotType`}
+                                render={({field}) => (<Select
+                                    {...field}
+                                    label={t('slotType')}
+                                    data={availableShifts}
+                                    value={getValues(`slotList.${index}.slotType`) || ''}
+                                    onChange={(value) => handleShiftChange(field, value, index)}
+                                    error={errors.slotList?.[index]?.slotType?.message}
+                                />)}
+                            />
+                            <Controller
+                                control={control}
+                                name={`slotList.${index}.startTime`}
+                                render={({field}) => (<TimeInput
+                                    {...field}
+                                    label={t('startTime')}
+                                    withSeconds
+                                    ref={(ref) => {
+                                        fromRef.current[index] = ref;
+                                    }}
+                                    rightSection={<ActionIcon variant="subtle" color="gray"
+                                                              onClick={() => fromRef.current[index]?.showPicker()}>
+                                        <Clock4Icon size={16}/>
+                                    </ActionIcon>}
+                                    error={errors.slotList?.[index]?.startTime?.message}
+                                />)}
+                            />
+                            <Controller
+                                control={control}
+                                name={`slotList.${index}.endTime`}
+                                render={({field}) => (<TimeInput
+                                    {...field}
+                                    withSeconds
+                                    label={t('endTime')}
+                                    ref={(ref) => {
+                                        toRef.current[index] = ref;
+                                    }}
+                                    rightSection={<ActionIcon variant="subtle" color="gray"
+                                                              onClick={() => toRef.current[index]?.showPicker()}>
+                                        <Clock4Icon size={16}/>
+                                    </ActionIcon>}
+                                    error={errors.slotList?.[index]?.endTime?.message}
+                                />)}
+                            />
+                            <Button color="red" leftSection={<Trash2 size={16}/>}
+                                    onClick={() => removeShift(index)}>
+                                {t('remove')}
+                            </Button>
+                        </Group>))}
+                    {shiftCount < 3 && (
+                        <Button mt="md" onClick={addShift} disabled={availableShifts.length === 0}>
+                            {t('addSlot')}
+                        </Button>)}
+                </Stack>)}
+                <Group position="right" mt="xl" align="center" justify="end">
+                    <Button variant="outline" leftSection={<CloseIcon size={16}/>}
+                            onClick={() => handleCancel({refresh: false})}>
+                        {t('cancel')}
+                    </Button>
+                    <Button
+                        onClick={onSubmit}
+                        disabled={!isSaveEnabled}
+                        loading={isSubmitting || loading}
+                        leftSection={mode === 'add' ? <Save size={16}/> : <SquarePen size={16}/>}
+                    >
+                        {mode === 'add' ? t('save') : t('update')}
+                    </Button>
+                </Group>
+            </form>
+        </Box>
+    </motion.div>);
 }

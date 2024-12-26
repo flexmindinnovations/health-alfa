@@ -152,7 +152,7 @@ export function GlobalPhoneInput({
                     alignItems: 'center',
                     border: `1px solid ${form.errors.username
                         ? theme.colors.red[6]
-                        : isFocused ? `var(--mantine-primary-color-filled)` : theme.colors.gray[4]
+                        : isFocused ? `white` : theme.colors.gray[4]
                     }`,
                     borderRadius: theme.radius.xl,
                     padding: 0,

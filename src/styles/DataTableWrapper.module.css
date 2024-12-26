@@ -13,3 +13,18 @@
 :root[dir='rtl'] .dataTableWrapper {
     @apply flex-1 flex flex-row items-center justify-start gap-2;
 }
+
+.icon {
+    width: rem(10px);
+    height: auto;
+    vertical-align: rem(-1px);
+    margin-right: rem(8px);
+}
+
+.expandIcon {
+    transition: transform 0.2s;
+}
+
+.expandIconRotated {
+    transform: rotate(90deg);
+}

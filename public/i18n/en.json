@@ -109,5 +109,10 @@
   "roles": "Roles",
   "role": "Role",
   "updateDetails": "Update Details",
-  "viewDetails": "View Details"
+  "viewDetails": "View Details",
+  "patientName": "Patient Name",
+  "appointmentDate": "Appointment Date",
+  "durationInMinutes": "Duration (Minutes)",
+  "status": "Status",
+  "notes": "Notes"
 }
