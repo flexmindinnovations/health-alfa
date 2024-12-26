@@ -12,7 +12,7 @@ import {
 } from '@mantine/core';
 import {useTranslation} from 'react-i18next';
 import {useCallback, useEffect, useState} from 'react';
-import {ChevronRightIcon, Plus, RefreshCcw, Search, SquarePen, Trash2, Stethoscope} from 'lucide-react';
+import {ChevronRightIcon, Plus, RefreshCcw, Search, SquarePen, Stethoscope, Trash2} from 'lucide-react';
 import styles from '@styles/DataTableWrapper.module.css';
 import {modals} from "@mantine/modals";
 import clsx from "clsx";
@@ -136,13 +136,15 @@ export function DataTableWrapper({
         ...enhancedColumns[nestedTableConfigIndex],
         render: (record) => (
             <Group gap={5}>
-                <ChevronRightIcon
-                    size={16}
-                    className={clsx(styles.icon, styles.expandIcon, {
-                        [styles.expandIconRotated]: expandedRowIds.includes(record[id]),
-                    })}
-                />
-                <Stethoscope size={14} />
+                <Tooltip label={expandedRowIds.includes(record[id]) ? t('collapseRow') : t('expandRow')}>
+                    <ChevronRightIcon
+                        size={16}
+                        className={clsx(styles.icon, styles.expandIcon, {
+                            [styles.expandIconRotated]: expandedRowIds.includes(record[id]),
+                        })}
+                    />
+                </Tooltip>
+                <Stethoscope size={14}/>
                 <span>{record[nestedTableConfig]}</span>
             </Group>
         )

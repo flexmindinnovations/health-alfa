@@ -1,19 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useForm} from '@mantine/form';
 import {useMediaQuery} from '@mantine/hooks';
-import {
-    Box,
-    Button,
-    CloseIcon,
-    Grid,
-    Group,
-    MultiSelect,
-    ScrollArea,
-    Select,
-    Stack,
-    Textarea,
-    TextInput
-} from '@mantine/core';
+import {Box, Button, CloseIcon, Grid, Group, MultiSelect, Select, Stack, Textarea, TextInput} from '@mantine/core';
 import {DateInput} from '@mantine/dates';
 import {zodResolver} from 'mantine-form-zod-resolver';
 import {z} from 'zod';
@@ -169,130 +157,122 @@ export function AddEditDoctor({data = {}, mode = 'add', showCancel = true, handl
             <Box sx={{maxWidth: 900, margin: '0 auto'}}>
                 <motion.form onSubmit={form.onSubmit(handleSubmit)} initial={{opacity: 0}} animate={{opacity: 1}}
                              exit={{opacity: 0}}>
-                    <Stack>
-                        <ScrollArea scrollbars={'y'}
-                                    styles={{
-                                        root: {
-                                            padding: isSmallScreen ? '0' : '0 20px'
-                                        }
-                                    }}
+                    <Stack p={20}
+                           className="form-container flex-1 max-h-[550px] overflow-hidden overflow-y-auto h-full mx-auto">
+                        <Grid
+                            gutter="md"
                         >
-                            <Stack className="flex-1 max-h-[32rem] mx-auto">
-                                <Grid
-                                    gutter="md"
-                                >
-                                    <Grid.Col span={{base: 12, md: 4, lg: 4}}
-                                              className="flex items-center justify-center">
-                                        <ImagePicker
-                                            disableForm={loading}
-                                            value={form.values.doctorProfileImagePath}
-                                            uploadProgress={imageUploadProgress}
-                                            isUploading={isUploading}
-                                            onChange={setProfileImage}
-                                        />
-                                    </Grid.Col>
-                                    <Grid.Col span={{base: 12, md: 8, lg: 8}}>
-                                        <Grid gutter="md">
-                                            <Grid.Col span={6}>
-                                                <TextInput label="Doctor Name"
-                                                           placeholder="Enter doctor name" {...form.getInputProps('doctorName')} />
-                                            </Grid.Col>
-                                            <Grid.Col span={6}>
-                                                <TextInput label="Mobile Number"
-                                                           placeholder="Enter mobile number" {...form.getInputProps('mobileNo')}
-                                                           disabled/>
-                                            </Grid.Col>
-                                            <Grid.Col span={6}>
-                                                <DateInput label="Date of Birth"
-                                                           placeholder="Select date" {...form.getInputProps('dateOfBirth')} />
-                                            </Grid.Col>
-                                            <Grid.Col span={6}>
-                                                <Select
-                                                    label="Gender"
-                                                    searchable
-                                                    placeholder="Select gender"
-                                                    data={['Male', 'Female', 'Other']}
-                                                    {...form.getInputProps('gender')}
-                                                />
-                                            </Grid.Col>
-                                        </Grid>
-                                    </Grid.Col>
-                                </Grid>
-
-                                <Grid mt={5} gutter="md">
+                            <Grid.Col span={{base: 12, md: 4, lg: 4}}
+                                      className="flex items-center justify-center">
+                                <ImagePicker
+                                    disableForm={loading}
+                                    value={form.values.doctorProfileImagePath}
+                                    uploadProgress={imageUploadProgress}
+                                    isUploading={isUploading}
+                                    onChange={setProfileImage}
+                                />
+                            </Grid.Col>
+                            <Grid.Col span={{base: 12, md: 8, lg: 8}}>
+                                <Grid gutter="md">
                                     <Grid.Col span={6}>
-                                        <MultiSelect
-                                            label="Qualification"
-                                            placeholder="Select degree(s)"
-                                            data={mappedDegrees}
-                                            value={form.values.qualification}
-                                            onChange={(selected) => form.setFieldValue('qualification', selected)}
-                                        />
+                                        <TextInput label="Doctor Name"
+                                                   placeholder="Enter doctor name" {...form.getInputProps('doctorName')} />
                                     </Grid.Col>
                                     <Grid.Col span={6}>
-                                        <MultiSelect
-                                            label="Speciality"
-                                            placeholder="Select specialty"
-                                            data={specialtyOptions}
-                                            {...form.getInputProps('speciality')}
+                                        <TextInput label="Mobile Number"
+                                                   placeholder="Enter mobile number" {...form.getInputProps('mobileNo')}
+                                                   disabled/>
+                                    </Grid.Col>
+                                    <Grid.Col span={6}>
+                                        <DateInput label="Date of Birth"
+                                                   placeholder="Select date" {...form.getInputProps('dateOfBirth')} />
+                                    </Grid.Col>
+                                    <Grid.Col span={6}>
+                                        <Select
+                                            label="Gender"
+                                            searchable
+                                            placeholder="Select gender"
+                                            data={['Male', 'Female', 'Other']}
+                                            {...form.getInputProps('gender')}
                                         />
                                     </Grid.Col>
                                 </Grid>
+                            </Grid.Col>
+                        </Grid>
 
-                                <Grid mt={5} gutter="md">
-                                    <Grid.Col span={6}>
-                                        <TextInput label="Medical Registration Number"
-                                                   placeholder="Enter registration number" {...form.getInputProps('medicalRegistrationNumber')} />
-                                    </Grid.Col>
-                                    <Grid.Col span={6}>
-                                        <TextInput label="Medical Council"
-                                                   placeholder="Enter medical council" {...form.getInputProps('medicalCouncil')} />
-                                    </Grid.Col>
-                                </Grid>
+                        <Grid mt={5} gutter="md">
+                            <Grid.Col span={6}>
+                                <MultiSelect
+                                    label="Qualification"
+                                    placeholder="Select degree(s)"
+                                    data={mappedDegrees}
+                                    value={form.values.qualification}
+                                    onChange={(selected) => form.setFieldValue('qualification', selected)}
+                                />
+                            </Grid.Col>
+                            <Grid.Col span={6}>
+                                <MultiSelect
+                                    label="Speciality"
+                                    placeholder="Select specialty"
+                                    data={specialtyOptions}
+                                    {...form.getInputProps('speciality')}
+                                />
+                            </Grid.Col>
+                        </Grid>
 
-                                <Grid mt={5} gutter="md">
-                                    <Grid.Col span={6}>
-                                        <DateInput label="Register Date"
-                                                   placeholder="Pick date" {...form.getInputProps('registerDate')} />
-                                    </Grid.Col>
-                                    <Grid.Col span={6}>
-                                        <TextInput label="Email ID"
-                                                   placeholder="Enter email address" {...form.getInputProps('emailId')} />
-                                    </Grid.Col>
-                                </Grid>
+                        <Grid mt={5} gutter="md">
+                            <Grid.Col span={6}>
+                                <TextInput label="Medical Registration Number"
+                                           placeholder="Enter registration number" {...form.getInputProps('medicalRegistrationNumber')} />
+                            </Grid.Col>
+                            <Grid.Col span={6}>
+                                <TextInput label="Medical Council"
+                                           placeholder="Enter medical council" {...form.getInputProps('medicalCouncil')} />
+                            </Grid.Col>
+                        </Grid>
 
-                                <Grid mt="md">
-                                    <Grid.Col span={12}>
-                                        <Textarea
-                                            rows={3}
-                                            label="Address"
-                                            placeholder="Enter address"
-                                            {...form.getInputProps('doctorAddress')}
-                                        />
-                                    </Grid.Col>
-                                </Grid>
-                            </Stack>
-                        </ScrollArea>
-                        <Group position="right" justify='flex-end' px={isSmallScreen ? 0 : 20}>
-                            {showCancel && <Button
-                                disabled={disableForm}
-                                leftSection={<CloseIcon size={16}/>}
-                                variant="outline"
-                                onClick={() => handleCancel({refresh: false})}>
-                                Cancel
-                            </Button>}
-                            <Button
-                                type="submit"
-                                loading={loading}
-                                className='min-w-24'
-                                leftSection={
-                                    mode === 'add' ? <Save size={16}/> : <SquarePen size={16}/>
-                                }
-                            >
-                                {mode === 'add' ? 'Save' : 'Update'}
-                            </Button>
-                        </Group>
+                        <Grid mt={5} gutter="md">
+                            <Grid.Col span={6}>
+                                <DateInput label="Register Date"
+                                           placeholder="Pick date" {...form.getInputProps('registerDate')} />
+                            </Grid.Col>
+                            <Grid.Col span={6}>
+                                <TextInput label="Email ID"
+                                           placeholder="Enter email address" {...form.getInputProps('emailId')} />
+                            </Grid.Col>
+                        </Grid>
+
+                        <Grid mt="md">
+                            <Grid.Col span={12}>
+                                <Textarea
+                                    rows={3}
+                                    label="Address"
+                                    placeholder="Enter address"
+                                    {...form.getInputProps('doctorAddress')}
+                                />
+                            </Grid.Col>
+                        </Grid>
                     </Stack>
+                    <Group p={isSmallScreen ? 0 : 20}
+                           position="right" justify='flex-end' px={isSmallScreen ? 0 : 20}>
+                        {showCancel && <Button
+                            disabled={disableForm}
+                            leftSection={<CloseIcon size={16}/>}
+                            variant="outline"
+                            onClick={() => handleCancel({refresh: false})}>
+                            Cancel
+                        </Button>}
+                        <Button
+                            type="submit"
+                            loading={loading}
+                            className='min-w-24'
+                            leftSection={
+                                mode === 'add' ? <Save size={16}/> : <SquarePen size={16}/>
+                            }
+                        >
+                            {mode === 'add' ? 'Save' : 'Update'}
+                        </Button>
+                    </Group>
                 </motion.form>
             </Box>
         </motion.div>

@@ -114,5 +114,7 @@
   "appointmentDate": "Appointment Date",
   "durationInMinutes": "Duration (Minutes)",
   "status": "Status",
-  "notes": "Notes"
+  "notes": "Notes",
+  "expandRow": "Expand Row",
+  "collapseRow": "Collapse Row"
 }

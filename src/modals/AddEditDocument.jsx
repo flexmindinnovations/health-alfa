@@ -111,7 +111,7 @@ export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
 
     return (
         // <ModalWrapper isOpen={open} toggle={handleOnClose} title={title} size="md">
-        <Stack className="flex flex-col gap-2">
+        <Stack className="flex flex-col gap-2" p={20}>
             <TextInput
                 {...form.getInputProps("documentNameEnglish")}
                 label={`${t("documentName")} ${t("english")}`}

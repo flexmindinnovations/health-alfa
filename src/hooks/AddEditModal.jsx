@@ -5,20 +5,19 @@ import {useTranslation} from "react-i18next";
 export function useModal(handleRefresh) {
     const {t} = useTranslation();
     const openModal = useCallback((
-        {Component, data = [] | {} | null, mode = 'add', title = 'Add ', handleRefresh}
+        {Component, data = [] | {} | null, mode = 'add', title = 'Add ', handleRefresh, props}
     ) => {
         modals.closeAll();
         modals.open({
             title: `${mode === "edit" ? t("update") : t("add")}` + ` ${title}`,
             centered: true,
             trapFocus: false,
-            size: 'xl',
+            size: 'lg',
+            classNames: {
+                body: `${props} !p-0 !overflow-hidden`,
+            },
             styles: {
                 title: {fontWeight: '500', fontSize: '14px'},
-                // inner: {
-                //     maxHeight: '80vh',
-                //     overflowY: 'auto',
-                // },
             },
             children: (
                 <Component
