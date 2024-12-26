@@ -63,7 +63,7 @@ export function ComboBoxComponent({
                     {item.icon && typeof item.icon === 'string'
                         ? createElement(item.icon, {size: 14})
                         : item.icon}
-                    <span style={{color: src === 'base' ? 'white' : "black"}}> {item.label}</span>
+                    <span style={{color: "black"}}> {item.label}</span>
                 </div>
             )
         } else {
