@@ -116,5 +116,15 @@
   "status": "Status",
   "notes": "Notes",
   "expandRow": "Expand Row",
-  "collapseRow": "Collapse Row"
+  "collapseRow": "Collapse Row",
+  "qualification": "Qualification",
+  "speciality": "Speciality",
+  "bookAppointment": "Book Appointment",
+  "bookSlot": "Book Slot",
+  "noSlotsAvailable": "No slots available",
+  "no": "No",
+  "slots": "Slots",
+  "slot": "Slot",
+  "notes": "Notes",
+  "selected": "Selected"
 }

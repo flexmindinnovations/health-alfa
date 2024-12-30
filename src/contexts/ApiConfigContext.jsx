@@ -29,9 +29,10 @@ const defaultApiConfig = {
         updateAvailability: (doctorTimingId) => `/DoctorTiming/updateDoctorTiming/${doctorTimingId}`,
         updateDoctorImage: (id) => `/Doctor/UpdateDoctorProfileImage?doctorId=${id}`,
         save: `/Doctor/SignUp`,
+        getDoctorTimingByDoctorIdAndDayWise: (doctorId, dayName) => `/DoctorTiming/GetDoctorTimingByDoctorIdAndDayWise?doctorId=${doctorId}&dayName=${dayName}`,
         saveDoctorAvailability: `/DoctorTiming/saveDoctorTiming`,
         updateDoctorAvailability: `DoctorTiming/updateDoctorTiming`,
-        getTimeSlots: (doctorId, dayOfWeek, requestedDate) => `/api/DoctorTiming/GetTimeSlots/${doctorId}/${dayOfWeek}/${requestedDate}`,
+        getTimeSlots: (doctorId, dayOfWeek, requestedDate) => `/DoctorTiming/GetTimeSlots/${doctorId}/${dayOfWeek}/${requestedDate}`,
         update: (id) => `/Doctor/UpdateDoctorPersonalInfo/${id}`
     },
     patientVisits: {
