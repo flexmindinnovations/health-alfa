@@ -1,114 +1,116 @@
-import {Card, Container, Text} from "@mantine/core";
-import {DataTableWrapper} from "@components/DataTableWrapper.jsx";
+import {Container, Grid, Loader} from "@mantine/core";
 import {useTranslation} from "react-i18next";
 import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
 import {useDocumentTitle} from "@hooks/DocumentTitle.jsx";
-import {useModal} from "@hooks/AddEditModal.jsx";
-import {useMemo} from "react";
+import {useState} from "react";
 import {useListManager} from "@hooks/ListManager.jsx";
-import {AddEditAppointment} from "@modals/AddEditAppointment.jsx";
-import dayjs from "dayjs";
+import {DoctorCard} from "@components/DoctorCard.jsx";
+import {AnimatePresence, motion} from "framer-motion";
+import {BookAppointments} from "@components/BookAppointment.jsx";
+import {v4 as uuid} from 'uuid';
+import {useModal} from "@hooks/AddEditModal.jsx";
 
 export default function Appointments() {
     const {t} = useTranslation();
+    const [selectedDoctor, setSelectedDoctor] = useState({});
+    const [modalVisible, setModalVisible] = useState(false);
     const {apiConfig} = useApiConfig();
-    useDocumentTitle(t('doctors'));
+    useDocumentTitle(t("doctors"));
+    const [openCardId, setOpenCardId] = useState(null);
+    const [layoutIds, setLayoutIds] = useState({});
+    const [initialRect, setInitialRect] = useState({});
     const {openModal} = useModal();
-
-    const columns = useMemo(() =>
-        [
-            {
-                accessor: 'appointmentId',
-                title: t('id'),
-                width: 80,
-                style: {padding: '10px'},
-            },
-            {
-                accessor: 'doctorName',
-                title: t('doctorName'),
-                width: 'auto',
-                style: {padding: '10px', flex: 1},
-            },
-            {
-                accessor: 'patientName',
-                title: t('patientName'),
-                width: 'auto',
-                style: {padding: '10px', flex: 1},
-            },
-            {
-                accessor: 'appointmentDate',
-                title: t('appointmentDate'),
-                width: 'auto',
-                style: {padding: '10px', flex: 1},
-                render: (record) => dayjs(record.appointmentDate).format('DD/MM/YYYY'),
-            },
-            {
-                accessor: 'durationInMinutes',
-                title: t('durationInMinutes'),
-                width: 'auto',
-                style: {padding: '10px', flex: 1},
-            },
-            {
-                accessor: 'appointmentStatus',
-                title: t('status'),
-                width: '120px',
-                style: {padding: '10px'},
-                render: (record) => (
-                    <Card p={0} shadow>
-                        <Text
-                            className={`
-                        ${record.appointmentStatus === 'Booked' ?
-                                `!bg-tb-900 flex items-center justify-center !p-1 !font-semibold !text-white` :
-                                ``} 
-                    `}
-                            size={"xs"}>{record.appointmentStatus}</Text>
-                    </Card>
-                )
-            },
-            {
-                accessor: 'notes',
-                title: t('notes'),
-                width: 'auto',
-                style: {padding: '10px', flex: 1},
-            },
-        ], [t])
 
     const {
         loading,
         dataSource,
-        handleRefresh
+        handleRefresh,
     } = useListManager({
-        apiEndpoint: apiConfig.appointment.getList,
+        apiEndpoint: apiConfig.doctors.getList,
     });
 
-    const openAddEditModal = ({data = null, mode = 'add'}) => {
+    const handleCardRef = (doctorId) => {
+        return (node) => {
+            if (node && !layoutIds[doctorId]) {
+                setLayoutIds((prevIds) => ({
+                    ...prevIds,
+                    [doctorId]: uuid(),
+                }));
+            }
+        };
+    };
+
+
+    const handleCardClick = (data, rect) => {
+        // setOpenCardId(data.doctorId);
+        // setSelectedDoctor(data);
+        // setModalVisible(true);
+        // setInitialRect(rect);
+        openAddEditModal(data, rect);
+    };
+
+    const openAddEditModal = (data, rect) => {
         openModal({
-            Component: AddEditAppointment,
-            data,
-            mode,
-            title: t("appointment"),
-            handleRefresh: handleRefresh
+            Component: BookAppointments,
+            data: {
+                data,
+                initialRect: rect,
+            },
+            props: `min-h-[630px]`,
+            size: 'xl',
+            isAddEdit: false,
+            title: t("bookAppointment"),
         });
     };
 
-    const handleDelete = (data) => {
-    }
+    const handleCloseModal = () => {
+        setModalVisible(false);
+        setInitialRect(null);
+        setSelectedDoctor({});
+    };
+
 
     return (
-        <Container>
-            <DataTableWrapper
-                loading={loading}
-                showAddButton={false}
-                showActions={false}
-                id={'appointmentId'}
-                addTitle={t('appointment')}
-                columns={columns}
-                dataSource={dataSource}
-                handleOnAdd={() => openAddEditModal({mode: 'add'})}
-                handleOnEdit={(data) => openAddEditModal({data, mode: 'edit'})}
-                onRefresh={handleRefresh}
-                handleOnDelete={data => handleDelete(data)}
-            />
-        </Container>
-    )
+        <div className="h-full w-full relative flex items-center justify-center">
+            {loading ? (
+                <Loader/>
+            ) : (
+                <Container fluid>
+                    <Grid>
+                        {/* Card Grid */}
+                        {dataSource.map((row) => (
+                            <Grid.Col key={row.doctorId} span={{base: 4, sm: 12, md: 6, lg: 4, xl: 6}}>
+                                <motion.div
+                                    layout
+                                    whileTap={{scale: 0.95, zIndex: 1000}}
+                                    transition={{type: "spring", stiffness: 50, damping: 100}}
+                                    className="top-1/2 left-1/2 !bg-white cursor-pointer z-40"
+                                    ref={handleCardRef(row.doctorId)}
+                                >
+                                    <DoctorCard
+                                        onClick={(data, rect) => handleCardClick(data, rect)}
+                                        data={row}
+                                        layoutId={`card-${row.doctorId}`}
+                                        isDetailsCard={false}
+                                        loading={loading}
+                                    />
+                                </motion.div>
+                            </Grid.Col>
+                        ))}
+
+                        <AnimatePresence>
+                            {
+                                modalVisible && selectedDoctor && initialRect && (
+                                    <BookAppointments layoutId={`card-${selectedDoctor.doctorId}`}
+                                                      initialRect={initialRect}
+                                                      data={selectedDoctor}
+                                                      onClose={handleCloseModal}/>
+                                )
+                            }
+                        </AnimatePresence>
+                    </Grid>
+                </Container>
+            )}
+        </div>
+    );
 }
