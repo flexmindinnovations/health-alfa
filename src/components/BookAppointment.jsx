@@ -49,9 +49,9 @@ const getFormattedTime = (time) => {
 }
 
 const appendTimeToCurrentDate = (date, time) => {
-    const currentDate = dayjs(date);
-    const dateWithTime = dayjs(`${currentDate.format('YYYY-MM-DD')} ${time}`, 'YYYY-MM-DD hh:mm A');
-    return dateWithTime.toISOString();
+    const currentDate = dayjs(date).format('YYYY-MM-DD');
+    const dateWithTime = dayjs(`${currentDate} ${time}`, 'YYYY-MM-DD hh:mm A');
+    return dateWithTime.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
 };
 
 const getDurationInMinutes = (startTime, endTime) => {

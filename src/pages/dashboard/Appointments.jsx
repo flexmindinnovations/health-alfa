@@ -91,23 +91,25 @@ export default function Appointments() {
                 <Loader/>
             ) : (
                 <Container fluid>
-                    <motion.div
-                        variants={staggerContainer}
-                        initial={"hidden"}
-                        animate={"visible"}
-                        className={"grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2"}
-                    >
+                    {/*<motion.div*/}
+                    {/*    variants={staggerContainer}*/}
+                    {/*    initial={"hidden"}*/}
+                    {/*    animate={"visible"}*/}
+                    {/*    className={"grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2"}*/}
+                    {/*>*/}
+                    <div className={"grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2"}>
                         {/* Card Grid */}
                         {dataSource.map((row, index) => (
-                            <motion.div
-                                key={row.doctorId}
-                                layout
-                                variants={cardVariants}
-                                whileTap={{scale: 0.95, zIndex: 1000}}
-                                transition={{type: "spring", stiffness: 50, damping: 100}}
-                                className="top-1/2 left-1/2 !bg-white cursor-pointer z-40"
-                                ref={handleCardRef(row.doctorId)}
-                            >
+                            // <motion.div
+                            //     key={row.doctorId}
+                            //     layout
+                            //     variants={cardVariants}
+                            //     whileTap={{scale: 0.95, zIndex: 1000}}
+                            //     transition={{type: "spring", stiffness: 50, damping: 100}}
+                            //     className="top-1/2 left-1/2 !bg-white cursor-pointer z-40"
+                            //     ref={handleCardRef(row.doctorId)}
+                            // >
+                            <div key={row.doctorId}>
                                 <DoctorCard
                                     onClick={(data, rect) => handleCardClick(data, rect)}
                                     data={row}
@@ -115,9 +117,11 @@ export default function Appointments() {
                                     isDetailsCard={false}
                                     loading={loading}
                                 />
-                            </motion.div>
+                            </div>
+                            // </motion.div>
                         ))}
-                    </motion.div>
+                </div>
+                    {/*</motion.div>*/}
                 </Container>
             )}
         </div>
