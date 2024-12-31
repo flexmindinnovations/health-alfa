@@ -1,11 +1,9 @@
 import {useViewportSize} from "@mantine/hooks";
-import {useAnimation} from "framer-motion";
+import {motion, useAnimation} from "framer-motion";
 import {
     BackgroundImage,
-    Button,
     Card,
     Container,
-    Grid,
     Group,
     Loader,
     Overlay,
@@ -15,12 +13,12 @@ import {
     Textarea,
     useMantineTheme
 } from "@mantine/core";
-import {useEffect, useMemo, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import dayjs from "dayjs";
 import MorningImage from "../assets/images/morning.jpg";
 import EveningImage from "../assets/images/evening.jpg";
 import NightImage from "../assets/images/night.jpg";
-import {CheckCircle, Save} from "lucide-react";
+import {CheckCircle} from "lucide-react";
 import useHttp from "@hooks/AxiosInstance.jsx";
 import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
 import {useTranslation} from "react-i18next";
@@ -67,8 +65,8 @@ const SlotCard = ({slot, isSelected, onClick, disabled}) => {
     const theme = useMantineTheme();
     return (
         <Card
-            h={50}
             withBorder
+            h={50}
             p={0}
             radius={'xl'}
             className={`cursor-pointer ${isSelected ? "!text-white" : ""} ${disabled ? "opacity-50 pointer-events-none" : ""}`}
@@ -91,10 +89,10 @@ const SlotCard = ({slot, isSelected, onClick, disabled}) => {
                         }}
                     >
                         {isSelected && (
-                            <CheckCircle size={16} className={`absolute font-semibold top-1.5 right-4`}/>
+                            <CheckCircle size={12} className={`absolute font-semibold top-2 right-3`}/>
                         )}
-                        <Text size="xs"
-                              fw={"bold"}>{slot.slotType.charAt(0).toUpperCase() + slot.slotType.slice(1)}</Text>
+                        {/*<Text size="xs"*/}
+                        {/*      fw={"bold"}>{slot.slotType.charAt(0).toUpperCase() + slot.slotType.slice(1)}</Text>*/}
                         <Text size="xs">{slot.startTime} - {slot.endTime}</Text>
                     </Stack>
                 </Overlay>
@@ -103,11 +101,30 @@ const SlotCard = ({slot, isSelected, onClick, disabled}) => {
     );
 };
 
+const parentVariants = {
+    hidden: {opacity: 0},
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.05,
+            when: "beforeChildren",
+        },
+    },
+}
+
+const childVariants = {
+    hidden: {opacity: 0, x: -20},
+    visible: {
+        opacity: 1,
+        x: 0,
+        transition: {type: "spring", stiffness: 150, damping: 20}
+    },
+};
+
 export function BookAppointments({
                                      data = {},
                                      layoutId,
                                      onClose,
-                                     initialRect,
                                      handleCancel
                                  }) {
     const {width, height} = useViewportSize();
@@ -125,16 +142,9 @@ export function BookAppointments({
     const notesRef = useRef(null);
     const theme = useMantineTheme();
     const {getEncryptedData} = useEncrypt();
-
-    const initialStyle = useMemo(
-        () => ({
-            top: data?.initialRect.top,
-            left: data?.initialRect.left,
-            width: data?.initialRect.width,
-            height: data?.initialRect.height,
-        }),
-        [initialRect]
-    );
+    const [slotTypes, setSlotTypes] = useState([]);
+    const [activeSlotType, setActiveSlotType] = useState('morning');
+    const [animationKey, setAnimationKey] = useState(0);
 
     useEffect(() => {
         controls.start({
@@ -182,6 +192,16 @@ export function BookAppointments({
                         return timeA - timeB;
                     })
                     ?? [];
+                const _slotTypes = updatedData
+                    .map((slot) => {
+                        return {
+                            key: slot.slotType,
+                            value: slot.slotType,
+                            title: slot.slotType.charAt(0).toUpperCase() + slot.slotType.slice(1),
+                        }
+                    })
+                    .filter((value, index, self) => self.findIndex((t) => t.key === value.key) === index);
+                setSlotTypes(_slotTypes);
                 setDoctorAvailability(updatedData);
                 setLoading(false);
             }
@@ -267,6 +287,15 @@ export function BookAppointments({
         handleCancel({refresh: false});
     };
 
+    const onTabChange = (tab) => {
+        setActiveTab(tab);
+    }
+
+    const onChildTabChange = (tab) => {
+        setActiveSlotType(tab);
+        setAnimationKey((prevKey) => prevKey + 1);
+    }
+
     return (
         <Container
             styles={{
@@ -276,8 +305,9 @@ export function BookAppointments({
             }}
         >
             <Tabs
+                variant={'pills'}
                 value={activeTab}
-                onChange={setActiveTab}
+                onChange={onTabChange}
                 className="flex-grow"
                 styles={{
                     root: {
@@ -286,11 +316,11 @@ export function BookAppointments({
                         height: '100%',
                     },
                     panel: {
-                        minHeight: `calc(100vh - 320px)`,
+                        minHeight: `calc(100vh - 355px)`,
                     }
                 }}
             >
-                <Tabs.List position="center">
+                <Tabs.List justify="center">
                     {dates.map(({key, title, day}) => (
                         <Tabs.Tab key={key} value={key}>
                             <Stack gap={0} align="center">
@@ -300,42 +330,66 @@ export function BookAppointments({
                         </Tabs.Tab>
                     ))}
                 </Tabs.List>
-                <Tabs.Panel value={activeTab} py={20} styles={{
-                    roo: {
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }
-                }}>
+                <Tabs.Panel value={activeTab} py={20}
+                            styles={{
+                                root: {
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }
+                            }}>
                     {loading ? (
-                        <div className={`h-full w-full min-h-full flex items-center justify-center`}>
+                        <div className={`h-full w-full min-h-full flex items-center justify-center min-h-[inherit]`}>
                             <Loader/>
                         </div>
                     ) : doctorAvailability?.length > 0 ? (
                         <Stack>
-                            <Group px={35}>
-                                <Text size="sm" pr={0}>{t('doctorName')}:&nbsp;{doctorInfo?.doctorName}</Text>
-                            </Group>
-                            <Grid gutter={10}
-                                  styles={{
-                                      root: {
-                                          padding: '0 20px',
-                                          maxHeight: 'calc(100vh - 500px)',
-                                          overflowY: 'auto',
-                                      }
-                                  }}
+                            <Tabs
+                                variant={'pills'}
+                                value={activeSlotType}
+                                onChange={onChildTabChange}
                             >
-                                {doctorAvailability?.map((slot) => (
-                                    <Grid.Col px={10} key={slot.id} span={3}>
-                                        <SlotCard
-                                            disabled={isBooking}
-                                            slot={slot}
-                                            isSelected={selectedSlots.includes(slot.id)}
-                                            onClick={onCardClick}
-                                        />
-                                    </Grid.Col>
+                                <Tabs.List justify="center">
+                                    {slotTypes.map(({key, value, title}) => (
+                                        <Tabs.Tab key={key} value={value}>
+                                            <Text size="sm">{title}</Text>
+                                        </Tabs.Tab>
+                                    ))}
+                                </Tabs.List>
+                                {slotTypes.map(({key, value}) => (
+                                    <Tabs.Panel key={key} value={value} className={`py-8`}>
+                                        <motion.div
+                                            key={animationKey}
+                                            style={{
+                                                padding: '0 20px',
+                                                minHeight: 'calc(100vh - 560px)',
+                                                maxHeight: 'calc(100vh - 560px)',
+                                                overflowY: 'auto',
+                                            }}
+                                            variants={parentVariants}
+                                            initial="hidden"
+                                            animate="visible"
+                                            className={`grid gap-y-2 grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`}
+                                        >
+                                            {doctorAvailability
+                                                ?.filter((slot) => slot.slotType === key)
+                                                ?.map((slot) => (
+                                                    <motion.div key={slot.id}
+                                                                variants={childVariants}
+                                                                className={`h-[50px]`}
+                                                    >
+                                                        <SlotCard
+                                                            disabled={isBooking}
+                                                            slot={slot}
+                                                            isSelected={selectedSlots.includes(slot.id)}
+                                                            onClick={onCardClick}
+                                                        />
+                                                    </motion.div>
+                                                ))}
+                                        </motion.div>
+                                    </Tabs.Panel>
                                 ))}
-                            </Grid>
+                            </Tabs>
                             <Group w={'100%'} px={20}>
                                 <Textarea
                                     disabled={isBooking}
@@ -350,31 +404,22 @@ export function BookAppointments({
                             </Group>
                         </Stack>
                     ) : (
-                        <Text align="center" opacity={0.4}>
-                            {t('noSlotsAvailable')}
-                        </Text>
+                        <motion.div className={`h-full w-full flex items-center justify-center min-h-[inherit]`}>
+                            <Text align="center" opacity={0.4}>
+                                {t('noSlotsAvailable')}
+                            </Text>
+                        </motion.div>
                     )}
                 </Tabs.Panel>
             </Tabs>
             <Group position="right" px={20} py={10} justify={'space-between'}>
-                <Group>
-                    {
-                        selectedSlots.length > 0 ? (
-                            <Text size={"sm"}>
-                                {selectedSlots.length}&nbsp;{selectedSlots?.length > 1 ? t('slots') : t('slot')}&nbsp;{t('selected')}
-                            </Text>
-                        ) : (
-                            <Text size={"sm"}>
-                                {t('no')}&nbsp;{t('slots')}&nbsp;{t('selected')}
-                            </Text>
-                        )
-                    }
-                </Group>
                 <ModalFooterButtons
                     loading={isBooking}
                     disabled={isBooking || !selectedSlots.length}
                     handleCancel={handleModalClose}
                     title={t('bookSlot')}
+                    showCount={true}
+                    selectedRows={selectedSlots}
                     handleSaveUpdate={handleBookAppointment}
                 />
             </Group>

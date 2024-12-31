@@ -1,14 +1,29 @@
-import {Container, Grid, Loader} from "@mantine/core";
+import {Container, Loader} from "@mantine/core";
 import {useTranslation} from "react-i18next";
 import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
 import {useDocumentTitle} from "@hooks/DocumentTitle.jsx";
 import {useState} from "react";
 import {useListManager} from "@hooks/ListManager.jsx";
 import {DoctorCard} from "@components/DoctorCard.jsx";
-import {AnimatePresence, motion} from "framer-motion";
+import {motion} from "framer-motion";
 import {BookAppointments} from "@components/BookAppointment.jsx";
 import {v4 as uuid} from 'uuid';
 import {useModal} from "@hooks/AddEditModal.jsx";
+
+const staggerContainer = {
+    hidden: {opacity: 0},
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.2,
+        },
+    },
+};
+
+const cardVariants = {
+    hidden: {opacity: 0, x: -20},
+    visible: {opacity: 1, x: 0, transition: {type: "spring", stiffness: 100}},
+};
 
 export default function Appointments() {
     const {t} = useTranslation();
@@ -59,7 +74,7 @@ export default function Appointments() {
             props: `min-h-[630px]`,
             size: 'xl',
             isAddEdit: false,
-            title: t("bookAppointment"),
+            title: `${t("bookAppointment")} - ${data.doctorName}`,
         });
     };
 
@@ -76,39 +91,33 @@ export default function Appointments() {
                 <Loader/>
             ) : (
                 <Container fluid>
-                    <Grid>
+                    <motion.div
+                        variants={staggerContainer}
+                        initial={"hidden"}
+                        animate={"visible"}
+                        className={"grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2"}
+                    >
                         {/* Card Grid */}
-                        {dataSource.map((row) => (
-                            <Grid.Col key={row.doctorId} span={{base: 4, sm: 12, md: 6, lg: 4, xl: 6}}>
-                                <motion.div
-                                    layout
-                                    whileTap={{scale: 0.95, zIndex: 1000}}
-                                    transition={{type: "spring", stiffness: 50, damping: 100}}
-                                    className="top-1/2 left-1/2 !bg-white cursor-pointer z-40"
-                                    ref={handleCardRef(row.doctorId)}
-                                >
-                                    <DoctorCard
-                                        onClick={(data, rect) => handleCardClick(data, rect)}
-                                        data={row}
-                                        layoutId={`card-${row.doctorId}`}
-                                        isDetailsCard={false}
-                                        loading={loading}
-                                    />
-                                </motion.div>
-                            </Grid.Col>
+                        {dataSource.map((row, index) => (
+                            <motion.div
+                                key={row.doctorId}
+                                layout
+                                variants={cardVariants}
+                                whileTap={{scale: 0.95, zIndex: 1000}}
+                                transition={{type: "spring", stiffness: 50, damping: 100}}
+                                className="top-1/2 left-1/2 !bg-white cursor-pointer z-40"
+                                ref={handleCardRef(row.doctorId)}
+                            >
+                                <DoctorCard
+                                    onClick={(data, rect) => handleCardClick(data, rect)}
+                                    data={row}
+                                    layoutId={`card-${row.doctorId}`}
+                                    isDetailsCard={false}
+                                    loading={loading}
+                                />
+                            </motion.div>
                         ))}
-
-                        <AnimatePresence>
-                            {
-                                modalVisible && selectedDoctor && initialRect && (
-                                    <BookAppointments layoutId={`card-${selectedDoctor.doctorId}`}
-                                                      initialRect={initialRect}
-                                                      data={selectedDoctor}
-                                                      onClose={handleCloseModal}/>
-                                )
-                            }
-                        </AnimatePresence>
-                    </Grid>
+                    </motion.div>
                 </Container>
             )}
         </div>
