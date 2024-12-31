@@ -138,7 +138,7 @@ export function BookAppointments({
     const http = useHttp();
     const {apiConfig} = useApiConfig();
     const {t} = useTranslation();
-    const [doctorInfo, setDoctorInfo] = useState(data?.data);
+    const [doctorInfo, setDoctorInfo] = useState(data);
     const notesRef = useRef(null);
     const theme = useMantineTheme();
     const {getEncryptedData} = useEncrypt();
