@@ -50,7 +50,7 @@ export function AppointmentCard({
                                         <Title size={'md'} className={`flex items-center justify-center gap-0.5`}>
                                             <Tooltip label={t('patientName')}>
                                                 <Info size={16}
-                                                      color={theme.colorScheme === 'dark' ? 'gray' : theme.colors.brand[6]}/>
+                                                      color={theme.colorScheme === 'dark' ? 'gray' : theme.colors.brand[9]}/>
                                             </Tooltip> &nbsp;
                                             {data?.patientName}
                                         </Title>
