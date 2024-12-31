@@ -20,20 +20,20 @@ export function DoctorCard({
     useEffect(() => {
         const imageEndpoint = data?.doctorProfileImagePath;
         const host = import.meta.env.VITE_API_URL;
-        const imageUrl = `${host}/${imageEndpoint}`.replace('/api', '');
+        const imageUrl = `${host}/${imageEndpoint}`?.replace('/api', '');
         if (imageEndpoint && imageUrl) setProfileImage(imageUrl);
     }, [data]);
 
     const formatMobileNumber = (number) => {
-        const cleanedNumber = number.replace(/\D/g, '');
-        if (cleanedNumber.startsWith('91') && cleanedNumber.length === 12) {
+        const cleanedNumber = number?.replace(/\D/g, '');
+        if (cleanedNumber?.startsWith('91') && cleanedNumber.length === 12) {
             return `+91-${cleanedNumber.slice(2)}`;
         }
         return number;
     };
 
     const stringFormatting = (inputString) => {
-        inputString = inputString.trim();
+        inputString = inputString?.trim() || [];
         if (inputString.includes(',')) {
             const inputStringArray = inputString.split(',').map(input => input.trim());
             if (inputStringArray.length > 1) {
@@ -62,7 +62,6 @@ export function DoctorCard({
                         <motion.div
                             ref={cardRef}
                             className={`p-0 relative cursor-pointer }`}
-                            layoutId={layoutId}
                             onClick={handleClick}
                         >
                             {isDetailsCard && <CloseButton

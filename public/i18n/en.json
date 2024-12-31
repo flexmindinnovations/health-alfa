@@ -111,7 +111,9 @@
   "updateDetails": "Update Details",
   "viewDetails": "View Details",
   "patientName": "Patient Name",
-  "appointmentDate": "Appointment Date",
+  "appointmentDate": "Date",
+  "appointmentTime": "Time",
+  "appointmentDuration": "Duration",
   "durationInMinutes": "Duration (Minutes)",
   "status": "Status",
   "notes": "Notes",
@@ -126,5 +128,6 @@
   "slots": "Slots",
   "slot": "Slot",
   "notes": "Notes",
-  "selected": "Selected"
+  "selected": "Selected",
+  "minutes": "Minutes"
 }

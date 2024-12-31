@@ -1,74 +1,150 @@
-import {Container, Loader} from "@mantine/core";
+import {Container, Loader, useMantineTheme} from "@mantine/core";
 import {useTranslation} from "react-i18next";
 import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
 import {useDocumentTitle} from "@hooks/DocumentTitle.jsx";
-import {useState} from "react";
-import {useListManager} from "@hooks/ListManager.jsx";
+import {useEffect, useState} from "react";
 import {DoctorCard} from "@components/DoctorCard.jsx";
-import {motion} from "framer-motion";
 import {BookAppointments} from "@components/BookAppointment.jsx";
 import {v4 as uuid} from 'uuid';
 import {useModal} from "@hooks/AddEditModal.jsx";
-
-const staggerContainer = {
-    hidden: {opacity: 0},
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.2,
-        },
-    },
-};
-
-const cardVariants = {
-    hidden: {opacity: 0, x: -20},
-    visible: {opacity: 1, x: 0, transition: {type: "spring", stiffness: 100}},
-};
+import {useEncrypt} from "@hooks/EncryptData.jsx";
+import {AppointmentCard} from "@components/AppointmentCard.jsx";
+import {openNotificationWithSound} from "@config/Notifications.js";
+import useHttp from "@hooks/AxiosInstance.jsx";
+import {AppointmentDetails} from "@components/AppointmentDetails.jsx";
 
 export default function Appointments() {
     const {t} = useTranslation();
-    const [selectedDoctor, setSelectedDoctor] = useState({});
-    const [modalVisible, setModalVisible] = useState(false);
+    useDocumentTitle(t("appointment"));
+    const [dataSource, setDataSource] = useState([]);
     const {apiConfig} = useApiConfig();
-    useDocumentTitle(t("doctors"));
-    const [openCardId, setOpenCardId] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [layoutIds, setLayoutIds] = useState({});
-    const [initialRect, setInitialRect] = useState({});
     const {openModal} = useModal();
+    const {getEncryptedData} = useEncrypt();
+    const theme = useMantineTheme();
+    const http = useHttp();
 
-    const {
-        loading,
-        dataSource,
-        handleRefresh,
-    } = useListManager({
-        apiEndpoint: apiConfig.doctors.getList,
-    });
+    const getEndpoint = () => {
+        const user = getEncryptedData('user');
+        const role = getEncryptedData('roles')?.toLocaleLowerCase();
+        let endpoint = apiConfig.doctors.getList;
+        switch (role) {
+            case 'doctor':
+                endpoint = apiConfig.appointment.getAppointmentListByDoctorId(user);
+                break;
+            case 'patient':
+            case 'client':
+                endpoint = apiConfig.appointment.getAppointmentListByPatientIdId(user);
+                break;
+            case 'admin':
+                endpoint = apiConfig.doctors.getList;
+                break;
+        }
+        return endpoint;
+    }
 
-    const handleCardRef = (doctorId) => {
-        return (node) => {
-            if (node && !layoutIds[doctorId]) {
-                setLayoutIds((prevIds) => ({
-                    ...prevIds,
-                    [doctorId]: uuid(),
-                }));
+    useEffect(() => {
+        getAppointmentList();
+    }, []);
+
+    const getAppointmentList = async () => {
+        setLoading(true);
+        try {
+            const response = await http.get(getEndpoint());
+            if (response?.status === 200) {
+                setDataSource(response.data);
             }
-        };
-    };
-
+        } catch (err) {
+            setDataSource([]);
+            const {name, message} = err;
+            openNotificationWithSound(
+                {
+                    title: name || "Error",
+                    message: message || "An unexpected error occurred.",
+                    color: theme.colors.red[6],
+                },
+                {withSound: false}
+            );
+        } finally {
+            setLoading(false);
+        }
+    }
+    const getUserCard = (row) => {
+        const role = getEncryptedData('roles')?.toLocaleLowerCase();
+        let cardComponent = apiConfig.doctors.getList;
+        switch (role) {
+            case 'doctor':
+                cardComponent = appointmentCard(row);
+                break;
+            case 'patient':
+            case 'client':
+                cardComponent = doctorCard(row);
+                break;
+            case 'admin':
+                cardComponent = doctorCard(row);
+                break;
+        }
+        return cardComponent;
+    }
+    const doctorCard = (row) => (
+        <DoctorCard onClick={(data, rect) => handleCardClick(data, rect)}
+                    data={row}
+                    layoutId={`card-${row.doctorId}`}
+                    isDetailsCard={false}
+                    loading={loading}/>
+    )
+    const appointmentCard = (row) => (
+        <AppointmentCard onClick={(data, rect) => handleCardClick(data, rect)}
+                         data={row}
+                         layoutId={`card-${row.doctorId}`}
+                         isDetailsCard={false}
+                         loading={loading}/>
+    )
+    const getGridLayout = () => {
+        const role = getEncryptedData('roles')?.toLocaleLowerCase();
+        let gridLayout = 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2';
+        switch (role) {
+            case 'doctor':
+                gridLayout = 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4';
+                break;
+            case 'patient':
+            case 'client':
+                gridLayout = 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2';
+                break;
+            case 'admin':
+                gridLayout = 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2';
+                break;
+        }
+        return gridLayout;
+    }
+    const getModalComponent = () => {
+        const role = getEncryptedData('roles')?.toLocaleLowerCase();
+        let modalComponent = DoctorCard;
+        switch (role) {
+            case 'doctor':
+                modalComponent = AppointmentDetails;
+                break;
+            case 'patient':
+            case 'client':
+                modalComponent = BookAppointments;
+                break;
+            case 'admin':
+                modalComponent = BookAppointments;
+                break;
+        }
+        return modalComponent
+    }
 
     const handleCardClick = (data, rect) => {
-        // setOpenCardId(data.doctorId);
-        // setSelectedDoctor(data);
-        // setModalVisible(true);
-        // setInitialRect(rect);
         openAddEditModal(data, rect);
     };
 
     const openAddEditModal = (data, rect) => {
         openModal({
-            Component: BookAppointments,
+            Component: getModalComponent(),
             data: {
-                data,
+                ...data,
                 initialRect: rect,
             },
             props: `min-h-[630px]`,
@@ -78,11 +154,9 @@ export default function Appointments() {
         });
     };
 
-    const handleCloseModal = () => {
-        setModalVisible(false);
-        setInitialRect(null);
-        setSelectedDoctor({});
-    };
+    const getRandomKey = () => {
+        return uuid();
+    }
 
 
     return (
@@ -90,34 +164,18 @@ export default function Appointments() {
             {loading ? (
                 <Loader/>
             ) : (
-                <Container fluid>
-                    <motion.div
-                        variants={staggerContainer}
-                        initial={"hidden"}
-                        animate={"visible"}
-                        className={"grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2"}
-                    >
-                        {/* Card Grid */}
+                <Container fluid styles={{
+                    root: {
+                        overflow: 'auto',
+                    }
+                }}>
+                    <div className={getGridLayout()}>
                         {dataSource.map((row, index) => (
-                            <motion.div
-                                key={row.doctorId}
-                                layout
-                                variants={cardVariants}
-                                whileTap={{scale: 0.95, zIndex: 1000}}
-                                transition={{type: "spring", stiffness: 50, damping: 100}}
-                                className="top-1/2 left-1/2 !bg-white cursor-pointer z-40"
-                                ref={handleCardRef(row.doctorId)}
-                            >
-                                <DoctorCard
-                                    onClick={(data, rect) => handleCardClick(data, rect)}
-                                    data={row}
-                                    layoutId={`card-${row.doctorId}`}
-                                    isDetailsCard={false}
-                                    loading={loading}
-                                />
-                            </motion.div>
+                            <div key={getRandomKey()}>
+                                {getUserCard(row)}
+                            </div>
                         ))}
-                    </motion.div>
+                    </div>
                 </Container>
             )}
         </div>

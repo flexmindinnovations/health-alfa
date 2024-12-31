@@ -49,9 +49,9 @@ const getFormattedTime = (time) => {
 }
 
 const appendTimeToCurrentDate = (date, time) => {
-    const currentDate = dayjs(date);
-    const dateWithTime = dayjs(`${currentDate.format('YYYY-MM-DD')} ${time}`, 'YYYY-MM-DD hh:mm A');
-    return dateWithTime.toISOString();
+    const currentDate = dayjs(date).format('YYYY-MM-DD');
+    const dateWithTime = dayjs(`${currentDate} ${time}`, 'YYYY-MM-DD hh:mm A');
+    return dateWithTime.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
 };
 
 const getDurationInMinutes = (startTime, endTime) => {
@@ -138,7 +138,7 @@ export function BookAppointments({
     const http = useHttp();
     const {apiConfig} = useApiConfig();
     const {t} = useTranslation();
-    const [doctorInfo, setDoctorInfo] = useState(data?.data);
+    const [doctorInfo, setDoctorInfo] = useState(data);
     const notesRef = useRef(null);
     const theme = useMantineTheme();
     const {getEncryptedData} = useEncrypt();
