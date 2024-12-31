@@ -1,4 +1,4 @@
-import {Button, Group} from "@mantine/core";
+import {Button, Group, Text} from "@mantine/core";
 import {Save, SquarePen} from "lucide-react";
 import {useTranslation} from "react-i18next";
 
@@ -8,28 +8,50 @@ export function ModalFooterButtons({
                                        disabled = true,
                                        title = null | '',
                                        handleCancel,
-                                       handleSaveUpdate
+                                       handleSaveUpdate,
+                                       showCount = false,
+                                       selectedRows = [],
                                    }) {
 
     const {t} = useTranslation();
 
     return (
-        <Group>
-            <Button variant="outline" onClick={handleCancel}>
-                {t('cancel')}
-            </Button>
-            <Button
-                loading={loading}
-                disabled={loading || disabled}
-                leftSection={
-                    mode ? (
-                        mode === 'add' ? <Save size={16}/> : <SquarePen size={16}/>
-                    ) : <Save size={16}/>
+        <Group className={`w-full !flex items-center !justify-between`}>
+            <Group>
+                {
+                    showCount &&
+                    <Group>
+                        {
+                            selectedRows.length > 0 ? (
+                                <Text size={"sm"}>
+                                    {selectedRows.length}&nbsp;{selectedRows?.length > 1 ? t('slots') : t('slot')}&nbsp;{t('selected')}
+                                </Text>
+                            ) : (
+                                <Text size={"sm"}>
+                                    {t('no')}&nbsp;{t('slots')}&nbsp;{t('selected')}
+                                </Text>
+                            )
+                        }
+                    </Group>
                 }
-                onClick={handleSaveUpdate}
-            >
-                {title ? title : mode ? mode === 'add' ? t('add') : t('update') : t('save')}
-            </Button>
+            </Group>
+            <Group>
+                <Button variant="outline" onClick={handleCancel}>
+                    {t('cancel')}
+                </Button>
+                <Button
+                    loading={loading}
+                    disabled={loading || disabled}
+                    leftSection={
+                        mode ? (
+                            mode === 'add' ? <Save size={16}/> : <SquarePen size={16}/>
+                        ) : <Save size={16}/>
+                    }
+                    onClick={handleSaveUpdate}
+                >
+                    {title ? title : mode ? mode === 'add' ? t('add') : t('update') : t('save')}
+                </Button>
+            </Group>
         </Group>
     );
 }
