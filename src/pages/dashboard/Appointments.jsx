@@ -74,7 +74,9 @@ export default function Appointments() {
                 break;
             case 'patient':
             case 'client':
-                endpoint = apiConfig.appointment.getAppointmentListByPatientIdId(user);
+            case 'user':
+                // endpoint = apiConfig.appointment.getAppointmentListByPatientIdId(user);
+                endpoint = apiConfig.doctors.getList;
                 break;
             case 'admin':
                 endpoint = apiConfig.doctors.getList;
@@ -122,6 +124,7 @@ export default function Appointments() {
                 break;
             case 'patient':
             case 'client':
+            case 'user':
                 cardComponent = doctorCard(row);
                 break;
             case 'admin':
@@ -171,6 +174,7 @@ export default function Appointments() {
                 break;
             case 'patient':
             case 'client':
+            case 'user':
                 modalComponent = BookAppointments;
                 break;
             case 'admin':
