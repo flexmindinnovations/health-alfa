@@ -3,93 +3,112 @@
 @tailwind utilities;
 
 :root {
-  --bgColor: #f4f4f4;
-  font-family: 'Poppins', sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    --bgColor: #f4f4f4;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
 
-  color-scheme: light dark;
-  background-color: var(--bgColor);
+    color-scheme: light dark;
+    background-color: var(--bgColor);
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+    --brand-primary: #224557;
+    --brand-secondary: #6c757d;
+    --brand-success: #28a745;
+    --brand-warning: #ffc107;
+    --brand-danger: #dc3545;
 }
 
 html {
-  scroll-behavior: smooth;
-  height: 100vh;
-  width: 100vw;
-  height: 100dvh;
-  width: 100dvw;
+    scroll-behavior: smooth;
+    height: 100vh;
+    width: 100vw;
+    height: 100dvh;
+    width: 100dvw;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  height: 100vh;
-  width: 100vw;
-  height: 100dvh;
-  width: 100dvw;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100vw;
+    height: 100dvh;
+    width: 100dvw;
 }
 
 html,
 body {
-  scroll-behavior: smooth;
-  overflow-y: auto;
-  overflow-x: hidden;
+    scroll-behavior: smooth;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
-input:-webkit-autofill:active{
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: white;
-  -webkit-box-shadow: 0 0 0 30px transparent inset !important;
-  transition: background-color 5000s ease-in-out 0s;
-  box-shadow: inset 0 0 20px 20px #23232329;
+input:-webkit-autofill:active {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0 30px transparent inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: inset 0 0 20px 20px #23232329;
 }
 
 [data-mantine-color-scheme='light'] .m_6c018570[data-variant='default'] {
-  --input-bd: var(--mantine-color-gray-4);
-   /*--input-bg: transparent;*/
-  --input-bd-focus: var(--mantine-primary-color-filled);
+    --input-bd: var(--mantine-color-gray-4);
+    /*--input-bg: transparent;*/
+    --input-bd-focus: var(--mantine-primary-color-filled);
 }
+
 input::selection {
-  background-color: gray !important;
-  color: gray !important;
+    background-color: gray !important;
+    color: gray !important;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+    width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f0f0f0; /* Track color */
-  border-radius: 10px; /* Rounded corners for the track */
+    background: #f0f0f0; /* Track color */
+    border-radius: 10px; /* Rounded corners for the track */
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #888; /* Thumb color */
-  border-radius: 10px; /* Rounded corners for the thumb */
-  border: 2px solid #f0f0f0; /* Optional: Adds padding between thumb and track */
+    background-color: #888; /* Thumb color */
+    border-radius: 10px; /* Rounded corners for the thumb */
+    border: 2px solid #f0f0f0; /* Optional: Adds padding between thumb and track */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #555; /* Thumb color on hover */
+    background-color: #555; /* Thumb color on hover */
 }
 
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #888 #f0f0f0;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f0f0f0;
 }
+
 body.dark-mode ::-webkit-scrollbar-thumb {
-  background-color: #444;
+    background-color: #444;
 }
 
 body.dark-mode ::-webkit-scrollbar-thumb:hover {
-  background-color: #222;
+    background-color: #222;
+}
+
+.fc-timegrid-axis-frame.fc-scrollgrid-shrink-frame.fc-timegrid-axis-frame-liquid {
+    @apply flex w-full items-center justify-center;
+}
+
+.fc .fc-timegrid-axis-cushion {
+    padding: 0px 10px;
+    @apply text-sm text-gray-500;
 }

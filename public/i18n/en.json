@@ -129,5 +129,10 @@
   "slot": "Slot",
   "notes": "Notes",
   "selected": "Selected",
-  "minutes": "Minutes"
+  "minutes": "Minutes",
+  "timeline": "Timeline",
+  "card": "Card",
+  "day": "Day",
+  "week": "Week",
+  "month": "Month"
 }

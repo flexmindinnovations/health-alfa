@@ -1,29 +1,63 @@
-import {Container, Loader, useMantineTheme} from "@mantine/core";
+import {Center, Container, Group, Loader, SegmentedControl, TextInput, Tooltip, useMantineTheme} from "@mantine/core";
 import {useTranslation} from "react-i18next";
 import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
 import {useDocumentTitle} from "@hooks/DocumentTitle.jsx";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {DoctorCard} from "@components/DoctorCard.jsx";
 import {BookAppointments} from "@components/BookAppointment.jsx";
-import {v4 as uuid} from 'uuid';
 import {useModal} from "@hooks/AddEditModal.jsx";
 import {useEncrypt} from "@hooks/EncryptData.jsx";
 import {AppointmentCard} from "@components/AppointmentCard.jsx";
 import {openNotificationWithSound} from "@config/Notifications.js";
 import useHttp from "@hooks/AxiosInstance.jsx";
 import {AppointmentDetails} from "@components/AppointmentDetails.jsx";
+import {CalendarRange, LayoutGrid} from "lucide-react";
+import {motion} from "framer-motion";
+import {AppointmentsCalendarView} from "@components/AppointmentsCalendarView.jsx";
 
 export default function Appointments() {
     const {t} = useTranslation();
     useDocumentTitle(t("appointment"));
     const [dataSource, setDataSource] = useState([]);
+    const [filteredDataSource, setFilteredDataSource] = useState(dataSource);
     const {apiConfig} = useApiConfig();
     const [loading, setLoading] = useState(true);
-    const [layoutIds, setLayoutIds] = useState({});
+    const [view, setView] = useState('grid');
     const {openModal} = useModal();
     const {getEncryptedData} = useEncrypt();
     const theme = useMantineTheme();
     const http = useHttp();
+    const [userType, setUserType] = useState('admin');
+
+    const segmentedItems = [
+        {
+            value: 'card',
+            label: (
+                <Center style={{gap: 10}}>
+                    <Tooltip label={t('card')}>
+                        <LayoutGrid size={16}/>
+                    </Tooltip>
+                </Center>
+            ),
+        },
+        {
+            value: 'timeline',
+            disabled: userType !== 'doctor',
+            label: (
+                <Center style={{gap: 10}}>
+                    <Tooltip label={t('timeline')}>
+                        <CalendarRange size={16}/>
+                    </Tooltip>
+                </Center>
+            ),
+        }
+    ];
+
+    const events = [
+        {title: 'Meeting', start: '2025-01-01T15:00:00', end: '2025-01-01T16:00:00'},
+        {title: 'Call', start: '2025-01-02T09:00:00', end: '2025-01-02T10:00:00'},
+        {title: 'Workshop', start: '2025-01-02T11:00:00', end: '2025-01-02T12:30:00'},
+    ];
 
     const getEndpoint = () => {
         const user = getEncryptedData('user');
@@ -46,6 +80,8 @@ export default function Appointments() {
 
     useEffect(() => {
         getAppointmentList();
+        const role = getEncryptedData('roles')?.toLocaleLowerCase();
+        setUserType(role);
     }, []);
 
     const getAppointmentList = async () => {
@@ -54,6 +90,7 @@ export default function Appointments() {
             const response = await http.get(getEndpoint());
             if (response?.status === 200) {
                 setDataSource(response.data);
+                setFilteredDataSource(response.data);
             }
         } catch (err) {
             setDataSource([]);
@@ -72,6 +109,7 @@ export default function Appointments() {
     }
     const getUserCard = (row) => {
         const role = getEncryptedData('roles')?.toLocaleLowerCase();
+        // setUserType(role);
         let cardComponent = apiConfig.doctors.getList;
         switch (role) {
             case 'doctor':
@@ -154,13 +192,37 @@ export default function Appointments() {
         });
     };
 
-    const getRandomKey = () => {
-        return uuid();
+    const filterData = useMemo(() => {
+        return (query) => {
+            if (!query.trim()) {
+                setFilteredDataSource(dataSource);
+                return;
+            }
+            const filteredData = dataSource.filter((item) =>
+                Object.values(item).some((value) =>
+                    String(value).toLowerCase().includes(query.toLowerCase())
+                )
+            );
+            setFilteredDataSource(filteredData);
+        };
+    }, [dataSource]);
+
+    const handleFilterTextChange = (event) => {
+        const {value} = event.target;
+        filterData(value);
+    }
+
+    const handleDateClick = (arg) => {
+        alert(arg.dateStr)
     }
 
 
+    const handleEventClick = (info) => {
+        alert(`Event clicked: ${info.event.title}`);
+    };
+
     return (
-        <div className="h-full w-full relative flex items-center justify-center">
+        <div className="h-full w-full relative !overflow-hidden flex items-center justify-center">
             {loading ? (
                 <Loader/>
             ) : (
@@ -169,13 +231,47 @@ export default function Appointments() {
                         overflow: 'auto',
                     }
                 }}>
-                    <div className={getGridLayout()}>
-                        {dataSource.map((row, index) => (
-                            <div key={getRandomKey()}>
-                                {getUserCard(row)}
-                            </div>
-                        ))}
-                    </div>
+                    <Group py={20} items={'center'} justify={'space-between'}>
+                        <Group>
+                            {
+                                view === 'card' && (
+                                    <TextInput onInput={handleFilterTextChange}/>
+                                )
+                            }
+                        </Group>
+                        <Group>
+                            {
+                                    <SegmentedControl
+                                        onChange={setView}
+                                        data={segmentedItems}
+                                        transitionDuration={200}
+                                        transitionTimingFunction="linear"
+                                    />
+                            }
+                        </Group>
+                    </Group>
+                    {
+                        view === 'timeline' ? (
+                                <motion.div className={`w-full`}>
+                                    <AppointmentsCalendarView
+                                        events={events}
+                                        loading={loading}
+                                        handleEventClick={handleEventClick}
+                                        handleDateClick={handleDateClick}
+                                    />
+                                </motion.div>
+                            )
+                            :
+                            (
+                                <div className={getGridLayout()}>
+                                    {filteredDataSource.map((row, index) => (
+                                        <div key={row.doctorId + index}>
+                                            {getUserCard(row)}
+                                        </div>
+                                    ))}
+                                </div>
+                            )
+                    }
                 </Container>
             )}
         </div>

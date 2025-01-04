@@ -1,0 +1,52 @@
+.tab {
+    position: relative;
+    border: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
+    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
+
+    &:first-of-type {
+        padding-left: var(--mantine-spacing-lg) !important;
+        border-radius: var(--mantine-radius-xl) 0 0 var(--mantine-radius-xl);
+
+        @mixin rtl {
+            border-radius: 0 var(--mantine-radius-xl) var(--mantine-radius-xl) 0;
+        }
+    }
+
+    &:last-of-type {
+        padding-right: var(--mantine-spacing-lg) !important;
+        border-radius: 0 var(--mantine-radius-xl) var(--mantine-radius-xl) 0;
+
+        @mixin rtl {
+            border-radius: var(--mantine-radius-xl) 0 0 var(--mantine-radius-xl);
+        }
+    }
+
+    & + & {
+        border-left-width: 0;
+
+        @mixin rtl {
+            border-right-width: 0;
+            border-left-width: 1px;
+        }
+    }
+
+    @mixin hover {
+        background-color: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-5)) !important;
+    }
+
+    &:hover:not([data-active]) {
+        background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-5)) !important;
+        transition: background-color 0.3s ease;
+    }
+
+    &[data-active] {
+        z-index: 1;
+        background-color: var(--brand-primary);
+        border-color: var(--mantine-color-blue-filled);
+        color: var(--mantine-color-white);
+
+        @mixin hover {
+            background-color: var(--mantine-color-blue-filled-hover);
+        }
+    }
+}
