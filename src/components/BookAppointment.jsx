@@ -22,7 +22,7 @@ const generateDate = () => {
         const currentDate = dayjs().add(i, 'day');
         const dateObject = {
             key: currentDate.format('dddd'),
-            title: currentDate.format('YYYY-MM-DD'),
+            title: currentDate.format('DD-MM-YYYY'),
             value: currentDate.toDate(),
             date: currentDate.toISOString(),
             day: currentDate.format('dddd')
