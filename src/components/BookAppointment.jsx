@@ -1,5 +1,5 @@
 import {useViewportSize} from "@mantine/hooks";
-import {motion, useAnimation} from "framer-motion";
+import {AnimatePresence, motion, useAnimation} from "framer-motion";
 import {Card, Center, Container, Group, Loader, Stack, Tabs, Text, Textarea, useMantineTheme} from "@mantine/core";
 import {useEffect, useRef, useState} from "react";
 import dayjs from "dayjs";
@@ -69,20 +69,32 @@ const SlotCard = ({slot, isSelected, onClick, disabled}) => {
                 h={'100%'}
                 w={'100%'}
             >
-                {isSelected && (
+                <AnimatePresence>
+                    {isSelected && (
+                        <motion.div
+                            key={'check-circle'}
+                            className={`absolute top-2 right-2.5`}
+                            initial={{opacity: 0, scale: 0}}
+                            animate={{opacity: 1, scale: 1}}
+                            exit={{opacity: 0, scale: 0}}
+                            transition={{duration: 0.3}}
+                        >
+                            <CheckCircle size={12} className={`text-white font-semibold`}/>
+                        </motion.div>
+                    )}
                     <motion.div
-                        className={`absolute top-2 right-2.5`}
-                        initial={{opacity: 0, scale: 0}}
-                        animate={{opacity: 1, scale: 1}}
-                        exit={{opacity: 0, scale: 0}}
+                        key={'slot-info'}
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        exit={{opacity: 0}}
+                        transition={{duration: 0.3}}
                     >
-                        <CheckCircle size={12} className={`text-white font-semibold`}/>
+                        <Text size="xs" fw={'550'} c={isSelected ? theme.white : theme.colors.brand[9]}>{slot.startTime}</Text>
                     </motion.div>
-                )}
+                </AnimatePresence>
                 {/*<Text size="xs"*/}
                 {/*      fw={"bold"}>{slot.slotType.charAt(0).toUpperCase() + slot.slotType.slice(1)}</Text>*/}
                 {/*<Text size="xs">{slot.startTime} - {slot.endTime}</Text>*/}
-                <Text size="xs" fw={'550'} c={isSelected ? theme.white : theme.colors.brand[9]}>{slot.startTime}</Text>
             </Center>
         </Card>
     );
@@ -315,7 +327,7 @@ export function BookAppointments({
                         height: '100%',
                     },
                     panel: {
-                        minHeight: `calc(100vh - 355px)`,
+                        minHeight: `calc(100vh - 370px)`,
                     },
                 }}
             >
@@ -363,8 +375,8 @@ export function BookAppointments({
                                         <motion.div
                                             key={animationKey}
                                             style={{
-                                                minHeight: 'calc(100vh - 560px)',
-                                                maxHeight: 'calc(100vh - 560px)',
+                                                minHeight: 'calc(100vh - 580px)',
+                                                maxHeight: 'calc(100vh - 580px)',
                                                 overflowY: 'auto',
                                             }}
                                             variants={parentVariants}
@@ -398,26 +410,29 @@ export function BookAppointments({
                             </Tabs>
                             <Group w={'100%'} px={20}>
                                 <div className={`w-full min-h-[5.5rem]`}>
-                                    {areSlotsRendered && (
-                                        <motion.div
-                                            initial={{opacity: 0, x: -20}}
-                                            animate={{opacity: 1, x: 0}}
-                                            exit={{opacity: 0, x: -20}}
-                                            transition={{duration: 0.1}}
-                                            className={`w-full`}
-                                        >
-                                            <Textarea
-                                                disabled={isBooking}
-                                                ref={notesRef}
-                                                minRows={3}
-                                                style={{
-                                                    width: '100%'
-                                                }}
-                                                radius="lg"
-                                                label={t('notes')}
-                                            />
-                                        </motion.div>
-                                    )}
+                                    <AnimatePresence>
+                                        {selectedSlots.length > 0 && (
+                                            <motion.div
+                                                key={animationKey}
+                                                initial={{opacity: 0, y: -20}}
+                                                animate={{opacity: 1, y: 0}}
+                                                exit={{opacity: 0, y: -20}}
+                                                transition={{duration: 0.3}}
+                                                className={`w-full`}
+                                            >
+                                                <Textarea
+                                                    disabled={isBooking}
+                                                    ref={notesRef}
+                                                    minRows={3}
+                                                    style={{
+                                                        width: '100%'
+                                                    }}
+                                                    radius="lg"
+                                                    label={t('notes')}
+                                                />
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                             </Group>
                         </Stack>

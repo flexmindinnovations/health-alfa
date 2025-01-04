@@ -1,8 +1,18 @@
-import {Center, Container, Group, Loader, SegmentedControl, TextInput, Tooltip, useMantineTheme} from "@mantine/core";
+import {
+    Center,
+    ComboboxClearButton,
+    Container,
+    Group,
+    Loader,
+    SegmentedControl,
+    TextInput,
+    Tooltip,
+    useMantineTheme
+} from "@mantine/core";
 import {useTranslation} from "react-i18next";
 import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
 import {useDocumentTitle} from "@hooks/DocumentTitle.jsx";
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {DoctorCard} from "@components/DoctorCard.jsx";
 import {BookAppointments} from "@components/BookAppointment.jsx";
 import {useModal} from "@hooks/AddEditModal.jsx";
@@ -11,7 +21,7 @@ import {AppointmentCard} from "@components/AppointmentCard.jsx";
 import {openNotificationWithSound} from "@config/Notifications.js";
 import useHttp from "@hooks/AxiosInstance.jsx";
 import {AppointmentDetails} from "@components/AppointmentDetails.jsx";
-import {CalendarRange, LayoutGrid} from "lucide-react";
+import {CalendarRange, LayoutGrid, SearchIcon} from "lucide-react";
 import {motion} from "framer-motion";
 import {AppointmentsCalendarView} from "@components/AppointmentsCalendarView.jsx";
 
@@ -22,13 +32,14 @@ export default function Appointments() {
     const [filteredDataSource, setFilteredDataSource] = useState(dataSource);
     const {apiConfig} = useApiConfig();
     const [loading, setLoading] = useState(true);
-    const [view, setView] = useState('grid');
+    const [view, setView] = useState('card');
     const {openModal} = useModal();
     const {getEncryptedData} = useEncrypt();
     const theme = useMantineTheme();
     const http = useHttp();
     const [userType, setUserType] = useState('admin');
-
+    const searchInputRef = useRef(null);
+    const [searchText, setSearchText] = useState('');
     const segmentedItems = [
         {
             value: 'card',
@@ -51,12 +62,6 @@ export default function Appointments() {
                 </Center>
             ),
         }
-    ];
-
-    const events = [
-        {title: 'Meeting', start: '2025-01-01T15:00:00', end: '2025-01-01T16:00:00'},
-        {title: 'Call', start: '2025-01-02T09:00:00', end: '2025-01-02T10:00:00'},
-        {title: 'Workshop', start: '2025-01-02T11:00:00', end: '2025-01-02T12:30:00'},
     ];
 
     const getEndpoint = () => {
@@ -139,6 +144,7 @@ export default function Appointments() {
                          isDetailsCard={false}
                          loading={loading}/>
     )
+
     const getGridLayout = () => {
         const role = getEncryptedData('roles')?.toLocaleLowerCase();
         let gridLayout = 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2';
@@ -207,8 +213,14 @@ export default function Appointments() {
         };
     }, [dataSource]);
 
+    const handleClearInput = () => {
+        setSearchText('');
+        filterData('');
+    };
+
     const handleFilterTextChange = (event) => {
         const {value} = event.target;
+        setSearchText(value);
         filterData(value);
     }
 
@@ -235,18 +247,29 @@ export default function Appointments() {
                         <Group>
                             {
                                 view === 'card' && (
-                                    <TextInput onInput={handleFilterTextChange}/>
+                                    <TextInput
+                                        placeholder={t('search')}
+                                        ref={searchInputRef}
+                                        value={searchText}
+                                        leftSection={<SearchIcon size={16}/>}
+                                        onInput={handleFilterTextChange}
+                                        rightSection={
+                                            searchText &&
+                                            <ComboboxClearButton onClear={() => handleClearInput()}/>
+                                        }
+                                        className={'w-full md:w-96 lg:w-96 xl:w-96'}
+                                    />
                                 )
                             }
                         </Group>
                         <Group>
                             {
-                                    <SegmentedControl
-                                        onChange={setView}
-                                        data={segmentedItems}
-                                        transitionDuration={200}
-                                        transitionTimingFunction="linear"
-                                    />
+                                <SegmentedControl
+                                    onChange={setView}
+                                    data={segmentedItems}
+                                    transitionDuration={200}
+                                    transitionTimingFunction="linear"
+                                />
                             }
                         </Group>
                     </Group>
@@ -254,7 +277,7 @@ export default function Appointments() {
                         view === 'timeline' ? (
                                 <motion.div className={`w-full`}>
                                     <AppointmentsCalendarView
-                                        events={events}
+                                        events={dataSource}
                                         loading={loading}
                                         handleEventClick={handleEventClick}
                                         handleDateClick={handleDateClick}

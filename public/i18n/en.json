@@ -127,12 +127,14 @@
   "no": "No",
   "slots": "Slots",
   "slot": "Slot",
-  "notes": "Notes",
   "selected": "Selected",
   "minutes": "Minutes",
   "timeline": "Timeline",
   "card": "Card",
   "day": "Day",
   "week": "Week",
-  "month": "Month"
+  "month": "Month",
+  "previous": "Previous",
+  "next": "Next",
+  "today": "Today"
 }

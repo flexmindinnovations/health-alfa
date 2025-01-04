@@ -112,3 +112,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
     padding: 0px 10px;
     @apply text-sm text-gray-500;
 }
+
+.fc-v-event {
+    @apply bg-tb-900 text-white border border-solid border-tb-900;
+}
