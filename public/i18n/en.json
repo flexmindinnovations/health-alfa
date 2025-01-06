@@ -136,5 +136,8 @@
   "month": "Month",
   "previous": "Previous",
   "next": "Next",
-  "today": "Today"
+  "today": "Today",
+  "unauthorized": "Unauthorized",
+  "signIn": "Sign In",
+  "signedIn": "Signed In"
 }

@@ -331,7 +331,7 @@ export function BookAppointments({
                     },
                 }}
             >
-                <Tabs.List justify="center">
+                <Tabs.List justify="center" variant="scrollable">
                     {dates.map(({key, title, day}) => (
                         <Tabs.Tab key={key} value={key}>
                             <Stack gap={0} align="center">

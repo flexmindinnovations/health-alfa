@@ -12,14 +12,15 @@ export const useEncrypt = () => {
     const getEncryptedData = (key) => {
         const encrypted = localStorage.getItem(key);
         if (!encrypted) return null;
-
-        try {
-            const bytes = CryptoJS.AES.decrypt(encrypted, secretKey);
-            const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-            return JSON.parse(decrypted);
-        } catch (error) {
-            console.error("Failed to decrypt or parse data:", error);
-            return null;
+        if (encrypted) {
+            try {
+                const bytes = CryptoJS.AES.decrypt(encrypted, secretKey);
+                const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+                return JSON.parse(decrypted);
+            } catch (error) {
+                console.error("Failed to decrypt or parse data:", error);
+                return null;
+            }
         }
     };
 

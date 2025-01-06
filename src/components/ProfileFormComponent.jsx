@@ -6,6 +6,7 @@ import {AddEditClient} from "@modals/AddEditClient.jsx";
 
 const userTypes = {
     'CLIENT': 'client',
+    'USER': 'user',
     'DOCTOR': 'doctor',
     'ADMIN': 'admin',
 }
@@ -16,6 +17,7 @@ export function ProfileFormComponent(props) {
     const [userType, setUserType] = useState(userTypes.ADMIN);
     useEffect(() => {
         const user = getEncryptedData('roles')?.toLowerCase();
+        console.log('user: ', user)
         setUserType(user);
     }, [data, userType]);
 
@@ -23,6 +25,7 @@ export function ProfileFormComponent(props) {
         let formComponent;
         switch (userType) {
             case userTypes.CLIENT:
+            case userTypes.USER:
                 formComponent = <AddEditClient/>;
                 break;
             case userTypes.DOCTOR:

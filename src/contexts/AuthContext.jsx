@@ -1,10 +1,10 @@
-import {createContext, useContext, useEffect, useState} from 'react';
-import {useEncrypt} from "@hooks/EncryptData.jsx";
-import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
-import {usePermissions} from "@contexts/Permission.jsx";
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useEncrypt } from "@hooks/EncryptData.jsx";
+import { useApiConfig } from "@contexts/ApiConfigContext.jsx";
+import { usePermissions } from "@contexts/Permission.jsx";
 import useHttp from "@hooks/AxiosInstance.jsx";
 import toast from "react-hot-toast";
-import {useNavigate} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const AuthContext = createContext({
     fetchUserDetails: () => {
@@ -14,19 +14,21 @@ const AuthContext = createContext({
     }, getToken: () => String, isAuthenticated: () => Boolean
 })
 
-export const AuthProvider = ({children}) => {
-    const {apiConfig} = useApiConfig();
+export const AuthProvider = ({ children }) => {
+    const { apiConfig } = useApiConfig();
     const [user, setUser] = useState(null)
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [error, setError] = useState(null);
-    const {getEncryptedData} = useEncrypt();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { getEncryptedData } = useEncrypt();
     const [userRole, setUserRole] = useState(null);
-    const {permissions} = usePermissions();
+    const { permissions } = usePermissions();
     const http = useHttp();
+    const location = useLocation();
     const navigate = useNavigate();
-
+    
     useEffect(() => {
-        if (!isAuthenticated()) {
+        const pathname = location.pathname.split('/')[1];
+        const publicPaths = ['login', 'register']
+        if (!isAuthenticated() && !publicPaths.includes(pathname)) {
             logoutUser();
             navigate('/');
         }
@@ -35,34 +37,48 @@ export const AuthProvider = ({children}) => {
     }, [userRole])
 
     const fetchUserDetails = async () => {
-        const userId = await getEncryptedData('user');
-        const role = userRole || getEncryptedData('roles')?.toLowerCase();
-        const endpoint = await getUserDetailsEndpoint(userId, role);
-        if (role === 'admin' || role === 'doctor') {
-            try {
-                if (endpoint) {
-                    const response = await http.get(endpoint);
-                    const {data} = response;
-                    if (data) {
-                        setUser(data);
-                        return data;
-                    }
+        try {
+            const userId = await getEncryptedData('user');
+            const role = userRole || (await getEncryptedData('roles'))?.toLowerCase();
+            if (role) {
+                const userRoles = ['admin', 'doctor', 'client', 'user', 'User'];
+
+                if (!userRoles.includes(role)) {
+                    toast.error('Invalid user role');
+                    return null;
                 }
-            } catch (error) {
-                const errorMessage = error.message
-                toast.error(errorMessage)
-                return null
+
+                const endpoint = getUserDetailsEndpoint(userId, role);
+                if (!endpoint) {
+                    toast.error('No endpoint found for the user role');
+                    return null;
+                }
+
+                const response = await http.get(endpoint);
+                if (response?.data) {
+                    const { data } = response;
+                    setUser(data);
+                    return data;
+                }
+            } else {
+                toast.error('Unauthorized')
             }
+        } catch (error) {
+            const errorMessage = error.message
+            toast.error(errorMessage)
+            return null
         }
     }
 
-    const getUserDetailsEndpoint = async (userId, role) => {
+    const getUserDetailsEndpoint = (userId, role) => {
         let endpoint = '';
         switch (role) {
             case "admin":
                 endpoint = apiConfig.admin.getAdminInfoById(userId);
                 break;
             case "client":
+            case "user":
+            case "User":
                 endpoint = '';
                 break;
             case "doctor":

@@ -48,11 +48,11 @@ export const Settings = () => {
                         </Tabs.List>
 
                         {settingItems.map((item) => (
-                            <Tabs.Panel key={item.id} value={item.key} p={20}
+                            <Tabs.Panel key={item.id} value={item.key} py={20} px={0}
                                         style={{flexGrow: 1, display: 'flex', height: '100%', flexDirection: 'column'}}>
                                 <Stack style={{height: '100%', flexGrow: 1}} gap={0}>
                                     {activeTab === 'profile' && (
-                                        <Group justify="end" style={{padding: '5px 0'}}>
+                                        <Group justify="end" style={{padding: '5px 20px'}}>
                                             <Button
                                                 leftSection={isViewMode ? <EyeIcon size={14}/> : <SquarePen size={14}/>}
                                                 onClick={() => setIsViewMode((prev) => !prev)}

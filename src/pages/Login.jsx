@@ -1,15 +1,11 @@
 import {
     Anchor,
-    AspectRatio,
-    Button,
-    Card,
-    Center,
-    Checkbox,
-    Grid,
-    Group,
+    AspectRatio, Button,
+    Center, Checkbox,
+    Container,
+    Grid, Group,
     Image,
     Overlay,
-    Paper,
     PasswordInput,
     Stack,
     Text,
@@ -29,9 +25,10 @@ import {useNavigate} from 'react-router-dom'
 import {useTranslation} from 'react-i18next';
 import {useDocumentTitle} from '@hooks/DocumentTitle';
 import {useAuth} from "@contexts/AuthContext.jsx";
-import Logo from '../assets/images/logo.png';
-import {GlobalPhoneInput} from "@components/PhoneInput.jsx";
 import {useEncrypt} from '@hooks/EncryptData.jsx';
+import {motion} from 'framer-motion';
+import Logo from "../assets/images/logo.png";
+import {GlobalPhoneInput} from "@components/PhoneInput.jsx";
 
 const emailSchema = z.string().min(3, {message: "Atleast 3 chars"});
 const phoneNumberSchema = z.string().refine(
@@ -79,6 +76,9 @@ export default function Login() {
     const {t} = useTranslation();
     const {setEncryptedData} = useEncrypt();
     useDocumentTitle(t("login"));
+    const [isLoginSuccess, setIsLoginSuccess] = useState(false);
+    const [isLoginError, setIsLoginError] = useState(false);
+    const [isCardLoaded, setIsCardLoaded] = useState(false);
 
     const handleCountryChange = (selected) => {
         const {userName} = form.getValues();
@@ -125,174 +125,208 @@ export default function Login() {
                         setUserDetails(JSON.parse((JSON.stringify(doctorModel))));
                     }
                     localStorage.setItem('token', token);
+                    setIsLoginSuccess(true);
                     openNotificationWithSound({
                         title: t('success'),
                         message: t('loginSuccessMessage'),
                         color: theme.colors.brand[9]
                     }, 'success')
-                    navigate('/');
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 1000)
                 }
             }).catch(error => {
-            openNotificationWithSound({
-                title: error.name,
-                message: error.message,
-                color: theme.colors.red[6]
-            }, 'error')
+            if (error.status === 401) {
+                const response = error.response;
+                if (response) {
+                    const {data} = response;
+                    openNotificationWithSound({
+                        title: t('unauthorized'),
+                        message: data.message,
+                        color: theme.colors.red[6]
+                    }, 'error')
+                }
+            } else {
+                openNotificationWithSound({
+                    title: error.name,
+                    message: error.message,
+                    color: theme.colors.red[6]
+                }, 'error')
+            }
+            setIsLoginError(true);
         }).finally(() => {
             setLoading(false);
+            setTimeout(() => {
+                setIsLoginSuccess(false);
+                setIsLoginError(false);
+            }, 2500)
         })
     }
 
     return (
-        <Card radius={0} shadow={0} pb={0} className={classes.loginPage}>
-            <Paper pos={'relative'} className={`h-full flex w-full !rounded-t-none`}
-                   styles={{
-                       root: {
-                           borderBottomLeftRadius: theme.radius.xl,
-                           borderBottomRightRadius: theme.radius.xl,
-                       }
-                   }}
-            >
-                <Overlay
-                    blur={'20px'}
-                    bg={theme.colors.brand[9]}
-                    opacity={1}
-                    className={`lg:!rounded-b-[30px] xl:!rounded-b-[30px] 2xl:!rounded-b-[30px] !backdrop-blur-md`}>
-                    <Grid grow gutter={0} className={`h-full w-full
-                    lg:!rounded-b-full xl:!rounded-b-full 2xl:!rounded-b-full
-                `}
-                          styles={{
-                              inner: {
-                                  height: '100%',
-                                  width: '100%',
-                                  padding: theme.spacing.xl,
-                              }
-                          }}
+        <Container fluid className={classes.loginPage}>
+            <Overlay className={`h-full w-full flex items-center justify-center !backdrop-blur-lg`}>
+                <Center p={20}>
+                    <motion.div
+                        initial={{opacity: 0, y: -20}}
+                        animate={{opacity: 1, y: 0}}
+                        exit={{opacity: 0, y: -20}}
+                        onAnimationComplete={() => setIsCardLoaded(true)}
+                        className={`bg-tb-700 max-w-sm p-4 relative rounded-3xl`}
                     >
-                        <Grid.Col order={2} span={{base: 12, sm: 12, md: 5, lg: 4}}>
-                            <Paper display={"flex"}
-                                   className={`!bg-transparent !items-center h-full w-full lg:!rounded-r-none xl:!rounded-r-none 2xl:!rounded-r-none`}>
-                                <Stack>
-                                    <Center>
-                                        <AspectRatio ratio={16 / 9}
-                                                     className={`flex lg:!hidden xl:!hidden 2xl:!hidden`}>
-                                            <Image
-                                                bd={1}
-                                                h={100}
-                                                w={100}
-                                                mb={20}
-                                                fit="scale-down"
-                                                src={Logo}
-                                            />
-                                        </AspectRatio>
-                                    </Center>
+                        <motion.div>
+                            <Grid>
+                                <Grid.Col order={2} span={12}>
+                                    <Stack>
+                                        <Center>
+                                            <motion.div
+                                                className={`
+                                                absolute -top-16
+                                                mb-4
+                                            h-36 w-36 bg-white p-2 
+                                            flex items-center justify-center rounded-full
+                                            `}>
+                                                {
+                                                    isCardLoaded && (
+                                                        <motion.div
+                                                            className={`h-full w-full 
+                                                 flex items-center justify-center rounded-full`}
+                                                            initial={{opacity: 0, scale: 0.8}}
+                                                            animate={{opacity: 1, scale: 1}}
+                                                            exit={{opacity: 0, scale: 0.8}}
+                                                        >
+                                                            <AspectRatio ratio={16 / 9}>
+                                                                <Image
+                                                                    bd={1}
+                                                                    h={100}
+                                                                    w={100}
+                                                                    fit="scale-down"
+                                                                    src={Logo}
+                                                                />
+                                                            </AspectRatio>
+                                                        </motion.div>
+                                                    )
+                                                }
+                                            </motion.div>
+                                        </Center>
 
-                                    <Stack gap={5}>
-                                        <Text align='center' className='w-full !text-white m-0' fz={'h1'} fw={'bold'}>
-                                            Sign In
-                                        </Text>
-                                        <Text className='w-full !text-white text-center' fz={'sm'}>
-                                            Welcome back, please enter your details
-                                        </Text>
-                                    </Stack>
+                                        <Stack gap={5} mt={50}>
+                                            <Text align='center' className='w-full !text-white m-0' fz={'h1'}
+                                                  fw={'bold'}>
+                                                Sign In
+                                            </Text>
+                                            <Text className='w-full text-xs !text-white text-center' fz={'sm'}>
+                                                Welcome back, please enter your details
+                                            </Text>
+                                        </Stack>
 
-                                    <form onSubmit={handleFormSubmit}>
-                                        <Stack my={20} gap={10}>
-                                            <GlobalPhoneInput
-                                                {...form.getInputProps('userName')}
-                                                label='Username'
-                                                withAsterisk
-                                                onChange={handleUsernameChange}
-                                                onCountryChange={handleCountryChange}
-                                                className={`w-full !text-white m-0`}
-                                                required={true}
-                                                labelProps={{
-                                                    color: 'white',
-                                                }}
-                                            />
-                                            <PasswordInput
-                                                {...form.getInputProps('userPassword')}
-                                                label='Password'
-                                                radius={'xl'}
-                                                autoComplete="off"
-                                                withAsterisk
-                                                size='md'
-                                                classNames={{
-                                                    visibilityToggle: classes.visibilityToggle
-                                                }}
-                                                onVisibilityChange={toggle}
-                                                varient={'outlined'}
-                                                className={`min-h-[5.5rem] ${classes.input}`}
-                                                styles={{
-                                                    label: {
-                                                        fontWeight: 'inherit',
-                                                        fontSize: '14px',
-                                                        color: theme.white
-                                                    },
-                                                    input: {
-                                                        backgroundColor: 'transparent',
-                                                        color: theme.white
-                                                    },
-                                                    error: {
-                                                        fontSize: theme.fontSizes.xs
-                                                    }
-                                                }}
-                                            />
-                                            <Group justify='space-between'>
-                                                <Checkbox
-                                                    size='sm'
+                                        <form onSubmit={handleFormSubmit}>
+                                            <Stack my={20} gap={10}>
+                                                <GlobalPhoneInput
+                                                    {...form.getInputProps('userName')}
+                                                    label='Username'
+                                                    withAsterisk
+                                                    onChange={handleUsernameChange}
+                                                    onCountryChange={handleCountryChange}
+                                                    className={`w-full !text-white m-0`}
+                                                    required={true}
+                                                    labelProps={{
+                                                        color: 'white',
+                                                    }}
+                                                />
+                                                <PasswordInput
+                                                    {...form.getInputProps('userPassword')}
+                                                    label='Password'
+                                                    radius={'xl'}
+                                                    autoComplete="off"
+                                                    variant='default'
+                                                    withAsterisk
+                                                    size='md'
+                                                    classNames={{
+                                                        visibilityToggle: classes.visibilityToggle
+                                                    }}
+                                                    onVisibilityChange={toggle}
+                                                    varient={'outlined'}
+                                                    className={`min-h-[5.5rem]`}
                                                     styles={{
                                                         label: {
-                                                            cursor: 'pointer',
+                                                            fontSize: '14px',
                                                             color: theme.white
+                                                        },
+                                                        input: {
+                                                            fontSize: '14px',
+                                                        },
+                                                        root: {
+                                                            backgroundColor: 'transparent'
                                                         }
                                                     }}
-
-                                                    label="Remember Me"
                                                 />
-                                                <Anchor underline="hover" c={theme.white} size='sm'>
-                                                    Forgot Password
-                                                </Anchor>
-                                            </Group>
-                                            <Button
-                                                disabled={!form.isValid()}
-                                                size='md'
-                                                variant={"white"}
-                                                my={20}
-                                                loading={loading}
-                                                onClick={handleFormSubmit}
-                                            >
-                                                Sign In
-                                            </Button>
-                                            <Center className='w-full'>
-                                                <Text size='xs' styles={{
-                                                    root: {
-                                                        textAlign: 'center',
-                                                        color: theme.white,
+                                                <Group justify='space-between'>
+                                                    <Checkbox
+                                                        size='sm'
+                                                        styles={{
+                                                            label: {
+                                                                cursor: 'pointer',
+                                                                color: theme.white
+                                                            }
+                                                        }}
+
+                                                        label="Remember Me"
+                                                    />
+                                                    <Anchor underline="hover" c={theme.white} size='sm'>
+                                                        Forgot Password
+                                                    </Anchor>
+                                                </Group>
+                                                <Button
+                                                    disabled={!form.isValid()}
+                                                    size='md'
+                                                    variant={"white"}
+                                                    my={20}
+                                                    loading={loading}
+                                                    onClick={handleFormSubmit}
+                                                    component={motion.div}
+                                                    style={{transition: 'background-color 0.3s ease'}}
+                                                    c={
+                                                        isLoginSuccess ? theme.white : isLoginError ? theme.white : ''
                                                     }
-                                                }} className='opacity-70'>
-                                                    By clicking on &#39;Sign In&#39;, you acknowledge the&nbsp;
-                                                    <Anchor underline="always" c={theme.colors.brand[1]} size='xs'>
-                                                        Terms of Services
-                                                    </Anchor>
-                                                    &nbsp; and &nbsp;
-                                                    <Anchor underline="always" c={theme.colors.brand[1]} size='xs'>
-                                                        Privacy Policy
-                                                    </Anchor>
-                                                </Text>
-                                            </Center>
-                                        </Stack>
-                                    </form>
-                                </Stack>
-                            </Paper>
-                        </Grid.Col>
-                        <Grid.Col order={1} span={{base: 0, sm: 0, md: 7, lg: 8}}>
-                            <Paper
-                                className={`!bg-transparent h-full w-full !rounded-l-none xl:!rounded-l-none 2xl:!rounded-l-none`}></Paper>
-                        </Grid.Col>
-                    </Grid>
-                </Overlay>
-            </Paper>
-        </Card>
+                                                    animate={{
+                                                        backgroundColor: isLoginSuccess
+                                                            ? theme.colors.teal[6]
+                                                            : isLoginError
+                                                                ? theme.colors.red[6]
+                                                                : ''
+                                                    }}
+                                                >
+                                                    {
+                                                        isLoginSuccess ? t('signedIn') : t('signIn')
+                                                    }
+                                                </Button>
+                                                <Center className='w-full'>
+                                                    <Text size='xs' styles={{
+                                                        root: {
+                                                            textAlign: 'center',
+                                                            color: theme.white,
+                                                        }
+                                                    }} className='opacity-70'>
+                                                        By clicking on &#39;Sign In&#39;, you acknowledge the&nbsp;
+                                                        <Anchor underline="always" c={theme.colors.brand[1]} size='xs'>
+                                                            Terms of Services
+                                                        </Anchor>
+                                                        &nbsp; and &nbsp;
+                                                        <Anchor underline="always" c={theme.colors.brand[1]} size='xs'>
+                                                            Privacy Policy
+                                                        </Anchor>
+                                                    </Text>
+                                                </Center>
+                                            </Stack>
+                                        </form>
+                                    </Stack>
+                                </Grid.Col>
+                            </Grid>
+                        </motion.div>
+                    </motion.div>
+                </Center>
+            </Overlay>
+        </Container>
     )
 }

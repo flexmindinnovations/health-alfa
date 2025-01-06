@@ -158,7 +158,7 @@ export function AddEditDoctor({data = {}, mode = 'add', showCancel = true, handl
                 <motion.form onSubmit={form.onSubmit(handleSubmit)} initial={{opacity: 0}} animate={{opacity: 1}}
                              exit={{opacity: 0}}>
                     <Stack p={20}
-                           className="form-container flex-1 max-h-[550px] overflow-hidden overflow-y-auto h-full mx-auto">
+                           className="form-container flex-1 max-h-[450px] lg:max-h-[500px] xl:max-h-[500px] 2xl:max-h-[500px] overflow-hidden overflow-y-auto h-full mx-auto">
                         <Grid
                             gutter="md"
                         >
@@ -253,7 +253,7 @@ export function AddEditDoctor({data = {}, mode = 'add', showCancel = true, handl
                             </Grid.Col>
                         </Grid>
                     </Stack>
-                    <Group p={isSmallScreen ? 0 : 20}
+                    <Group p={isSmallScreen ? 10 : 20}
                            position="right" justify='flex-end' px={isSmallScreen ? 0 : 20}>
                         {showCancel && <Button
                             disabled={disableForm}

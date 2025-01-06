@@ -15,6 +15,7 @@ export function UserMenu({showHideSettingsModel}) {
     const theme = useMantineTheme();
     const {getEncryptedData} = useEncrypt();
     const [isAdmin, setIsAdmin] = useState(false);
+    const [isUser, setIsUser] = useState(false);
 
 
     useEffect(() => {
@@ -24,6 +25,7 @@ export function UserMenu({showHideSettingsModel}) {
         setProfileImage(imageUrl);
         const role = getEncryptedData('roles')?.toLowerCase();
         setIsAdmin(() => role === 'admin');
+        setIsUser(() => role === 'user');
         if (user && role) processUserDetails(role);
     }, [user])
 
@@ -62,7 +64,8 @@ export function UserMenu({showHideSettingsModel}) {
     }
 
     return (<div>
-        {!user && !isAdmin ? <Skeleton circle width={40} height={40}/> :
+        {/*{!user && (!isAdmin || !isUser) ? <Skeleton circle width={40} height={40}/> :*/}
+        {!user && (!isAdmin && !isUser) ? <Skeleton circle width={40} height={40}/> :
 
             <Menu shadow='md' width={250} radius='md' withArrow
                   arrowSize={15}

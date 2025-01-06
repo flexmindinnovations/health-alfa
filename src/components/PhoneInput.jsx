@@ -159,7 +159,7 @@ export function GlobalPhoneInput({
                     transition: 'border-color 0.2s ease',
                 }}
             >
-                <Transition
+                {/* <Transition
                     mounted={!isEmail}
                     transition="fade-right"
                     duration={100}
@@ -202,7 +202,7 @@ export function GlobalPhoneInput({
                             />
                         </div>
                     )}
-                </Transition>
+                </Transition> */}
 
                 <TextInput
                     id="phoneInput"

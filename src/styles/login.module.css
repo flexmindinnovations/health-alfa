@@ -1,6 +1,10 @@
 .loginPage {
-  background-image: url('../assets/images/login_bg.svg');
-  @apply h-screen w-screen p-0 bg-no-repeat bg-center bg-cover !mx-auto lg:!pb-40 lg:!pl-40 lg:!pr-40;
+  /*background-image: url('../assets/images/login_bg.svg');*/
+  background-color: var(--mantine-color-anchor);
+  /*background: radial-gradient(circle, #ffffff, #d9e4f5);*/
+  /* background: radial-gradient(circle, var(--mantine-color-brand-9)); */
+
+  @apply !backdrop-blur-lg h-screen w-screen flex items-center justify-center p-0 bg-no-repeat bg-center bg-cover;
 }
 
 @keyframes gradientAnimation {

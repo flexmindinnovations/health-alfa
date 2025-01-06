@@ -17,6 +17,8 @@ export function ProfileView({data = {}}) {
 
     const getProfileImagePath = () => {
         const userType = getEncryptedData('roles').toLowerCase();
+        console.log('data: ', data);
+        console.log('userType: ', userType);
         setUserType(userType);
         let path = '';
         switch (userType) {
@@ -24,7 +26,8 @@ export function ProfileView({data = {}}) {
                 path = 'admin';
                 break;
             case 'client':
-                path = 'client';
+            case 'user':
+                path = data['doctorProfileImagePath'];
                 break;
             case 'doctor':
                 path = data['doctorProfileImagePath'];
@@ -99,7 +102,7 @@ export function ProfileView({data = {}}) {
 
     return (
         <motion.div initial={{opacity: 0, y: 50}} animate={{opacity: 1, y: 0}} exit={{opacity: 0, y: 50}}>
-            <Stack gap={0} p={10}
+            <Stack gap={0} p={20}
             styles={{
                 root: {
                     maxHeight: '70vh',

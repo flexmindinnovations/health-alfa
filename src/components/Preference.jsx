@@ -73,7 +73,7 @@ export function PreferenceComponent() {
         </Container>)
     }
 
-    return (<Container m={0} p={0} className='px-0 md:px-4 lg:px-4 xl:px-4 2xl:px-4'>
+    return (<Container m={0} px={20} className='px-0 md:px-4 lg:px-4 xl:px-4 2xl:px-4'>
         <Grid align='center' m={0} p={0}>
             <Grid.Col span={{base: 4, sm: 4, md: 6, lg: 6, xl: 6}}>
                 <Text size='sm'>{t('theme')}</Text>
