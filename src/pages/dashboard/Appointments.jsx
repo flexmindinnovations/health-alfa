@@ -24,6 +24,8 @@ import {AppointmentDetails} from "@components/AppointmentDetails.jsx";
 import {CalendarRange, LayoutGrid, SearchIcon} from "lucide-react";
 import {motion} from "framer-motion";
 import {AppointmentsCalendarView} from "@components/AppointmentsCalendarView.jsx";
+import {useLocation} from "react-router-dom";
+import {UploadPrescription} from "@components/UploadPrescription.jsx";
 
 export default function Appointments() {
     const {t} = useTranslation();
@@ -40,6 +42,7 @@ export default function Appointments() {
     const [userType, setUserType] = useState('admin');
     const searchInputRef = useRef(null);
     const [searchText, setSearchText] = useState('');
+    const location = useLocation();
     const segmentedItems = [
         {
             value: 'card',
@@ -166,6 +169,7 @@ export default function Appointments() {
         return gridLayout;
     }
     const getModalComponent = () => {
+        const path = location?.pathname && location.pathname?.split('/')[2] || '';
         const role = getEncryptedData('roles')?.toLocaleLowerCase();
         let modalComponent = DoctorCard;
         switch (role) {
@@ -175,10 +179,10 @@ export default function Appointments() {
             case 'patient':
             case 'client':
             case 'user':
-                modalComponent = BookAppointments;
+                modalComponent = path && path === 'prescription' ? UploadPrescription : BookAppointments;
                 break;
             case 'admin':
-                modalComponent = BookAppointments;
+                modalComponent = path && path === 'prescription' ? UploadPrescription : BookAppointments;
                 break;
         }
         return modalComponent
@@ -198,9 +202,22 @@ export default function Appointments() {
             props: `min-h-[630px]`,
             size: 'xl',
             isAddEdit: false,
-            title: `${t("bookAppointment")} - ${data.doctorName}`,
+            title: getModalTitle(data),
         });
     };
+
+    const getModalTitle = (data) => {
+        const path = location?.pathname && location.pathname?.split('/')[2] || '';
+        let title = '';
+        switch (path) {
+            case 'prescription':
+                title = `${t("prescription")} - ${data.doctorName}`;
+                break;
+            default:
+                title = `${t("bookAppointment")} - ${data.doctorName}`;
+        }
+        return title;
+    }
 
     const filterData = useMemo(() => {
         return (query) => {

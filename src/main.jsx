@@ -19,6 +19,8 @@ import '@mantine/carousel/styles.css';
 import '@mantine/dates/styles.css';
 import {ModalsProvider} from "@mantine/modals";
 import {PermissionsProvider} from "@contexts/Permission.jsx";
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
 
 export const notificationAudio = new Audio('/sounds/notification.wav')
 notificationAudio.load();

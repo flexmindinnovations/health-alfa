@@ -1,4 +1,4 @@
-import {Avatar, Card, CloseButton, Group, Loader, Stack, Text, Title} from "@mantine/core";
+import {Avatar, Card, CloseButton, Group, Loader, Stack, Text, Title, Tooltip} from "@mantine/core";
 import {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Mail, Smartphone} from 'lucide-react';
@@ -52,6 +52,13 @@ export function DoctorCard({
         }
     };
 
+    const truncateText = (text, maxLength) => {
+        if (text.length <= maxLength) {
+            return text;
+        }
+        return text.substring(0, maxLength) + '...';
+    }
+
     return (
         <>
             {
@@ -100,7 +107,10 @@ export function DoctorCard({
                                         </Group>
                                         <Group gap={10}>
                                             <Text size={"xs"}>{t('speciality')}:</Text>
-                                            <Text size={"xs"}>{stringFormatting(data?.speciality)}</Text>
+                                            <Tooltip label={stringFormatting(data?.speciality)}>
+                                                <Text
+                                                    size={"xs"}>{truncateText(stringFormatting(data?.speciality), 60)}</Text>
+                                            </Tooltip>
                                         </Group>
                                         <Group gap={10}>
                                             <Text size={"xs"}>{t('address')}:</Text>

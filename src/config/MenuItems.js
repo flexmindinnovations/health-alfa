@@ -87,6 +87,15 @@ export const MENU_ITEMS = [
         roles: ['ADMIN', 'DOCTOR', 'USER'],
     },
     {
+        id: 9,
+        key: 'prescription',
+        title: 'Prescription',
+        icon: Pill,
+        route: '/prescription',
+        active: false,
+        roles: ['ADMIN', 'DOCTOR', 'USER'],
+    },
+    {
         id: 13,
         key: 'roles',
         title: 'Roles',

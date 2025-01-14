@@ -327,7 +327,7 @@ export function BookAppointments({
                         height: '100%',
                     },
                     panel: {
-                        minHeight: `calc(100vh - 370px)`,
+                        minHeight: theme.breakpoints.lg ? `calc(100vh - 370px)` : `calc(100vh - 260px)`,
                     },
                 }}
             >

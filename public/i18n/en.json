@@ -139,5 +139,7 @@
   "today": "Today",
   "unauthorized": "Unauthorized",
   "signIn": "Sign In",
-  "signedIn": "Signed In"
+  "signedIn": "Signed In",
+  "prescription": "Prescription",
+  "uploadPrescription": "Upload Prescription"
 }

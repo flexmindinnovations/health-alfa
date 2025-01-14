@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Box, Text, TextInput, Transition, useMantineTheme} from '@mantine/core';
+import {Box, Text, TextInput, Transition, useMantineTheme, useMantineColorScheme} from '@mantine/core';
 import {parsePhoneNumberFromString} from 'libphonenumber-js';
 import Flag from 'react-world-flags';
 import {ComboBoxComponent as ComboBox} from '@components/ComboBox';
@@ -45,6 +45,7 @@ export function GlobalPhoneInput({
     const [inputValue, setInputValue] = useState('');
     const [isEmail, setIsEmail] = useState(true);
     const [isFocused, setIsFocused] = useState(false);
+    const {colorScheme} = useMantineColorScheme();
 
     // const emailSchema = z.string().email("Invalid email address");
     const emailSchema = z.string().min(3, {message: "Atleast 3 chars"});
@@ -148,6 +149,7 @@ export function GlobalPhoneInput({
             </Text>
             <Box
                 style={{
+                    backgroundColor: colorScheme === 'light' ? theme.white : theme.colors.gray[6],
                     display: 'flex',
                     alignItems: 'center',
                     border: `1px solid ${form.errors.username
@@ -218,23 +220,12 @@ export function GlobalPhoneInput({
                     size={'md'}
                     className={classes.input}
                     styles={{
-                        error: {
-                            display: 'none'
-                        },
                         input: {
                             border: 'none',
-                            padding: '0 10px',
-                            backgroundColor: 'transparent',
-                            height: 'auto',
-                            width: '100%',
-                            flex: '1',
-                            fontSize: '0.8rem',
-                            color: theme.white,
                         },
                         root: {
-                            width: '100%',
-                            background: 'transparent'
-                        },
+                            border: 'none'
+                        }
                     }}
                 />
             </Box>

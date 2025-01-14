@@ -94,3 +94,8 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 .fc-v-event {
     @apply bg-tb-900 text-white border border-solid border-tb-900;
 }
+
+.react-pdf__Page__canvas {
+    max-height: 634px;
+    width: 100% !important;
+}
