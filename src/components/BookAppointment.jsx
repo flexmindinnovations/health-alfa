@@ -1,6 +1,6 @@
 import {useViewportSize} from "@mantine/hooks";
 import {AnimatePresence, motion, useAnimation} from "framer-motion";
-import {Card, Center, Container, Group, Loader, Stack, Tabs, Text, Textarea, useMantineTheme} from "@mantine/core";
+import {Card, Center, Group, Loader, Stack, Tabs, Text, Textarea, useMantineTheme} from "@mantine/core";
 import {useEffect, useRef, useState} from "react";
 import dayjs from "dayjs";
 import MorningImage from "../assets/images/morning.jpg";
@@ -15,6 +15,7 @@ import {openNotificationWithSound} from "@config/Notifications.js";
 import {useEncrypt} from "@hooks/EncryptData.jsx";
 import {ModalFooterButtons} from "@components/ModalFooterButtons.jsx";
 import classes from '@styles/BookAppointment.module.css';
+import {utils} from "@config/utils.js";
 
 const generateDate = () => {
     const dates = [];
@@ -61,8 +62,8 @@ const SlotCard = ({slot, isSelected, onClick, disabled}) => {
             h={'100%'}
             width={'100%'}
             radius={'xl'}
-            className={`cursor-pointer ${(disabled || slot?.isBooked) ? "opacity-50 pointer-events-none" : ""}`}
-            bg={slot?.isBooked ? theme.colors.brand[5] : isSelected ? theme.colors.brand[9] : theme.white}
+            className={`cursor-pointer ${(disabled || slot?.isBooked) ? "cursor-not-allowed pointer-events-none" : ""}`}
+            bg={slot?.isBooked ? theme.colors.gray[5] : isSelected ? theme.colors.brand[9] : theme.white}
             onClick={() => onClick(slot)}
         >
             <Center
@@ -89,40 +90,17 @@ const SlotCard = ({slot, isSelected, onClick, disabled}) => {
                         exit={{opacity: 0}}
                         transition={{duration: 0.3}}
                     >
-                        <Text size="xs" fw={'550'} c={isSelected ? theme.white : theme.colors.brand[9]}>{slot.startTime}</Text>
+                        <Text size="xs" className={`!select-none`} fw={'550'}
+                              c={(isSelected || slot?.isBooked) ? theme.white : theme.colors.brand[9]}>{slot.startTime}</Text>
                     </motion.div>
                 </AnimatePresence>
-                {/*<Text size="xs"*/}
-                {/*      fw={"bold"}>{slot.slotType.charAt(0).toUpperCase() + slot.slotType.slice(1)}</Text>*/}
-                {/*<Text size="xs">{slot.startTime} - {slot.endTime}</Text>*/}
             </Center>
         </Card>
     );
 };
 
-const parentVariants = {
-    hidden: {opacity: 0},
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.05,
-            when: "beforeChildren",
-        },
-    },
-}
-
-const childVariants = {
-    hidden: {opacity: 0, x: -20},
-    visible: {
-        opacity: 1,
-        x: 0,
-        transition: {type: "spring", stiffness: 150, damping: 20}
-    },
-};
-
 export function BookAppointments({
                                      data = {},
-                                     layoutId,
                                      onClose,
                                      handleCancel
                                  }) {
@@ -170,7 +148,7 @@ export function BookAppointments({
         try {
             const selectedDate = dates.find((date) => date.key === day);
             const {doctorId} = doctorInfo;
-            const response = await http.get(apiConfig.doctors.getTimeSlots(doctorId, day, selectedDate.date));
+            const response = await http.get(apiConfig.doctors.getTimeSlots(doctorId, day, dayjs(selectedDate.date).format('YYYY-MM-DD')));
             const data = response.data;
             if (response.status === 200) {
                 const updatedData = data?.map((slot) => {
@@ -293,6 +271,8 @@ export function BookAppointments({
 
     const onTabChange = (tab) => {
         setActiveTab(tab);
+        const activeSlot = slotTypes?.length ? slotTypes[0].value : null;
+        setActiveSlotType(null);
         setAreSlotsRendered(false);
         onCardClick(null);
     }
@@ -305,13 +285,7 @@ export function BookAppointments({
     }
 
     return (
-        <Container
-            styles={{
-                root: {
-                    minHeight: 'inherit',
-                }
-            }}
-        >
+        <div className={`min-h-[inherit] relative`}>
             <Tabs
                 keepMounted={false}
                 variant={'unstyled'}
@@ -379,7 +353,7 @@ export function BookAppointments({
                                                 maxHeight: 'calc(100vh - 580px)',
                                                 overflowY: 'auto',
                                             }}
-                                            variants={parentVariants}
+                                            variants={utils.parentVariants}
                                             initial="hidden"
                                             animate="visible"
                                             className={`flex items-start`}
@@ -392,7 +366,8 @@ export function BookAppointments({
                                                     ?.filter((slot) => slot.slotType === key)
                                                     ?.map((slot) => (
                                                         <motion.div key={slot.id}
-                                                                    variants={childVariants}
+                                                                    variants={utils.childVariants}
+                                                                    whileTap={{y: 5}}
                                                                     className={`p-0 h-10`}
                                                         >
                                                             <SlotCard
@@ -449,7 +424,7 @@ export function BookAppointments({
                     )}
                 </Tabs.Panel>
             </Tabs>
-            <Group position="right" px={20} py={10} justify={'space-between'}>
+            <Group className={`absolute bottom-4 w-full`} position="right" px={20} py={10} justify={'space-between'}>
                 <ModalFooterButtons
                     loading={isBooking}
                     disabled={isBooking || !selectedSlots.length}
@@ -460,6 +435,6 @@ export function BookAppointments({
                     handleSaveUpdate={handleBookAppointment}
                 />
             </Group>
-        </Container>
+        </div>
     );
 }

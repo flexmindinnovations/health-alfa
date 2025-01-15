@@ -99,3 +99,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
     max-height: 634px;
     width: 100% !important;
 }
+
+.swiper-pagination {
+    @apply flex flex-col gap-4 bg-tb-50 py-4 rounded-full border-solid px-1;
+}

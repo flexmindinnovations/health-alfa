@@ -104,7 +104,7 @@ export function ComboBoxComponent({
             styles={{
                 dropdown: {
                     zIndex: 9999,
-                    // position: 'fixed',
+                    position: 'fixed',
                     left: left,
                     minWidth: minWidth,
                     maxHeight: 200,

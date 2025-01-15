@@ -224,7 +224,8 @@ export function GlobalPhoneInput({
                             border: 'none',
                         },
                         root: {
-                            border: 'none'
+                            border: 'none',
+                            width: '100%',
                         }
                     }}
                 />

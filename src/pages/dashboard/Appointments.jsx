@@ -26,6 +26,8 @@ import {motion} from "framer-motion";
 import {AppointmentsCalendarView} from "@components/AppointmentsCalendarView.jsx";
 import {useLocation} from "react-router-dom";
 import {UploadPrescription} from "@components/UploadPrescription.jsx";
+import {AppointmentFilter} from "@components/AppointmentFilter.jsx";
+import {utils} from "@config/utils.js";
 
 export default function Appointments() {
     const {t} = useTranslation();
@@ -234,6 +236,25 @@ export default function Appointments() {
         };
     }, [dataSource]);
 
+    const dropdownDataFilter = useMemo(() => {
+        return (filters) => {
+            const {qualification, speciality, gender} = filters;
+            const filteredData = dataSource.filter((item) => {
+                const matchesQualification = qualification
+                    ? item.qualification.includes(qualification)
+                    : true;
+                const matchesSpeciality = speciality
+                    ? item.speciality.includes(speciality)
+                    : true;
+                const matchesGender = gender
+                    ? item.gender === gender
+                    : true;
+                return matchesQualification && matchesSpeciality && matchesGender;
+            });
+            setFilteredDataSource(filteredData);
+        };
+    }, [dataSource]);
+
     const handleClearInput = () => {
         setSearchText('');
         filterData('');
@@ -246,13 +267,17 @@ export default function Appointments() {
     }
 
     const handleDateClick = (arg) => {
-        alert(arg.dateStr)
+        // alert(arg.dateStr)
     }
 
 
     const handleEventClick = (info) => {
-        alert(`Event clicked: ${info.event.title}`);
+        // alert(`Event clicked: ${info.event.title}`);
     };
+
+    const handleFilterChange = (filters) => {
+        dropdownDataFilter(filters);
+    }
 
     return (
         <div className="h-full w-full relative !overflow-hidden flex items-center justify-center">
@@ -307,12 +332,20 @@ export default function Appointments() {
                             )
                             :
                             (
-                                <div className={getGridLayout()}>
-                                    {filteredDataSource.map((row, index) => (
-                                        <div key={row.doctorId + index}>
-                                            {getUserCard(row)}
-                                        </div>
-                                    ))}
+                                <div>
+                                    <AppointmentFilter onFilterChange={handleFilterChange}/>
+                                    <motion.div
+                                        variants={utils.parentVariants}
+                                        initial={'hidden'}
+                                        animate={'visible'}
+                                        className={`mt-4 ${getGridLayout()}`}>
+                                        {filteredDataSource.map((row, index) => (
+                                            <motion.div whileTap={{y: 10}} variants={utils.childVariants}
+                                                        key={row.doctorId + index}>
+                                                {getUserCard(row)}
+                                            </motion.div>
+                                        ))}
+                                    </motion.div>
                                 </div>
                             )
                     }

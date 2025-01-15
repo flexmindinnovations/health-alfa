@@ -1,4 +1,4 @@
-import {Group, Textarea} from '@mantine/core';
+import {Group, Textarea, useMantineTheme} from '@mantine/core';
 import {createRef, useRef, useState} from "react";
 import PrescriptionViewer from "@components/PrescriptionViewer.jsx";
 import {motion} from "framer-motion";
@@ -10,6 +10,7 @@ import {modals} from "@mantine/modals";
 import dayjs from "dayjs";
 import useHttp from "@hooks/AxiosInstance.jsx";
 import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
+import {openNotificationWithSound} from "@config/Notifications.js";
 
 const parentVariants = {
     hidden: {opacity: 0},
@@ -48,6 +49,7 @@ export function UploadPrescription(
     const {getEncryptedData} = useEncrypt();
     const {apiConfig} = useApiConfig();
     const http = useHttp();
+    const theme = useMantineTheme();
 
     const addPrescriptionRef = (index) => {
         if (!prescriptionRefs.current[index]) {
@@ -79,7 +81,7 @@ export function UploadPrescription(
 
     const handleUploadPrescription = async () => {
         const patientId = getEncryptedData('user');
-        const uploadedDocs = prescriptions.map(item => item.file).filter((item, i) => item !== null);
+        const uploadedDocs = prescriptions.filter(item => item.file !== null).map(item => item.file);
         const formData = new FormData();
         const payload = {
             doctorId: data?.doctorId,
@@ -89,7 +91,9 @@ export function UploadPrescription(
             doctorSuggetion: notesRef.current.value
         }
         formData.append("model", JSON.stringify(payload));
-        formData.append("files", uploadedDocs);
+        uploadedDocs.forEach(item => (
+            formData.append("files", item)
+        ))
         setLoading(true);
         try {
             const apiMethod = mode === 'add' ? http.post : http.put;
@@ -97,9 +101,30 @@ export function UploadPrescription(
                 ? apiConfig.patientVisits.savePatientVisit
                 : `${apiConfig.patientVisits.updatePatientVisit(data?.visitId)}`;
             const response = await apiMethod(url, formData);
-            console.log('response: ', response);
+            if (response.status === 200) {
+                const {data} = response;
+                openNotificationWithSound(
+                    {
+                        title: t('success'),
+                        message: data.message,
+                        color: theme.colors.brand[9],
+                    },
+                    {withSound: false}
+                );
+                handleCancel({refresh: false})
+            }
+
         } catch (error) {
             console.error('Error: ', error);
+            const {name, message} = error;
+            openNotificationWithSound(
+                {
+                    title: name || "Error",
+                    message: message || "An unexpected error occurred.",
+                    color: theme.colors.red[6],
+                },
+                {withSound: false}
+            );
         } finally {
             setLoading(false);
         }

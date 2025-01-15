@@ -24,12 +24,10 @@ export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
         documentNameEnglish: z.string().min(1, {message: t('englishNameIsRequired')}),
         documentNameArabic: z.string().min(1, {message: t('arabicNameIsRequired')}),
     });
-
-
     const form = useForm({
         initialValues: {
-            documentNameEnglish: "",
-            documentNameArabic: "",
+            documentNameEnglish: data?.documentTypeEnglish || '',
+            documentNameArabic: data?.documentTypeArabic || '',
         },
         validate: zodResolver(addEditDocumentSchema),
         validateInputOnBlur: true,
@@ -73,7 +71,6 @@ export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
     const handleSubmit = async () => {
         // setLoading(true);
         onAddEdit();
-        console.log("Form submitted:", form.values);
     };
 
     useEffect(() => {

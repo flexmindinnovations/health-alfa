@@ -72,10 +72,10 @@ export default function Home() {
     return (
         <div className="w-full min-h-screen flex flex-col">
             {/* Hero Section */}
-            <HeroSection height={height} />
+            <HeroSection />
 
             {/* Services Section */}
-            <section className="py-8 px-4 sm:py-12 md:py-16 lg:py-20">
+            <section className="py-10 px-4 sm:py-12 md:py-16 lg:py-20">
                 <Container size="xl" mx={'auto'}>
                     <div className="text-center mb-8 sm:mb-12">
                         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800">

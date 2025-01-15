@@ -141,5 +141,7 @@
   "signIn": "Sign In",
   "signedIn": "Signed In",
   "prescription": "Prescription",
-  "uploadPrescription": "Upload Prescription"
+  "uploadPrescription": "Upload Prescription",
+  "filter": "Filter",
+  "resetFilters": "Reset Filters"
 }
