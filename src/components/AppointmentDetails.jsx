@@ -2,7 +2,7 @@ export function AppointmentDetails({}) {
     return (
         <>
             <p>
-                AppointmentDetails
+                Appointment
             </p>
         </>
     )
