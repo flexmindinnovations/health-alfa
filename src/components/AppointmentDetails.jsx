@@ -183,12 +183,13 @@ export function AppointmentDetails({ data }) {
             <Select
               label="Dosage"
               data={[
-                { value: "morning", label: "Morning" },
-                { value: "afternoon", label: "Afternoon" },
-                { value: "evening", label: "Evening" },
-                { value: "morningAfternoon", label: "Morning Afternoon" },
-                { value: "morningEvening", label: "Morning Evening" },
-                { value: "afternoonEvening", label: "Afternoon Evening" },
+                { value: "morning", label: "1--0--0" },
+                { value: "morningEvening", label: "1--0--1" },
+                { value: "morningAfternoonEvening", label: "1--1--1" },
+                { value: "evening", label: "0--0--1" },
+                { value: "afternoon", label: "0--1--0" },
+                { value: "morningAfternoon", label: "1--1--0" },
+                { value: "afternoonEvening", label: "0--1--1" },
               ]}
               value={row.dosage}
               onChange={(value) => handleChange(index, "dosage", value)}
