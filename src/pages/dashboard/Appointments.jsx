@@ -215,6 +215,7 @@ export default function Appointments() {
         ...data,
         initialRect: rect,
         onClose: closeModal,
+        refreshList: getAppointmentList,
       },
       props: `min-h-[630px]`,
       size: "xl",

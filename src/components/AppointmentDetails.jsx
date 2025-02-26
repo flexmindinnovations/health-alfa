@@ -11,18 +11,23 @@ import { openNotificationWithSound } from "@config/Notifications";
 import useHttp from "@hooks/AxiosInstance.jsx";
 import { Trash2 } from "lucide-react";
 import { useApiConfig } from "@contexts/ApiConfigContext";
+import { useRef } from "react";
 
 export function AppointmentDetails({ data }) {
   const [rows, setRows] = useState([
-    { medicineId: null, dosage: null, quantity: "" },
+    { medicineId: null, dosage: "", quantity: "" },
   ]);
   const [searches, setSearches] = useState({});
   const [options, setOptions] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [typeLoading, setTypeLoading] = useState(false);
+  const [medicineLoading, setMedicineLoading] = useState({});
   const { apiConfig } = useApiConfig();
   const http = useHttp();
   const [diagnosis, setDiagnosis] = useState("");
+  const [type, setType] = useState("all");
   const [doctorSuggestion, setDoctorSuggestion] = useState("");
+  const [typeList, setTypeList] = useState([]);
+  const searchTimeout = useRef({});
 
   const handleChange = (index, key, value) => {
     setRows((prev) =>
@@ -31,7 +36,7 @@ export function AppointmentDetails({ data }) {
   };
 
   const addRow = () => {
-    setRows([...rows, { medicineId: null, dosage: null, quantity: "" }]);
+    setRows([...rows, { medicineId: null, dosage: "", quantity: "" }]);
   };
 
   const removeRow = (index) => {
@@ -58,29 +63,71 @@ export function AppointmentDetails({ data }) {
     Object.keys(searches).forEach((index) => {
       if (!searches[index]) {
         setOptions((prev) => ({ ...prev, [index]: [] }));
-        return;
+      } else {
+        clearTimeout(searchTimeout.current[index]); // Clear the previous timeout
+        searchTimeout.current[index] = setTimeout(() => {
+          getMedicineList(index);
+        }, 500); // Debounce API calls by 500ms
       }
-      getMedicineList(index);
     });
   }, [searches]);
 
+  useEffect(() => {
+    getMedicineType();
+  }, []);
+
+  const getMedicineType = async () => {
+    setTypeLoading(true);
+    try {
+      const response = await http.get(apiConfig.medicineType.getList);
+      const types = Array.isArray(response?.data)
+        ? response.data.map((pres) => ({
+            label: pres.medicineTypeName,
+            value: String(pres.medicineTypeId),
+          }))
+        : [];
+      setTypeList([{ label: "All", value: "all" }, ...types]);
+    } catch (err) {
+      setTypeList([{ label: "All", value: "all" }]);
+      openNotificationWithSound(
+        {
+          title: err.name || "Error",
+          message: err.message || "Something went wrong",
+          color: "red",
+        },
+        { withSound: false }
+      );
+    } finally {
+      setTypeLoading(false);
+    }
+  };
+
   const getMedicineList = async (index) => {
-    setLoading(true);
+    setMedicineLoading((prev) => ({ ...prev, [index]: true })); // Set loading for the specific row
+
     try {
       const response = await http.get(
-        apiConfig.medicine.getMedicineList(1, 10, searches[index])
+        type === "all"
+          ? apiConfig.medicine.getMedicineList(1, 10, searches[index])
+          : apiConfig.medicine.getMedicineListByType(
+              parseInt(type),
+              1,
+              10,
+              searches[index]
+            )
       );
-      if (response?.status === 200 && Array.isArray(response.data)) {
-        setOptions((prev) => ({
-          ...prev,
-          [index]: response.data.map((med) => ({
-            label: med.medicineName,
-            value: String(med.medicineId),
-          })),
-        }));
-      } else {
-        setOptions((prev) => ({ ...prev, [index]: [] }));
-      }
+
+      setOptions((prev) => ({
+        ...prev,
+        [index]: response?.data
+          ? response.data
+              .filter((med) => med.medicineName && med.medicineId)
+              .map((med) => ({
+                label: med.medicineName,
+                value: String(med.medicineId),
+              }))
+          : [],
+      }));
     } catch (err) {
       setOptions((prev) => ({ ...prev, [index]: [] }));
       openNotificationWithSound(
@@ -92,7 +139,7 @@ export function AppointmentDetails({ data }) {
         { withSound: false }
       );
     } finally {
-      setLoading(false);
+      setMedicineLoading((prev) => ({ ...prev, [index]: false })); // Reset loading for the specific row
     }
   };
 
@@ -103,7 +150,8 @@ export function AppointmentDetails({ data }) {
       doctorId: data?.doctorId,
       patientId: data?.patientId,
       prescriptionDate: data?.appointmentDate,
-      diagnosis: diagnosis,
+      diagnosis,
+      doctorSuggestion,
       medications: rows.map((row) => ({
         medicationId: 0,
         medicineId: row.medicineId ? parseInt(row.medicineId, 10) : 0,
@@ -125,6 +173,8 @@ export function AppointmentDetails({ data }) {
           },
           { withSound: true }
         );
+        data?.refreshList?.();
+
         data?.onClose?.();
       }
     } catch (error) {
@@ -154,11 +204,19 @@ export function AppointmentDetails({ data }) {
           <span className="font-medium">Doctor Name:</span> {data?.doctorName}
         </div>
       </div>
-      <div className="w-full mb-4">
+      <div className="grid grid-cols-2 md:grid-flow-col-1 gap-4 mb-4">
         <TextInput
           label="Diagnosis"
           value={diagnosis}
-          onChange={(event) => setDiagnosis(event.target.value)}
+          onChange={(e) => setDiagnosis(e.target.value)}
+        />
+        <Select
+          label="Type"
+          data={typeList}
+          value={type}
+          onChange={(value) => setType(value)}
+          searchable
+          rightSection={typeLoading ? <Loader size="sm" /> : null} // Show loader only when loading
         />
       </div>
       <div className="space-y-4">
@@ -178,6 +236,9 @@ export function AppointmentDetails({ data }) {
               placeholder="Search for a medicine"
               clearable
               className="w-full"
+              rightSection={
+                medicineLoading[index] ? <Loader size="sm" /> : null
+              } // Show loader only when loading
             />
 
             <Select
@@ -191,7 +252,6 @@ export function AppointmentDetails({ data }) {
                 { value: "morningAfternoon", label: "1--1--0" },
                 { value: "afternoonEvening", label: "0--1--1" },
               ]}
-              value={row.dosage}
               onChange={(value) => handleChange(index, "dosage", value)}
               searchable
               className="w-full"

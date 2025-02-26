@@ -73,6 +73,16 @@ const defaultApiConfig = {
   medicine: {
     getMedicineList: (pageNumber, pageSize, searchTerm) =>
       `/Medicine/getMedicineList?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${searchTerm}`,
+    getMedicineListByType: (
+      getMedicineListByType,
+      pageNumber,
+      pageSize,
+      searchTerm
+    ) =>
+      `/Medicine/getMedicineListByType/${getMedicineListByType}?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${searchTerm}`,
+  },
+  medicineType: {
+    getList: `/MedicineType/GetMedicineTypeList`,
   },
   DoctorPrescription: {
     saveDoctorPrescription: `/DoctorPrescription/saveDoctorPrescription`,
