@@ -144,7 +144,7 @@ function AppointmentDetails() {
                         {
                             medicineList.map((field, index) => <AppointmentRowItem key={index} state={state}
                                 selectedMedicines={selectedMedicines}
-                                showDelete={medicineList?.length > 1} index={index} handleInputChange={(values) => handleInputChange(values, index)} removeMedicine={() => removeMedicine(index)} />)
+                                showDelete={medicineList?.length > 1} index={index} handleInputChange={(values) => handleInputChange(values, index)} removeMedicine={(index) => removeMedicine(index)} />)
                         }
                     </Stack>
                 </Group>

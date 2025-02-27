@@ -238,7 +238,7 @@ export function AppointmentRowItem({
             {
                 showDelete && (
                     <Tooltip label={t('delete')}>
-                        <ActionIcon className={`!mt-6`} onClick={() => removeMedicine()} variant={'transparent'}
+                        <ActionIcon className={`!mt-6`} onClick={() => removeMedicine(index)} variant={'transparent'}
                             c={theme.colors.red[6]}>
                             <Trash2 size={20} />
                         </ActionIcon>
