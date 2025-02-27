@@ -126,13 +126,13 @@ function AppointmentDetails() {
 
     return (
         <Container fluid className={`relative`}>
-            <Group py={20} className={`w-full flex items-center !justify-between`}>
-                <Title>{state?.patientName}</Title>
+            <Group py={5} className={`w-full flex items-center !justify-between`}>
+                <Title size={'lg'}>{state?.patientName}</Title>
                 <Text className={`flex items-center`} size={"sm"}
                     opacity={0.8}>{t('appointmentDate')}:&nbsp;{dayjs(state?.appointmentDate).format('DD-MM-YYYY')}</Text>
             </Group>
             <Divider className="w-full" />
-            <Stack gap={0} className={`max-h-[calc(100vh-300px)] overflow-y-auto`}>
+            <Stack gap={0} className={`lg:max-h-[calc(100vh-230px)] xl:max-h-[calc(100vh-230px)] overflow-y-auto`}>
                 <Group pt={20} className={`w-full px-4 flex items-center !justify-between`}>
                     <Group className={`w-full flex items-center !justify-between`}>
                         <Text opacity={0.6}>Medications:</Text>
@@ -140,7 +140,7 @@ function AppointmentDetails() {
                             <Plus size={16} className={`mr-1`} /> {t('medicine')}
                         </Button>
                     </Group>
-                    <Stack w={'100%'} py={10} mah={250} className='overflow-auto'>
+                    <Stack w={'100%'} py={10} mah={200} className='overflow-auto'>
                         {
                             medicineList.map((field, index) => <AppointmentRowItem key={index} state={state}
                                 selectedMedicines={selectedMedicines}

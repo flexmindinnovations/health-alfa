@@ -92,14 +92,14 @@ export function Layout() {
 
     return (
         <AppShell
-            header={{ height: 60 }}
+            header={{ height: 50 }}
             navbar={{
                 width: 250,
                 breakpoint: 'sm',
                 collapsed: { mobile: !opened }
             }}
             styles={{ main: { height: '100vh', display: 'flex', flexDirection: 'column' } }}
-            padding='md'
+            padding='sm'
             layout='alt'
             pl={0}
         >
@@ -128,12 +128,21 @@ export function Layout() {
                             to={`/app${MENU_ITEMS[0].route}`}
                             className={`flex items-center py-2 px-6 text-sm gap-2 lg:gap-4 xl:gap-4 2xl:gap-4 !font-medium`}
                         >
-                            <AspectRatio ratio={16 / 9} maw={100} mx='auto'>
+                            <AspectRatio ratio={16 / 9} maw={'100px'}
+                            h={'80px'}  mx='auto'>
                                 <Image
                                     src={logo}
                                     alt='logo'
                                     className='!object-fill'
-                                    width='100%'
+                                    width='100px'
+                                    height={'80px'}
+                                    styles={{
+                                        root: {
+                                            height: '80px',
+                                            width: '100px',
+                                            objectFit: 'fill'
+                                        }
+                                    }}
                                 />
                             </AspectRatio>
                         </Link>

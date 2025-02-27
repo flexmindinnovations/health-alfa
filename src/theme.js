@@ -1,4 +1,4 @@
-import {createTheme, Loader} from '@mantine/core';
+import { createTheme, Loader } from '@mantine/core';
 import RingLoader from '@components/RingLoader'
 
 const defaultSize = '12px';
@@ -7,28 +7,60 @@ const defaultRadiusTextArea = 'lg';
 
 export const theme = createTheme({
     fontFamily: `'Poppins', sans-serif`,
-    headings: {fontFamily: `'Poppins', sans-serif`},
+    headings: { fontFamily: `'Poppins', sans-serif` },
     colors: {
         brand: [
-            '#effafc', '#d6f1f7', '#b2e4ef', '#7dcee3', '#41b0cf',
-            '#2594b5', '#227798', '#22617c', '#245066', '#224557', '#143345'
+            "#e4fdfe",
+            "#d5f5f7",
+            "#aee9ed",
+            "#84dde2",
+            "#62d2d9",
+            "#4cccd3",
+            "#3cc9d1",
+            "#2ab1b9",
+            "#169ea5",
+            "#008990"
         ],
         primary: [
-            '#fff9ea', '#ffeec5', '#ffdc86', '#ffc346', '#ffab1c',
-            '#f17e01', '#e16000', '#bb3e02', '#973009', '#7c280b', '#481100'
+            "#FAE4F9", "#F8D8F5", "#F6C6F0", "#F3B3EB", "#F1A1E6",
+            "#EE8EE1", "#EB7BDC", "#E867D6", "#E554D1", "#E240CC"
         ],
         secondary: [
-            '#e6f0ff', '#cce0ff', '#99c2ff', '#66a3ff', '#3385ff',
-            '#0066ff', '#0059e6', '#004dcc', '#0040b3', '#003399'
-        ]
+            "#E3EDF2",
+            "#C7D9E3",
+            "#AAC4D5",
+            "#8EAFC7",
+            "#719AB9",
+            "#5585AA",
+            "#3F6B8B",
+            "#2D5068",
+            "#1E3A4D",
+            "#143345"
+        ],
+        error: [
+            "#F7D3D3", "#F5C6C6", "#F3B9B9", "#F2ACAC", "#F09F9F",
+            "#EE9292", "#EC8585", "#EA7878", "#E86B6B", "#E65E5E"
+        ],
+        info: [
+            "#D6F1F8", "#C5EBF5", "#B4E5F2", "#A3DFEF", "#92D9EC",
+            "#81D3E9", "#70CDE6", "#5FC7E3", "#4EC1E0", "#3DBBDC"
+        ],
+        warning: [
+            "#FAE2C0", "#F8D9B0", "#F7D0A0", "#F5C790", "#F3BE80",
+            "#F2B570", "#F0AC60", "#EEA350", "#EC9A40", "#EA9130"
+        ],
+        success: [
+            "#D8F3A4", "#C8EE92", "#B8E980", "#A8E46E", "#98DF5C",
+            "#88DA4A", "#78D538", "#68D026", "#58CB14", "#48C600"
+        ],
     },
-    primaryColor: 'brand',
+    primaryColor: 'secondary',
     primaryShade: 9,
     defaultRadius,
     components: {
         Loader: Loader.extend({
             defaultProps: {
-                loaders: {...Loader.defaultLoaders, ring: RingLoader},
+                loaders: { ...Loader.defaultLoaders, ring: RingLoader },
                 type: 'ring',
                 size: 'xl'
             }
@@ -171,7 +203,7 @@ export const theme = createTheme({
         Button: {
             defaultProps: {
                 radius: 'xl',
-                loaderProps: {h: '48px', w: '48px'}
+                loaderProps: { h: '48px', w: '48px' }
             },
         },
         Tooltip: {
