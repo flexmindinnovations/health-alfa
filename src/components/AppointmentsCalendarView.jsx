@@ -151,15 +151,16 @@ export function AppointmentsCalendarView({
         setViewTitle();
     }
     const handleNavigationChange = (direction) => {
+        const calendarApi = calendarRef.current?.getApi();
         switch (direction) {
             case 'next':
-                calendarApi.next();
+                calendarApi?.next();
                 break;
             case 'prev':
-                calendarApi.prev();
+                calendarApi?.prev();
                 break;
             case 'today':
-                calendarApi.today();
+                calendarApi?.today();
                 break;
         }
         setViewTitle();

@@ -9,49 +9,50 @@ import {
     Tooltip,
     useMantineTheme
 } from "@mantine/core";
-import {useTranslation} from "react-i18next";
-import {useApiConfig} from "@contexts/ApiConfigContext.jsx";
-import {useDocumentTitle} from "@hooks/DocumentTitle.jsx";
-import {useEffect, useMemo, useRef, useState} from "react";
-import {DoctorCard} from "@components/DoctorCard.jsx";
-import {BookAppointments} from "@components/BookAppointment.jsx";
-import {useModal} from "@hooks/AddEditModal.jsx";
-import {useEncrypt} from "@hooks/EncryptData.jsx";
-import {AppointmentCard} from "@components/AppointmentCard.jsx";
-import {openNotificationWithSound} from "@config/Notifications.js";
+import { useTranslation } from "react-i18next";
+import { useApiConfig } from "@contexts/ApiConfigContext.jsx";
+import { useDocumentTitle } from "@hooks/DocumentTitle.jsx";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { DoctorCard } from "@components/DoctorCard.jsx";
+import { BookAppointments } from "@components/BookAppointment.jsx";
+import { useModal } from "@hooks/AddEditModal.jsx";
+import { useEncrypt } from "@hooks/EncryptData.jsx";
+import { AppointmentCard } from "@components/AppointmentCard.jsx";
+import { openNotificationWithSound } from "@config/Notifications.js";
 import useHttp from "@hooks/AxiosInstance.jsx";
-import {AppointmentDetails} from "@components/AppointmentDetails.jsx";
-import {CalendarRange, LayoutGrid, SearchIcon} from "lucide-react";
-import {motion} from "framer-motion";
-import {AppointmentsCalendarView} from "@components/AppointmentsCalendarView.jsx";
-import {useLocation} from "react-router-dom";
-import {UploadPrescription} from "@components/UploadPrescription.jsx";
-import {AppointmentFilter} from "@components/AppointmentFilter.jsx";
-import {utils} from "@config/utils.js";
+import { AppointmentDetails } from "@components/AppointmentDetails.jsx";
+import { CalendarRange, LayoutGrid, SearchIcon } from "lucide-react";
+import { motion } from "framer-motion";
+import { AppointmentsCalendarView } from "@components/AppointmentsCalendarView.jsx";
+import { useLocation, useNavigate } from "react-router-dom";
+import { UploadPrescription } from "@components/UploadPrescription.jsx";
+import { AppointmentFilter } from "@components/AppointmentFilter.jsx";
+import { utils } from "@config/utils.js";
 
 export default function Appointments() {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     useDocumentTitle(t("appointment"));
     const [dataSource, setDataSource] = useState([]);
     const [filteredDataSource, setFilteredDataSource] = useState(dataSource);
-    const {apiConfig} = useApiConfig();
+    const { apiConfig } = useApiConfig();
     const [loading, setLoading] = useState(true);
     const [view, setView] = useState('card');
-    const {openModal} = useModal();
-    const {getEncryptedData} = useEncrypt();
+    const { openModal } = useModal();
+    const { getEncryptedData } = useEncrypt();
     const theme = useMantineTheme();
     const http = useHttp();
     const [userType, setUserType] = useState('admin');
     const searchInputRef = useRef(null);
     const [searchText, setSearchText] = useState('');
     const location = useLocation();
+    const navigate = useNavigate();
     const segmentedItems = [
         {
             value: 'card',
             label: (
-                <Center style={{gap: 10}}>
+                <Center style={{ gap: 10 }}>
                     <Tooltip label={t('card')}>
-                        <LayoutGrid size={16}/>
+                        <LayoutGrid size={16} />
                     </Tooltip>
                 </Center>
             ),
@@ -60,9 +61,9 @@ export default function Appointments() {
             value: 'timeline',
             disabled: userType !== 'doctor',
             label: (
-                <Center style={{gap: 10}}>
+                <Center style={{ gap: 10 }}>
                     <Tooltip label={t('timeline')}>
-                        <CalendarRange size={16}/>
+                        <CalendarRange size={16} />
                     </Tooltip>
                 </Center>
             ),
@@ -106,14 +107,14 @@ export default function Appointments() {
             }
         } catch (err) {
             setDataSource([]);
-            const {name, message} = err;
+            const { name, message } = err;
             openNotificationWithSound(
                 {
                     title: name || "Error",
                     message: message || "An unexpected error occurred.",
                     color: theme.colors.red[6],
                 },
-                {withSound: false}
+                { withSound: false }
             );
         } finally {
             setLoading(false);
@@ -140,29 +141,30 @@ export default function Appointments() {
     }
     const doctorCard = (row) => (
         <DoctorCard onClick={(data, rect) => handleCardClick(data, rect)}
-                    data={row}
-                    layoutId={`card-${row.doctorId}`}
-                    isDetailsCard={false}
-                    loading={loading}/>
+            data={row}
+            layoutId={`card-${row.doctorId}`}
+            isDetailsCard={false}
+            loading={loading} />
     )
     const appointmentCard = (row) => (
         <AppointmentCard onClick={(data, rect) => handleCardClick(data, rect)}
-                         data={row}
-                         layoutId={`card-${row.doctorId}`}
-                         isDetailsCard={false}
-                         loading={loading}/>
+            data={row}
+            layoutId={`card-${row.doctorId}`}
+            isDetailsCard={false}
+            loading={loading} />
     )
 
     const getGridLayout = () => {
         const role = getEncryptedData('roles')?.toLocaleLowerCase();
-        let gridLayout = 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2';
+        let gridLayout = 'grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3';
         switch (role) {
             case 'doctor':
-                gridLayout = 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4';
+                gridLayout = 'grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4';
                 break;
             case 'patient':
             case 'client':
-                gridLayout = 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2';
+            case 'user':
+                gridLayout = 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3';
                 break;
             case 'admin':
                 gridLayout = 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2';
@@ -191,7 +193,12 @@ export default function Appointments() {
     }
 
     const handleCardClick = (data, rect) => {
-        openAddEditModal(data, rect);
+        const role = getEncryptedData('roles')?.toLocaleLowerCase();
+        if (role !== 'doctor') {
+            openAddEditModal(data, rect);
+        } else {
+            navigate(`/app/appointments/details/${data.appointmentId}`, { state: { data } })
+        }
     };
 
     const openAddEditModal = (data, rect) => {
@@ -238,7 +245,7 @@ export default function Appointments() {
 
     const dropdownDataFilter = useMemo(() => {
         return (filters) => {
-            const {qualification, speciality, gender} = filters;
+            const { qualification, speciality, gender } = filters;
             const filteredData = dataSource.filter((item) => {
                 const matchesQualification = qualification
                     ? item.qualification.includes(qualification)
@@ -261,7 +268,7 @@ export default function Appointments() {
     };
 
     const handleFilterTextChange = (event) => {
-        const {value} = event.target;
+        const { value } = event.target;
         setSearchText(value);
         filterData(value);
     }
@@ -282,7 +289,7 @@ export default function Appointments() {
     return (
         <div className="h-full w-full relative !overflow-hidden flex items-center justify-center">
             {loading ? (
-                <Loader/>
+                <Loader />
             ) : (
                 <Container fluid styles={{
                     root: {
@@ -297,11 +304,11 @@ export default function Appointments() {
                                         placeholder={t('search')}
                                         ref={searchInputRef}
                                         value={searchText}
-                                        leftSection={<SearchIcon size={16}/>}
+                                        leftSection={<SearchIcon size={16} />}
                                         onInput={handleFilterTextChange}
                                         rightSection={
                                             searchText &&
-                                            <ComboboxClearButton onClear={() => handleClearInput()}/>
+                                            <ComboboxClearButton onClear={() => handleClearInput()} />
                                         }
                                         className={'w-full md:w-96 lg:w-96 xl:w-96'}
                                     />
@@ -321,27 +328,29 @@ export default function Appointments() {
                     </Group>
                     {
                         view === 'timeline' ? (
-                                <motion.div className={`w-full`}>
-                                    <AppointmentsCalendarView
-                                        events={dataSource}
-                                        loading={loading}
-                                        handleEventClick={handleEventClick}
-                                        handleDateClick={handleDateClick}
-                                    />
-                                </motion.div>
-                            )
+                            <motion.div className={`w-full`}>
+                                <AppointmentsCalendarView
+                                    events={dataSource}
+                                    loading={loading}
+                                    handleEventClick={handleEventClick}
+                                    handleDateClick={handleDateClick}
+                                />
+                            </motion.div>
+                        )
                             :
                             (
                                 <div>
-                                    <AppointmentFilter onFilterChange={handleFilterChange}/>
+                                    {userType !== 'doctor' && (
+                                        <AppointmentFilter onFilterChange={handleFilterChange} />
+                                    )}
                                     <motion.div
                                         variants={utils.parentVariants}
                                         initial={'hidden'}
                                         animate={'visible'}
                                         className={`mt-4 ${getGridLayout()}`}>
                                         {filteredDataSource.map((row, index) => (
-                                            <motion.div whileTap={{y: 10}} variants={utils.childVariants}
-                                                        key={row.doctorId + index}>
+                                            <motion.div variants={utils.childVariants}
+                                                key={row.doctorId + index}>
                                                 {getUserCard(row)}
                                             </motion.div>
                                         ))}

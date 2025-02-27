@@ -16,5 +16,11 @@ export const utils = {
             x: 0,
             transition: {type: "spring", stiffness: 150, damping: 20}
         },
+    },
+    truncateText: (text, maxLength) => {
+        if (text.length <= maxLength) {
+            return text;
+        }
+        return text.substring(0, maxLength) + '...';
     }
 }

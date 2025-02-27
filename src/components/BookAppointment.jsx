@@ -180,6 +180,8 @@ export function BookAppointments({
                     })
                     .filter((value, index, self) => self.findIndex((t) => t.key === value.key) === index);
                 setSlotTypes(_slotTypes);
+                const activeSlot = _slotTypes?.length ? _slotTypes[0].value : null;
+                setActiveSlotType(activeSlot);
                 setDoctorAvailability(updatedData);
                 setLoading(false);
             }
@@ -271,7 +273,6 @@ export function BookAppointments({
 
     const onTabChange = (tab) => {
         setActiveTab(tab);
-        const activeSlot = slotTypes?.length ? slotTypes[0].value : null;
         setActiveSlotType(null);
         setAreSlotsRendered(false);
         onCardClick(null);
@@ -367,7 +368,7 @@ export function BookAppointments({
                                                     ?.map((slot) => (
                                                         <motion.div key={slot.id}
                                                                     variants={utils.childVariants}
-                                                                    whileTap={{y: 5}}
+                                                                    whileTap={slot.isBooked ? {y: 0} : {y: 3}}
                                                                     className={`p-0 h-10`}
                                                         >
                                                             <SlotCard

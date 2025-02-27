@@ -1,6 +1,6 @@
-import {createContext, useContext} from 'react'
-import {useDirection} from '@mantine/core'
-import {useTranslation} from 'react-i18next'
+import { createContext, useContext } from 'react'
+import { useDirection } from '@mantine/core'
+import { useTranslation } from 'react-i18next'
 
 const defaultApiConfig = {
     appConfig: {
@@ -37,9 +37,10 @@ const defaultApiConfig = {
     },
     patientVisits: {
         getList: `/PatientVisit/GetPatientVisitList`,
-        getPatientVisitInfoByVisitId: (id) => `/api/PatientVisit/getPatientVisitInfoByVisitId/${id}`,
+        getPatientVisitInfoByVisitId: (id) => `/PatientVisit/getPatientVisitInfoByVisitId/${id}`,
+        getPatientVisitListDoctorWise: (doctorId) => `/PatientVisit/getPatientVisitListDoctorWise/${doctorId}`,
         savePatientVisit: `/PatientVisit/SavePatientVisit`,
-        updatePatientVisit: (visitId) => `/api/PatientVisit/updatePatientVisit/${visitId}`
+        updatePatientVisit: (visitId) => `/PatientVisit/updatePatientVisit/${visitId}`
     },
     testTypes: {
         getList: `/TestType/getTestTypeList`
@@ -57,7 +58,26 @@ const defaultApiConfig = {
         getAppointmentListByPatientIdId: (patientId) => `/Appointment/GetAppointmentListByPatientIdWise/${patientId}`,
         getAppointmentListByDoctorId: (doctorId) => `/Appointment/GetAppointmentListByDoctorIdWise/${doctorId}`,
         bookAppointment: `/Appointment/BookAppointment`,
-    }
+    },
+    medicine: {
+        getList: (pageNumber = 1, pageSize = 10, query = '') => `/Medicine/getMedicineList?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${query}`,
+        getMedicineListByType: (
+            medicineType,
+            pageNumber,
+            pageSize,
+            searchTerm
+        ) =>
+            `/Medicine/getMedicineListByType/${medicineType}?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${searchTerm}`,
+    },
+    medicineType: {
+        getList: `/MedicineType/GetMedicineTypeList`,
+    },
+    prescription: {
+        savePrescription: `/DoctorPrescription/saveDoctorPrescription`
+    },
+    doctorPrescription: {
+        saveDoctorPrescription: `/DoctorPrescription/saveDoctorPrescription`,
+    },
 }
 
 const ApiConfigContext = createContext({
@@ -66,9 +86,9 @@ const ApiConfigContext = createContext({
     }
 })
 
-export const ApiConfigProvider = ({children}) => {
-    const {setDirection} = useDirection()
-    const {i18n} = useTranslation()
+export const ApiConfigProvider = ({ children }) => {
+    const { setDirection } = useDirection()
+    const { i18n } = useTranslation()
 
     const setPreferences = () => {
         let dir = localStorage.getItem('dir')
@@ -88,7 +108,7 @@ export const ApiConfigProvider = ({children}) => {
 
     return (
         <ApiConfigContext.Provider
-            value={{apiConfig: defaultApiConfig, setPreferences}}
+            value={{ apiConfig: defaultApiConfig, setPreferences }}
         >
             {children}
         </ApiConfigContext.Provider>

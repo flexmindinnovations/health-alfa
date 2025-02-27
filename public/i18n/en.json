@@ -143,5 +143,13 @@
   "prescription": "Prescription",
   "uploadPrescription": "Upload Prescription",
   "filter": "Filter",
-  "resetFilters": "Reset Filters"
+  "resetFilters": "Reset Filters",
+  "searching": "Searching...",
+  "medicine": "Medicine",
+  "dosage": "Dosage",
+  "quantity": "Quantity",
+  "diagnosis": "Diagnosis",
+  "medicineType": "Medicine Type",
+  "doctorSuggestion": "Doctor Suggestion",
+  "searchValue": "Search value"
 }

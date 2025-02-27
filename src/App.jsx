@@ -29,6 +29,7 @@ const ContactUs = lazy(() => import('@pages/ContactUs'));
 const Availability = lazy(() => import('@dashboard/Availability.jsx'));
 const Roles = lazy(() => import('@dashboard/Roles.jsx'));
 const Appointments = lazy(() => import('@dashboard/Appointments.jsx'));
+const AppointmentDetails = lazy(() => import('@dashboard/AppointmentDetails'));
 
 function App() {
     const {setDirection} = useDirection();
@@ -54,6 +55,7 @@ function App() {
                     <Route path='patients' element={<PatientVisits/>}/>
                     <Route path='roles' element={<Roles/>}/>
                     <Route path='appointments' element={<Appointments/>}/>
+                    <Route path='appointments/details/:appointmentId' element={<AppointmentDetails/>}/>
                     <Route path='prescription' element={<Appointments/>}/>
                     <Route path='tests' element={<TestTypes/>}/>
                     <Route path='documents' element={<Documents/>}/>
