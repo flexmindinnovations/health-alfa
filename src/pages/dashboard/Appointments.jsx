@@ -24,7 +24,7 @@ import { AppointmentDetails } from "@components/AppointmentDetails.jsx";
 import { CalendarRange, LayoutGrid, SearchIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { AppointmentsCalendarView } from "@components/AppointmentsCalendarView.jsx";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { UploadPrescription } from "@components/UploadPrescription.jsx";
 import { AppointmentFilter } from "@components/AppointmentFilter.jsx";
 import { utils } from "@config/utils.js";
@@ -37,7 +37,7 @@ export default function Appointments() {
   const { apiConfig } = useApiConfig();
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState("card");
-  const { openModal, closeModal } = useModal();
+  const { openModal } = useModal();
   const { getEncryptedData } = useEncrypt();
   const theme = useMantineTheme();
   const http = useHttp();
@@ -45,6 +45,7 @@ export default function Appointments() {
   const searchInputRef = useRef(null);
   const [searchText, setSearchText] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
   const segmentedItems = [
     {
       value: "card",
@@ -160,16 +161,17 @@ export default function Appointments() {
   const getGridLayout = () => {
     const role = getEncryptedData("roles")?.toLocaleLowerCase();
     let gridLayout =
-      "grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2";
+      "grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3";
     switch (role) {
       case "doctor":
         gridLayout =
-          "grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4";
+          "grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4";
         break;
       case "patient":
       case "client":
+      case "user":
         gridLayout =
-          "grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2";
+          "grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3";
         break;
       case "admin":
         gridLayout =
@@ -205,7 +207,14 @@ export default function Appointments() {
   };
 
   const handleCardClick = (data, rect) => {
-    openAddEditModal(data, rect);
+    const role = getEncryptedData("roles")?.toLocaleLowerCase();
+    if (role !== "doctor") {
+      openAddEditModal(data, rect);
+    } else {
+      navigate(`/app/appointments/details/${data.appointmentId}`, {
+        state: { data },
+      });
+    }
   };
 
   const openAddEditModal = (data, rect) => {
@@ -214,8 +223,6 @@ export default function Appointments() {
       data: {
         ...data,
         initialRect: rect,
-        onClose: closeModal,
-        refreshList: getAppointmentList,
       },
       props: `min-h-[630px]`,
       size: "xl",
@@ -345,7 +352,9 @@ export default function Appointments() {
             </motion.div>
           ) : (
             <div>
-              <AppointmentFilter onFilterChange={handleFilterChange} />
+              {userType !== "doctor" && (
+                <AppointmentFilter onFilterChange={handleFilterChange} />
+              )}
               <motion.div
                 variants={utils.parentVariants}
                 initial={"hidden"}
@@ -354,7 +363,6 @@ export default function Appointments() {
               >
                 {filteredDataSource.map((row, index) => (
                   <motion.div
-                    whileTap={{ y: 10 }}
                     variants={utils.childVariants}
                     key={row.doctorId + index}
                   >

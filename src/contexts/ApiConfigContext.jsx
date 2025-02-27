@@ -44,10 +44,12 @@ const defaultApiConfig = {
   patientVisits: {
     getList: `/PatientVisit/GetPatientVisitList`,
     getPatientVisitInfoByVisitId: (id) =>
-      `/api/PatientVisit/getPatientVisitInfoByVisitId/${id}`,
+      `/PatientVisit/getPatientVisitInfoByVisitId/${id}`,
+    getPatientVisitListDoctorWise: (doctorId) =>
+      `/PatientVisit/getPatientVisitListDoctorWise/${doctorId}`,
     savePatientVisit: `/PatientVisit/SavePatientVisit`,
     updatePatientVisit: (visitId) =>
-      `/api/PatientVisit/updatePatientVisit/${visitId}`,
+      `/PatientVisit/updatePatientVisit/${visitId}`,
   },
   testTypes: {
     getList: `/TestType/getTestTypeList`,
@@ -71,20 +73,18 @@ const defaultApiConfig = {
     bookAppointment: `/Appointment/BookAppointment`,
   },
   medicine: {
-    getMedicineList: (pageNumber, pageSize, searchTerm) =>
-      `/Medicine/getMedicineList?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${searchTerm}`,
-    getMedicineListByType: (
-      getMedicineListByType,
-      pageNumber,
-      pageSize,
-      searchTerm
-    ) =>
-      `/Medicine/getMedicineListByType/${getMedicineListByType}?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${searchTerm}`,
+    getList: (pageNumber = 1, pageSize = 10, query = "") =>
+      `/Medicine/getMedicineList?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${query}`,
+    getMedicineListByType: (medicineType, pageNumber, pageSize, searchTerm) =>
+      `/Medicine/getMedicineListByType/${medicineType}?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${searchTerm}`,
   },
   medicineType: {
     getList: `/MedicineType/GetMedicineTypeList`,
   },
-  DoctorPrescription: {
+  prescription: {
+    savePrescription: `/DoctorPrescription/saveDoctorPrescription`,
+  },
+  doctorPrescription: {
     saveDoctorPrescription: `/DoctorPrescription/saveDoctorPrescription`,
   },
 };

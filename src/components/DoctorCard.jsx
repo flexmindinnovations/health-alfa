@@ -67,21 +67,23 @@ export function DoctorCard({
                         <Loader/>) :
                     (
                         <motion.div
+                            layout
                             ref={cardRef}
-                            className={`p-0 relative cursor-pointer }`}
+                            whileTap={{y: 5}}
+                            className={`p-0 relative w-full cursor-pointer overflow-auto rounded-2xl`}
                             onClick={handleClick}
                         >
                             {isDetailsCard && <CloseButton
                                 onClick={handleCloseModal}
                                 className="!absolute !top-2 !right-2 text-gray-500 hover:text-gray-700"
                             />}
-                            <Card shadow={"lg"} withBorder>
+                            <Card shadow={"none"} withBorder>
                                 <Stack>
                                     <Group align={'center'} justify={'start'} gap={40}>
                                         <Avatar size={"lg"} radius={"xl"} src={profileImage}/>
                                         <Stack gap={5}>
                                             <Title size={'md'}>{data?.doctorName}</Title>
-                                            <Group>
+                                            <Stack>
                                                 <Group gap={0}>
                                                     <Smartphone size={14}/>:&nbsp;
                                                     <Text size={"sm"}>{formatMobileNumber(data?.mobileNo)}</Text>
@@ -93,7 +95,7 @@ export function DoctorCard({
                                                         <Text size={"sm"}>{data?.emailId}</Text>
                                                     </Group>
                                                 }
-                                            </Group>
+                                            </Stack>
                                         </Stack>
                                     </Group>
                                     <Stack gap={5}>
@@ -109,7 +111,7 @@ export function DoctorCard({
                                             <Text size={"xs"}>{t('speciality')}:</Text>
                                             <Tooltip label={stringFormatting(data?.speciality)}>
                                                 <Text
-                                                    size={"xs"}>{truncateText(stringFormatting(data?.speciality), 60)}</Text>
+                                                    size={"xs"}>{truncateText(stringFormatting(data?.speciality), 40)}</Text>
                                             </Tooltip>
                                         </Group>
                                         <Group gap={10}>

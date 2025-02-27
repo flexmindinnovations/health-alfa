@@ -7,7 +7,6 @@ import {useApiConfig} from '@contexts/ApiConfigContext.jsx'
 import dayjs from 'dayjs';
 import {useListManager} from "@hooks/ListManager.jsx";
 import {useModal} from "@hooks/AddEditModal.jsx";
-import {AddEditDocument} from "@modals/AddEditDocument.jsx";
 import {AddEditClient} from "@modals/AddEditClient.jsx";
 
 export default function Users() {

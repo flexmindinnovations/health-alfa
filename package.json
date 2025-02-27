@@ -38,6 +38,7 @@
     "i18next-http-backend": "^2.6.2",
     "lenis": "^1.1.18",
     "libphonenumber-js": "^1.11.14",
+    "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.454.0",
     "mantine-datatable": "^7.12.4",

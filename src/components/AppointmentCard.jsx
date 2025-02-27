@@ -1,21 +1,22 @@
-import {Card, CloseButton, Group, Loader, Stack, Text, Title, Tooltip, useMantineTheme} from "@mantine/core";
-import {motion} from "framer-motion";
-import {useRef, useState} from "react";
-import {useTranslation} from "react-i18next";
+import { Card, CloseButton, Group, Loader, Stack, Text, Title, Tooltip, useMantineTheme } from "@mantine/core";
+import { motion } from "framer-motion";
+import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
-import {Info} from "lucide-react";
+import { Info } from "lucide-react";
+import { utils } from "@config/utils";
 
 export function AppointmentCard({
-                                    data = {},
-                                    loading = false,
-                                    handleCloseModal,
-                                    isDetailsCard = false,
-                                    onClick,
-                                    layoutId,
-                                } = {}) {
+    data = {},
+    loading = false,
+    handleCloseModal,
+    isDetailsCard = false,
+    onClick,
+    layoutId,
+} = {}) {
 
     const [profileImage, setProfileImage] = useState(null);
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const cardRef = useRef(null);
     const [isOpen, setIsOpen] = useState(handleCloseModal);
     const theme = useMantineTheme();
@@ -33,34 +34,38 @@ export function AppointmentCard({
             {
                 loading ?
                     (
-                        <Loader/>) :
+                        <Loader />) :
                     (
                         <motion.div
                             ref={cardRef}
-                            className={`p-0 relative cursor-pointer }`}
+                            className={`p-0 relative cursor-pointer appointment-card`}
                             onClick={handleClick}
                         >
                             {isDetailsCard && <CloseButton
                                 onClick={handleCloseModal}
                                 className="!absolute !top-2 !right-2 text-gray-500 hover:text-gray-700"
                             />}
-                            <Card shadow={"lg"} withBorder>
+                            <Card shadow={"lg"} withBorder  className="!relative">
                                 <Stack>
                                     <Group align={'center'} justify={'space-between'} gap={40}>
                                         <Title size={'md'} className={`flex items-center justify-center gap-0.5`}>
                                             <Tooltip label={t('patientName')}>
                                                 <Info size={16}
-                                                      color={theme.colorScheme === 'dark' ? 'gray' : theme.colors.brand[9]}/>
+                                                    color={theme.colorScheme === 'dark' ? 'gray' : theme.colors.brand[9]} />
                                             </Tooltip> &nbsp;
-                                            {data?.patientName}
+                                            <Tooltip label={data?.patientName}>
+                                                <p>
+                                                {utils.truncateText(data?.patientName, 12)}
+                                                </p>
+                                            </Tooltip>
                                         </Title>
                                         <Card
                                             px={10}
                                             py={5}
-                                            radius={"xl"}
                                             withBorder
                                             shadow={"lg"}
                                             bg={data?.appointmentStatus === 'Pending' ? 'yellow' : 'green'}
+                                            className={`!absolute top-0 right-0`}
                                         >
                                             <Text
                                                 fw={"bold"}
