@@ -7,7 +7,7 @@ import 'lenis/dist/lenis.css';
 import HealthRecordImage from '../assets/images/services/health-record.png';
 import EmergencyImage from '../assets/images/services/emergency.png';
 import MultilingleImage from '../assets/images/services/multilingle.png';
-import FamilyImage from '../assets/images/services/family.jpg';
+import FamilyImage from '../assets/images/services/family.png';
 import FindDoctorsImage from '../assets/images/services/find-doctors.png';
 import PersonalHealthImage from '../assets/images/services/personal-health.png';
 
