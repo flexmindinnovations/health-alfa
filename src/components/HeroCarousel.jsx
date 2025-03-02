@@ -67,10 +67,10 @@ export function HeroCarousel() {
           enabled: true,
           onlyInViewport: true,
         }}
-        // autoplay={{
-        //   delay: 5000,
-        //   disableOnInteraction: false,
-        // }}
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
+        }}
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
         style={{ height: "100%", width: "100%", backgroundColor: "transparent", zIndex: 10 }}
       >
