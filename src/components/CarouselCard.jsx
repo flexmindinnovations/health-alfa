@@ -1,9 +1,9 @@
 import { Button, Paper, Text, Title } from '@mantine/core';
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import classes from '@styles/card.module.css';
 
-export function CarouselCard({ image, title, category }) {
+export function CarouselCard({ image, title, category, isActive }) {
     const ref = useRef(null);
     const isInView = useInView(ref, { threshold: 0.5 });
 
@@ -26,28 +26,28 @@ export function CarouselCard({ image, title, category }) {
             ref={ref}
             shadow="md"
             radius={'none'}
+            className={`${classes.card} w-full bg-transparent`}
             style={{
-                backgroundImage: `url(${image})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center center',
                 position: 'relative',
-                overflow: 'hidden',
-                width: '100%'
+                backgroundImage: `url(${image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                clipPath: "polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%)",
+                borderRadius: "0 0 20px 20px"
             }}
-            className={`${classes.card}`}
         >
             <motion.div
                 initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
+                animate={isActive ? "visible" : "hidden"}
                 variants={fadeVariant}
                 className={`absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-r xl:bg-gradient-to-r 2xl:bg-gradient-to-r from-tb-950/95 via-tb-800/90 to-transparent`}
             ></motion.div>
             <div className="relative w-full h-full flex items-start justify-start lg:justify-center xl:justify-center 2x:justify-center flex-col gap-5 p-10 md:p-10 lg:p-20 xl:p-20 2xl:p-20">
                 <motion.div
                     initial="hidden"
-                    animate={isInView ? "visible" : "hidden"}
+                    animate={isActive ? "visible" : "hidden"}
                     variants={slideVariant}
-                    className="box flex items-start justify-center flex-col gap-5 max-w-2xl"
+                    className="box flex items-start justify-center flex-col gap-5 max-w-2xl absolute top-[40%] -translate-y-[40%]"
                 >
                     <Title order={1} size={1} className={classes.title}>
                         {title}

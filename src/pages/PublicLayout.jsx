@@ -1,18 +1,19 @@
-import {AppShell, AspectRatio, Burger, Button, Group, Image, UnstyledButton, useMantineTheme} from "@mantine/core";
-import {useDisclosure} from "@mantine/hooks";
-import {useAuth} from "@contexts/AuthContext";
-import {useTranslation} from "react-i18next";
-import {Link, Outlet, useLocation} from "react-router-dom";
+import { AppShell, AspectRatio, Burger, Button, Group, Image, UnstyledButton, useMantineTheme } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { useAuth } from "@contexts/AuthContext";
+import { useTranslation } from "react-i18next";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import styles from "@styles/layout.module.css";
-import {createElement, useEffect, useState} from "react";
-import {HeadsetIcon, HomeIcon, InfoIcon, LayoutDashboardIcon, LockIcon,} from "lucide-react";
-import logo from '/images/logo.png'
+import { createElement, useEffect, useState, useRef } from "react";
+import { HeadsetIcon, HomeIcon, InfoIcon, LayoutDashboardIcon, LockIcon, } from "lucide-react";
+import logo from '/images/logo.png';
+import { useScroll, useSpring, motion } from 'framer-motion';
 
 // Menu Links
 const links = [
-    {link: "/", label: "Home", icon: HomeIcon, key: "home"},
-    {link: "/about-us", label: "About", icon: InfoIcon, key: "aboutUs"},
-    {link: "/contact-us", label: "Contact", icon: HeadsetIcon, key: "contactUs"},
+    { link: "/", label: "Home", icon: HomeIcon, key: "home" },
+    { link: "/about-us", label: "About", icon: InfoIcon, key: "aboutUs" },
+    { link: "/contact-us", label: "Contact", icon: HeadsetIcon, key: "contactUs" },
 ];
 
 // Auth Items
@@ -32,13 +33,16 @@ const authItems = [
 ];
 
 export default function PublicLayout() {
-    const [opened, {toggle}] = useDisclosure();
-    const {t} = useTranslation();
+    const [opened, { toggle }] = useDisclosure();
+    const { t } = useTranslation();
     const [menuItems, setMenuItems] = useState([]);
     const [userMenuItems, setUserMenuItems] = useState(authItems);
-    const {pathname} = useLocation();
-    const {isAuthenticated} = useAuth();
+    const { pathname } = useLocation();
+    const { isAuthenticated } = useAuth();
     const theme = useMantineTheme();
+    const mainRef = useRef(null);
+    const { scrollY, scrollYProgress } = useScroll({ container: mainRef });
+    const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
         const updatedMenuItems = links.map((item) => ({
@@ -62,32 +66,47 @@ export default function PublicLayout() {
             active: item.key === menuItem.key,
         }));
         setMenuItems(updatedMenuItems);
-
-        // Collapse sidebar on mobile
         if (window.innerWidth < 768) toggle();
     };
 
+    useEffect(() => {
+        const updateScroll = () => {
+            const y = scrollY.get();
+            const currentViewPort = window.innerHeight - 105;
+            setScrolled(y > currentViewPort);
+        };
+        updateScroll();
+        const unsubscribe = scrollY.on("change", updateScroll);
+        return () => unsubscribe();
+    }, [scrollY]);
+
     return (
         <AppShell
-            header={{height: 80}}
             navbar={{
                 width: 300,
                 breakpoint: "sm",
-                collapsed: {desktop: true, mobile: !opened},
+                collapsed: { desktop: true, mobile: !opened },
             }}
             padding={0}
         >
-            {/* Header */}
-            <AppShell.Header>
+            <AppShell.Header
+                component={motion.header}
+                py={10}
+                style={{
+                    backgroundColor: scrolled ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.7)',
+                    margin: scrolled ? "0px" : "20px",
+                    borderRadius: scrolled ? "0px" : "20px",
+                    transition: "margin 0.3s ease-in-out, background-color 0.3s ease-in-out, border-radius 0.3s ease-in-out",
+                }}
+                className={`transition-colors duration-300 backdrop-blur-sm ${scrolled ? '' : '!border-none rounded-xl'}`}>
                 <Group h="100%" px="md">
-
                     <Burger
                         opened={opened}
                         onClick={toggle}
                         hiddenFrom="sm"
                         size="sm"
                     />
-                    <Group justify="space-between" style={{flex: 1}}>
+                    <Group justify="space-between" style={{ flex: 1 }}>
                         {/* Top Navbar Items */}
                         <div className="flex md:hidden"></div>
                         <Group>
@@ -105,13 +124,13 @@ export default function PublicLayout() {
                                     key={item.key}
                                     onClick={() => handleNavClick(item)}
                                     className={`${item.active ? styles.activeItem : styles.inactiveItem
-                                    } ${styles.publicNavbarItem}`}
+                                        } ${styles.publicNavbarItem}`}
                                 >
                                     <Link
                                         to={item.link}
                                         className="flex items-center py-2 px-4 text-sm gap-2 !font-medium"
                                     >
-                                        <span>{createElement(item.icon, {size: 16})}</span>
+                                        <span>{createElement(item.icon, { size: 16 })}</span>
                                         <span>{t(item.key)}</span>
                                     </Link>
                                 </UnstyledButton>
@@ -134,7 +153,7 @@ export default function PublicLayout() {
                                                 to={item.link}
                                                 className="flex items-center py-2 px-4 text-sm gap-2 !font-medium"
                                             >
-                                                <span>{createElement(item.icon, {size: 16})}</span>
+                                                <span>{createElement(item.icon, { size: 16 })}</span>
                                                 <span>{t(item.label)}</span>
                                             </Link>
                                         </Button>
@@ -153,13 +172,13 @@ export default function PublicLayout() {
                             key={item.key}
                             onClick={() => handleNavClick(item)}
                             className={`${item.active ? styles.activeItem : styles.inactiveItem
-                            } ${styles.navbarItem}`}
+                                } ${styles.navbarItem}`}
                         >
                             <Link
                                 to={item.link}
                                 className={`flex items-center py-2 px-6 text-sm gap-2 lg:gap-4 xl:gap-4 2xl:gap-4 !font-medium`}
                             >
-                                <span>{createElement(item.icon, {size: 16})}</span>
+                                <span>{createElement(item.icon, { size: 16 })}</span>
                                 <span>{t(item.key)}</span>
                             </Link>
                         </UnstyledButton>
@@ -168,8 +187,8 @@ export default function PublicLayout() {
             </AppShell.Navbar>
 
             {/* Main Content */}
-            <AppShell.Main>
-                <Outlet/>
+            <AppShell.Main ref={mainRef} style={{ overflowY: "auto", height: "100vh" }}>
+                <Outlet />
             </AppShell.Main>
         </AppShell>
     );
