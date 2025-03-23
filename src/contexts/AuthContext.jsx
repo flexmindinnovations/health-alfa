@@ -36,6 +36,31 @@ export const AuthProvider = ({ children }) => {
         if (role) setUserRole(role.toLowerCase());
     }, [userRole])
 
+    useEffect(() => {
+        const pathname = location.pathname.split('/')[1];
+        const publicPaths = ['login', 'register'];
+        if (!isAuthenticated() && !publicPaths.includes(pathname)) {
+            navigate('/');
+        }
+
+        const handleBackButton = (event) => {
+            if (!isAuthenticated() && !publicPaths.includes(pathname)) {
+                event.preventDefault();
+                navigate('/');
+            } else if (isAuthenticated() && publicPaths.includes(pathname)) {
+                event.preventDefault();
+                navigate('/');
+            }
+        };
+
+        window.history.pushState(null, "", window.location.href);
+        window.addEventListener("popstate", handleBackButton);
+
+        return () => {
+            window.removeEventListener("popstate", handleBackButton);
+        };
+    }, [location.pathname]);
+
     const fetchUserDetails = async () => {
         try {
             const userId = await getEncryptedData('user');

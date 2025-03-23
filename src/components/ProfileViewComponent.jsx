@@ -17,8 +17,6 @@ export function ProfileView({data = {}}) {
 
     const getProfileImagePath = () => {
         const userType = getEncryptedData('roles').toLowerCase();
-        console.log('data: ', data);
-        console.log('userType: ', userType);
         setUserType(userType);
         let path = '';
         switch (userType) {
@@ -78,7 +76,7 @@ export function ProfileView({data = {}}) {
     };
 
     const stringFormatting = (inputString) => {
-        inputString = inputString.trim();
+        inputString = inputString?.trim();
         if (inputString.includes(',')) {
             const inputStringArray = inputString.split(',').map(input => input.trim());
             if (inputStringArray.length > 1) {

@@ -50,7 +50,7 @@ const container = document.getElementById('root')
 const root = createRoot(container)
 
 root.render(
-    <StrictMode>
+    // <StrictMode>
         <BrowserRouter
             future={{
                 v7_startTransition: true,
@@ -71,5 +71,5 @@ root.render(
                 </ErrorBoundary>
             </DirectionProvider>
         </BrowserRouter>
-    </StrictMode>
+    // </StrictMode>
 )

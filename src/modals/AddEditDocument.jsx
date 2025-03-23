@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
-import {Button, CloseIcon, Container, Group, Loader, Stack, TextInput} from "@mantine/core";
+import {Button, CloseIcon, Container, Group, Loader, Stack, TextInput, useMantineTheme} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {z} from "zod";
 import {zodResolver} from "mantine-form-zod-resolver";
@@ -8,6 +8,7 @@ import {useTranslation} from "react-i18next";
 import {useApiConfig} from "@contexts/ApiConfigContext";
 import useHttp from "@hooks/AxiosInstance.jsx";
 import _ from "underscore";
+import {openNotificationWithSound} from "@config/Notifications.js";
 
 export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
     const {i18n, t} = useTranslation();
@@ -15,6 +16,7 @@ export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
     const [title, setTitle] = useState("");
     const {apiConfig} = useApiConfig();
     const http = useHttp();
+    const theme = useMantineTheme();
     const [disableFormField, setDisableFormField] = useState({
         documentNameEnglish: false,
         documentNameArabic: false
@@ -65,12 +67,29 @@ export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
         , []);
 
     const handleTextChange = (disabledKey, value, targetLanguage) => {
-        debouncedTranslateText(disabledKey, value, targetLanguage);
+        // debouncedTranslateText(disabledKey, value, targetLanguage);
     };
 
     const handleSubmit = async () => {
-        // setLoading(true);
-        onAddEdit();
+        setLoading(true);
+        try {
+            const payload = form.values;
+            const response = mode === 'add' ? await http.post(apiConfig.document.saveDocument, payload) : await http.put(apiConfig.document.updateDocument(data?.documentTypeId), payload);
+            if (response.status === 200) {
+                const data = response.data;
+                openNotificationWithSound({
+                    title: t('success'), message: data.message, color: theme.colors.brand[6]
+                }, {withSound: false})
+            }
+        } catch (error) {
+            const {data} = error.response;
+            openNotificationWithSound({
+                title: t('error'), message: data.message, color: theme.colors.red[6]
+            }, {withSound: false})
+        } finally {
+            setLoading(false);
+            handleCancel({refresh: true});
+        }
     };
 
     useEffect(() => {
@@ -91,20 +110,20 @@ export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
         setLoading(false);
     }, [mode, data, t, i18n.language, form.values]);
 
-    if (loading) {
-        return (
-            <Container
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100vh",
-                }}
-            >
-                <Loader/>
-            </Container>
-        );
-    }
+    // if (loading) {
+    //     return (
+    //         <Container
+    //             style={{
+    //                 display: "flex",
+    //                 justifyContent: "center",
+    //                 alignItems: "center",
+    //                 height: "100vh",
+    //             }}
+    //         >
+    //             <Loader/>
+    //         </Container>
+    //     );
+    // }
 
     return (
         // <ModalWrapper isOpen={open} toggle={handleOnClose} title={title} size="md">

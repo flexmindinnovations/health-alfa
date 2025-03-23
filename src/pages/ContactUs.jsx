@@ -18,28 +18,28 @@ export default function ContactUs() {
     const contactDetails = [
         {
             title: "General Inquiries",
-            email: "info@healthalpha.com",
+            email: "info@healthalpha.ae",
             icon: <Mail className="h-7 w-7 text-cPrimaryFilled"/>,
             description:
                 "For any general information about Health Alpha, our mission, services, or platform features, feel free to reach out. We're here to guide you in understanding how we simplify health management for everyone. Whether you're a new user exploring our platform or an organization seeking more details about our offerings, our team is happy to assist you.",
         },
         {
             title: "Customer Support",
-            email: "support@healthalpha.com",
+            email: "support@healthalpha.ae",
             icon: <MessageCircle className="h-7 w-7 text-cPrimaryFilled"/>,
             description:
                 "Facing issues with our app? Whether it’s account setup, troubleshooting, or feature-related questions, our dedicated support team is here to help you navigate seamlessly through Health Alpha.",
         },
         {
             title: "Feedback & Suggestions",
-            email: "feedback@healthalpha.com",
+            email: "feedback@healthalpha.ae",
             icon: <Edit3 className="h-7 w-7 text-cPrimaryFilled"/>,
             description:
                 "Your input matters! Share your feedback and suggestions to help us refine our platform, add new features, and ensure Health Alpha meets the needs of our users. We welcome all ideas, whether it's about improving user experience, adding new health-tracking features, or expanding our services. Together, let’s create a more user-friendly and innovative health management solution.",
         },
         {
             title: "Partnerships",
-            email: "partnerships@healthalpha.com",
+            email: "partnerships@healthalpha.ae",
             icon: <Handshake className="h-7 w-7 text-cPrimaryFilled"/>,
             description:
                 "Join us in creating meaningful collaborations! If you're a healthcare provider, organization, or innovator, connect with us to explore partnership opportunities aimed at improving healthcare accessibility.",

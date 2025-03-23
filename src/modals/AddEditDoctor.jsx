@@ -155,10 +155,12 @@ export function AddEditDoctor({data = {}, mode = 'add', showCancel = true, handl
     return (
         <motion.div initial={{opacity: 0, y: 50}} animate={{opacity: 1, y: 0}} exit={{opacity: 0, y: 50}}>
             <Box sx={{maxWidth: 900, margin: '0 auto'}}>
-                <motion.form onSubmit={form.onSubmit(handleSubmit)} initial={{opacity: 0}} animate={{opacity: 1}}
+                <motion.form
+                    className={`relative overflow-hidden h-[calc(100vh-240px)]`}
+                    onSubmit={form.onSubmit(handleSubmit)} initial={{opacity: 0}} animate={{opacity: 1}}
                              exit={{opacity: 0}}>
                     <Stack p={20}
-                           className="form-container flex-1 max-h-[450px] lg:max-h-[500px] xl:max-h-[500px] 2xl:max-h-[500px] overflow-hidden overflow-y-auto h-full mx-auto">
+                           className="form-container flex-1 max-h-[450px] lg:max-h-[500px] xl:max-h-[500px] 2xl:max-h-[500px] overflow-y-auto h-full mx-auto">
                         <Grid
                             gutter="md"
                         >
@@ -253,7 +255,9 @@ export function AddEditDoctor({data = {}, mode = 'add', showCancel = true, handl
                             </Grid.Col>
                         </Grid>
                     </Stack>
-                    <Group p={isSmallScreen ? 10 : 20}
+                    <Group
+                        className={`absolute bottom-0 py-2 w-full px-4 bg-white`}
+                        p={isSmallScreen ? 10 : 20}
                            position="right" justify='flex-end' px={isSmallScreen ? 0 : 20}>
                         {showCancel && <Button
                             disabled={disableForm}

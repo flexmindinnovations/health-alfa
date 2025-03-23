@@ -66,7 +66,6 @@ export function UserMenu({showHideSettingsModel}) {
     return (<div>
         {/*{!user && (!isAdmin || !isUser) ? <Skeleton circle width={40} height={40}/> :*/}
         {!user && (!isAdmin && !isUser) ? <Skeleton circle width={40} height={40}/> :
-
             <Menu shadow='md' width={250} radius='md' withArrow
                   arrowSize={15}
                   transitionProps={{

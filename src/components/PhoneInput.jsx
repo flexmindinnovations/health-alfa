@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Box, Text, TextInput, Transition, useMantineTheme, useMantineColorScheme} from '@mantine/core';
+import {Box, Text, TextInput, Transition, useMantineColorScheme, useMantineTheme} from '@mantine/core';
 import {parsePhoneNumberFromString} from 'libphonenumber-js';
 import Flag from 'react-world-flags';
 import {ComboBoxComponent as ComboBox} from '@components/ComboBox';
@@ -38,6 +38,7 @@ export function GlobalPhoneInput({
                                      props,
                                      labelProps,
                                      required = false,
+                                     isLoginWindow = false
                                  }) {
     const theme = useMantineTheme();
     const [countryList, setCountryList] = useState([]);
@@ -161,51 +162,53 @@ export function GlobalPhoneInput({
                     transition: 'border-color 0.2s ease',
                 }}
             >
-                {/* <Transition
-                    mounted={!isEmail}
-                    transition="fade-right"
-                    duration={100}
-                >
-                    {(styles) => (
-                        <div
-                            style={{
-                                ...styles,
-                                transform: `translateX(${!isEmail ? 0 : -30}px)`,
-                                transition: 'transform 0.3s ease',
-                                borderTopLeftRadius: theme.radius.md,
-                                borderBottomLeftRadius: theme.radius.md
-                            }}
-                        >
-                            <ComboBox
-                                withinPortal={true}
-                                minWidth={'320px'}
-                                left={'58%'}
-                                dataSource={countryList}
-                                defaultValue={selectedCountry}
-                                onValueChange={handleCountryChange}
-                                labelProps={labelProps}
-                                styles={{
-                                    dropdown: {
-                                        zIndex: 9999,
-                                        height: theme.spacing.md
-                                    },
-                                    input: {
-                                        border: 'none',
-                                        background: 'transparent',
-                                        minWidth: 110,
-                                        height: '42px',
-                                        maxHeight: 200
-                                    },
-                                    root: {
-                                        height: '42px',
-                                        background: 'transparent'
-                                    }
+                {
+                    isLoginWindow &&
+                    <Transition
+                        mounted={!isEmail}
+                        transition="fade-right"
+                        duration={100}
+                    >
+                        {(styles) => (
+                            <div
+                                style={{
+                                    ...styles,
+                                    transform: `translateX(${!isEmail ? 0 : -30}px)`,
+                                    transition: 'transform 0.3s ease',
+                                    borderTopLeftRadius: theme.radius.md,
+                                    borderBottomLeftRadius: theme.radius.md
                                 }}
-                            />
-                        </div>
-                    )}
-                </Transition> */}
-
+                            >
+                                <ComboBox
+                                    withinPortal={true}
+                                    minWidth={'320px'}
+                                    left={isLoginWindow ? '39%' : '58%'}
+                                    dataSource={countryList}
+                                    defaultValue={selectedCountry}
+                                    onValueChange={handleCountryChange}
+                                    labelProps={labelProps}
+                                    styles={{
+                                        dropdown: {
+                                            zIndex: 9999,
+                                            height: theme.spacing.md
+                                        },
+                                        input: {
+                                            border: 'none',
+                                            background: 'transparent',
+                                            minWidth: 110,
+                                            height: '42px',
+                                            maxHeight: 200
+                                        },
+                                        root: {
+                                            height: '42px',
+                                            background: 'transparent'
+                                        }
+                                    }}
+                                />
+                            </div>
+                        )}
+                    </Transition>
+                }
                 <TextInput
                     id="phoneInput"
                     {...props}

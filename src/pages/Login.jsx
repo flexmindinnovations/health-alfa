@@ -1,9 +1,12 @@
 import {
     Anchor,
-    AspectRatio, Button,
-    Center, Checkbox,
+    AspectRatio,
+    Button,
+    Center,
+    Checkbox,
     Container,
-    Grid, Group,
+    Grid,
+    Group,
     Image,
     Overlay,
     PasswordInput,
@@ -102,6 +105,15 @@ export default function Login() {
         form.setFieldValue('userName', value);
         form.validateField('userName');
     }
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            if (form.isValid()) {
+                handleFormSubmit(event);
+            }
+        }
+    };
 
     const handleFormSubmit = (event) => {
         event.preventDefault();
@@ -220,100 +232,76 @@ export default function Login() {
                                             </Text>
                                         </Stack>
 
-                                        <form onSubmit={handleFormSubmit}>
+                                        <form onSubmit={handleFormSubmit} onKeyDown={handleKeyDown}>
                                             <Stack my={20} gap={10}>
                                                 <GlobalPhoneInput
+                                                    isLoginWindow={true}
                                                     {...form.getInputProps('userName')}
                                                     label='Username'
                                                     withAsterisk
                                                     onChange={handleUsernameChange}
                                                     onCountryChange={handleCountryChange}
-                                                    className={`w-full !text-white m-0`}
-                                                    required={true}
-                                                    labelProps={{
-                                                        color: 'white',
-                                                    }}
+                                                    className='w-full !text-white m-0'
+                                                    required
+                                                    labelProps={{color: 'white'}}
                                                 />
+
                                                 <PasswordInput
                                                     {...form.getInputProps('userPassword')}
                                                     label='Password'
-                                                    radius={'xl'}
-                                                    autoComplete="off"
-                                                    variant='default'
+                                                    radius='xl'
+                                                    autoComplete='off'
                                                     withAsterisk
                                                     size='md'
-                                                    classNames={{
-                                                        visibilityToggle: classes.visibilityToggle
-                                                    }}
+                                                    classNames={{visibilityToggle: classes.visibilityToggle}}
                                                     onVisibilityChange={toggle}
-                                                    varient={'outlined'}
-                                                    className={`min-h-[5.5rem]`}
+                                                    className='min-h-[5.5rem]'
                                                     styles={{
-                                                        label: {
-                                                            fontSize: '14px',
-                                                            color: theme.white
-                                                        },
-                                                        input: {
-                                                            fontSize: '14px',
-                                                        },
-                                                        root: {
-                                                            backgroundColor: 'transparent'
-                                                        }
+                                                        label: {fontSize: '14px', color: theme.white},
+                                                        input: {fontSize: '14px'},
+                                                        root: {backgroundColor: 'transparent'},
                                                     }}
                                                 />
+
                                                 <Group justify='space-between'>
                                                     <Checkbox
                                                         size='sm'
-                                                        styles={{
-                                                            label: {
-                                                                cursor: 'pointer',
-                                                                color: theme.white
-                                                            }
-                                                        }}
-
-                                                        label="Remember Me"
+                                                        styles={{label: {cursor: 'pointer', color: theme.white}}}
+                                                        label='Remember Me'
                                                     />
-                                                    <Anchor underline="hover" c={theme.white} size='sm'>
+                                                    <Anchor underline='hover' c={theme.white} size='sm'>
                                                         Forgot Password
                                                     </Anchor>
                                                 </Group>
+
                                                 <Button
+                                                    type='submit'
+                                                    onClick={handleFormSubmit}
                                                     disabled={!form.isValid()}
                                                     size='md'
-                                                    variant={"white"}
+                                                    variant='white'
                                                     my={20}
                                                     loading={loading}
-                                                    onClick={handleFormSubmit}
                                                     component={motion.div}
-                                                    style={{transition: 'background-color 0.3s ease'}}
-                                                    c={
-                                                        isLoginSuccess ? theme.white : isLoginError ? theme.white : ''
-                                                    }
-                                                    animate={{
-                                                        backgroundColor: isLoginSuccess
-                                                            ? theme.colors.teal[6]
-                                                            : isLoginError
-                                                                ? theme.colors.red[6]
-                                                                : ''
+                                                    style={{
+                                                        transition: 'background-color 0.3s ease',
+                                                        pointerEvents: !form.isValid() ? 'none' : 'auto'
                                                     }}
+                                                    c={isLoginSuccess || isLoginError ? theme.white : ''}
+                                                    animate={{backgroundColor: isLoginSuccess ? theme.colors.teal[6] : isLoginError ? theme.colors.red[6] : ''}}
                                                 >
-                                                    {
-                                                        isLoginSuccess ? t('signedIn') : t('signIn')
-                                                    }
+                                                    {isLoginSuccess ? t('signedIn') : t('signIn')}
                                                 </Button>
+
                                                 <Center className='w-full'>
-                                                    <Text size='xs' styles={{
-                                                        root: {
-                                                            textAlign: 'center',
-                                                            color: theme.white,
-                                                        }
-                                                    }} className='opacity-70'>
+                                                    <Text size='xs' className='opacity-70'
+                                                          style={{textAlign: 'center', color: theme.white}}>
                                                         By clicking on &#39;Sign In&#39;, you acknowledge the&nbsp;
-                                                        <Anchor underline="always" c={theme.colors.brand[1]} size='xs'>
+                                                        <Anchor underline='always' c={theme.colors.brand[1]} size='xs'>
                                                             Terms of Services
                                                         </Anchor>
                                                         &nbsp; and &nbsp;
-                                                        <Anchor underline="always" c={theme.colors.brand[1]} size='xs'>
+                                                        <Anchor underline='always' c={theme.colors.brand[1]} size='xs'>
                                                             Privacy Policy
                                                         </Anchor>
                                                     </Text>

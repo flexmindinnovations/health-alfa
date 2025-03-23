@@ -168,10 +168,10 @@ export default function Home() {
                         >
                             Our Services
                         </Title>
-                        <p className="mt-4 text-sm sm:text-base lg:text-lg text-gray-600">
+                        <Text className="mt-4 text-sm sm:text-base lg:text-lg ">
                             Health Alpha offers a comprehensive suite of tools to help you manage your health with ease.
                             From secure storage of medical records to personalized health tracking, we simplify healthcare for everyone.
-                        </p>
+                        </Text>
                     </div>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3">
                         {services.map((service, index) =>
