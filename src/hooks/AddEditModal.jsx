@@ -10,7 +10,9 @@ export function useModal(handleRefresh) {
             handleRefresh,
             props,
             isAddEdit = true,
-            size = 'lg'
+            size = 'lg',
+            titleprops,
+            closable = false
         }
     ) => {
         modals.closeAll();
@@ -18,12 +20,13 @@ export function useModal(handleRefresh) {
             title: `${isAddEdit ? mode === "edit" ? t("update") : t("add") : ''}` + ` ${title}`,
             centered: true,
             trapFocus: false,
+            withCloseButton: closable,
             size: size,
             classNames: {
                 body: `${props} !p-0 !overflow-hidden`,
             },
             styles: {
-                title: {fontWeight: '500', fontSize: '14px'},
+                title: {fontWeight: '500', fontSize: '14px', ...titleprops},
             },
             children: (
                 <Component

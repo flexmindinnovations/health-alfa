@@ -151,5 +151,7 @@
   "diagnosis": "Diagnosis",
   "medicineType": "Medicine Type",
   "doctorSuggestion": "Doctor Suggestion",
-  "searchValue": "Search value"
+  "searchValue": "Search value",
+  "termsAndConditions": "Terms And Conditions",
+  "privacyPolicy": "Privacy Policy"
 }
