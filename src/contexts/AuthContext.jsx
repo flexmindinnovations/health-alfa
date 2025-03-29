@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
             case "client":
             case "user":
             case "User":
-                endpoint = '';
+                endpoint = apiConfig.clients.clientInfo(userId);
                 break;
             case "doctor":
                 endpoint = apiConfig.doctors.getDoctorInfoById(userId);

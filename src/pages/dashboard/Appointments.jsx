@@ -208,7 +208,7 @@ export default function Appointments() {
                 ...data,
                 initialRect: rect,
             },
-            props: `min-h-[630px]`,
+            props: `min-h-[480px]`,
             size: 'xl',
             isAddEdit: false,
             title: getModalTitle(data),

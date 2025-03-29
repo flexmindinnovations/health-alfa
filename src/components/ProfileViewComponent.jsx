@@ -17,7 +17,7 @@ export function ProfileView({data = {}}) {
 
     const getProfileImagePath = () => {
         const userType = getEncryptedData('roles').toLowerCase();
-        setUserType(userType);
+        setUserType(userType);        
         let path = '';
         switch (userType) {
             case 'admin':
@@ -25,7 +25,7 @@ export function ProfileView({data = {}}) {
                 break;
             case 'client':
             case 'user':
-                path = data['doctorProfileImagePath'];
+                path = data['profileImagePath'];
                 break;
             case 'doctor':
                 path = data['doctorProfileImagePath'];
@@ -43,7 +43,7 @@ export function ProfileView({data = {}}) {
             }, {});
     }
 
-    const excludedKeys = ['doctorProfileImagePath', 'doctorId', 'registrationDate'];
+    const excludedKeys = ['doctorProfileImagePath', 'doctorId', 'registrationDate', 'profileImagePath', 'clientId'];
     const filteredData = excludeProperties(data, excludedKeys);
 
     const formatKey = (key) => {
@@ -76,7 +76,8 @@ export function ProfileView({data = {}}) {
     };
 
     const stringFormatting = (inputString) => {
-        inputString = inputString?.trim();
+        if (!inputString) return '';
+        inputString = inputString?.toString()?.trim();
         if (inputString.includes(',')) {
             const inputStringArray = inputString.split(',').map(input => input.trim());
             if (inputStringArray.length > 1) {

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import {
     Box,
     Button,
@@ -12,18 +12,18 @@ import {
     TextInput,
     useMantineTheme
 } from '@mantine/core';
-import {DateInput} from '@mantine/dates';
-import {useForm} from '@mantine/form';
-import {useMediaQuery} from '@mantine/hooks';
-import {zodResolver} from 'mantine-form-zod-resolver';
-import {z} from 'zod';
-import {motion} from 'framer-motion';
-import {Save, SquarePen} from 'lucide-react';
-import {ImagePicker} from '@components/ImagePicker';
-import {useTranslation} from 'react-i18next';
-import {useApiConfig} from '@contexts/ApiConfigContext.jsx';
+import { DateInput } from '@mantine/dates';
+import { useForm } from '@mantine/form';
+import { useMediaQuery } from '@mantine/hooks';
+import { zodResolver } from 'mantine-form-zod-resolver';
+import { z } from 'zod';
+import { motion } from 'framer-motion';
+import { Save, SquarePen } from 'lucide-react';
+import { ImagePicker } from '@components/ImagePicker';
+import { useTranslation } from 'react-i18next';
+import { useApiConfig } from '@contexts/ApiConfigContext.jsx';
 import useHttp from '@hooks/AxiosInstance.jsx';
-import {openNotificationWithSound} from '@config/Notifications';
+import { openNotificationWithSound } from '@config/Notifications';
 
 const bloodGroupTypes = [
     {
@@ -61,9 +61,9 @@ const bloodGroupTypes = [
 ];
 
 const genderOptions = [
-    {title: 'Male', value: 'Male'},
-    {title: 'Female', value: 'Female'},
-    {title: 'Other', value: 'Other'},
+    { title: 'Male', value: 'Male' },
+    { title: 'Female', value: 'Female' },
+    { title: 'Other', value: 'Other' },
 ]
 
 const schema = z.object({
@@ -74,12 +74,12 @@ const schema = z.object({
     emailId: z.string().email('Invalid email format'),
     mobileNo: z.string().min(1, 'Mobile Number is required'),
     bloodType: z.string().optional().refine((value) =>
-            bloodGroupTypes.some((group) => group.value === value),
-        {message: 'Invalid blood group type'}
+        bloodGroupTypes.some((group) => group.value === value),
+        { message: 'Invalid blood group type' }
     ),
     gender: z.string().optional().refine((value) =>
-            genderOptions.some((group) => group.value === value),
-        {message: 'Gender is required'}
+        genderOptions.some((group) => group.value === value),
+        { message: 'Gender is required' }
     ),
     dateOfBirth: z.date().optional(),
     profileImagePath: z
@@ -88,13 +88,13 @@ const schema = z.object({
         .optional(),
 });
 
-export function AddEditClient({data = {}, mode = 'add', handleCancel}) {
+export function AddEditClient({ data = {}, mode = 'add', showCancel = true, handleCancel }) {
     const [profileImage, setProfileImage] = useState(null);
     const [imageUploadProgress, setImageUploadProgress] = useState(0);
     const [loading, setLoading] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
-    const {t} = useTranslation();
-    const {apiConfig} = useApiConfig();
+    const { t } = useTranslation();
+    const { apiConfig } = useApiConfig();
     const http = useHttp();
     const theme = useMantineTheme();
     const [disableForm, setDisableForm] = useState(false);
@@ -117,7 +117,7 @@ export function AddEditClient({data = {}, mode = 'add', handleCancel}) {
             dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : null,
             profileImagePath: data.profileImagePath || '',
         },
-        enhanceGetInputProps: () => ({disabled: disableForm}),
+        enhanceGetInputProps: () => ({ disabled: disableForm }),
         validateInputOnBlur: true,
         validateInputOnChange: true,
         validate: zodResolver(schema),
@@ -131,7 +131,7 @@ export function AddEditClient({data = {}, mode = 'add', handleCancel}) {
         setLoading(true);
         setDisableForm(true);
         const apiCalls = [];
-        const {clientId, ...rest} = data;
+        const { clientId, ...rest } = data;
         if (typeof rest === 'object' && Object.prototype.hasOwnProperty.call(rest, 'height')) {
             rest.height = rest.height.toString();
         }
@@ -143,7 +143,7 @@ export function AddEditClient({data = {}, mode = 'add', handleCancel}) {
             formData.append('file', profileImage);
             const updateProfileImage = http.post(apiConfig.clients.updateUserImage(clientId), formData,
                 {
-                    headers: {'Content-Type': 'multipart/form-data'},
+                    headers: { 'Content-Type': 'multipart/form-data' },
                     onUploadProgress: (progressEvent) => {
                         const percentCompleted = Math.round(
                             (progressEvent.loaded * 100) / progressEvent.total
@@ -169,7 +169,7 @@ export function AddEditClient({data = {}, mode = 'add', handleCancel}) {
                     title: t('updatedSuccessfully'),
                     message: data.message,
                     color: theme.colors.brand[6]
-                }, {withSound: false})
+                }, { withSound: false })
             } else if (saveUpdateResponse.status === 'rejected') {
                 console.error('Save/Update failed:', saveUpdateResponse.reason);
             }
@@ -181,67 +181,68 @@ export function AddEditClient({data = {}, mode = 'add', handleCancel}) {
                     title: t('profileImageUpdatedSuccessfully'),
                     message: data.message,
                     color: theme.colors.brand[6]
-                }, {withSound: false})
+                }, { withSound: false })
             } else if (updateProfileImageResponse?.status === 'rejected') {
                 console.error('Profile image update failed:', updateProfileImageResponse.reason);
             }
 
         } catch (error) {
-            const {name, message} = error;
+            const { name, message } = error;
             openNotificationWithSound({
                 title: name,
                 message: message,
                 color: theme.colors.red[6]
-            }, {withSound: false})
+            }, { withSound: false })
         } finally {
             setLoading(false);
             setDisableForm(false);
-            handleCancel({refresh: true});
+            handleCancel({ refresh: true });
         }
     }
 
     return (
         <motion.div
-            initial={{opacity: 0, y: 50}}
-            animate={{opacity: 1, y: 0}}
-            exit={{opacity: 0, y: 50}}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className='h-full'
         >
-            <Box sx={{maxWidth: 900, margin: '0 auto'}}>
-                <motion.form onSubmit={form.onSubmit(handleSubmit)} initial={{opacity: 0}}
-                             animate={{opacity: 1}}
-                             exit={{opacity: 0}}>
+            <Box sx={{ maxWidth: 900, margin: '0 auto' }}>
+                <motion.form onSubmit={form.onSubmit(handleSubmit)} initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}>
                     <Stack
                         p={20}
-                        className="form-container flex-1 max-h-[560px] overflow-hidden overflow-y-auto h-full mx-auto">
+                        className="form-container flex-1 overflow-hidden overflow-y-auto h-full mx-auto">
                         <Grid gutter="md">
-                            <Grid.Col span={{base: 12, md: 4, lg: 4}}
-                                      className='flex items-center justify-center'>
+                            <Grid.Col span={{ base: 12, md: 4, lg: 4 }}
+                                className='flex items-center justify-center'>
                                 <ImagePicker
                                     disableForm={disableForm}
                                     value={form.values.profileImagePath}
                                     uploadProgress={imageUploadProgress}
                                     isUploading={isUploading}
                                     onChange={(file) => setProfileImage(file)}
-                                    // onChange={(file) => uploadUserImage(file)}
+                                // onChange={(file) => uploadUserImage(file)}
                                 />
                             </Grid.Col>
-                            <Grid.Col span={{base: 12, md: 8, lg: 8}}>
+                            <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
                                 <Grid gutter="md">
                                     <Grid.Col span={6}>
                                         <TextInput label="First Name"
-                                                   placeholder="Enter first name" {...form.getInputProps('firstName')} />
+                                            placeholder="Enter first name" {...form.getInputProps('firstName')} />
                                     </Grid.Col>
                                     <Grid.Col span={6}>
                                         <TextInput label="Middle Name"
-                                                   placeholder="Enter middle name" {...form.getInputProps('middleName')} />
+                                            placeholder="Enter middle name" {...form.getInputProps('middleName')} />
                                     </Grid.Col>
                                     <Grid.Col span={6}>
                                         <TextInput label="Last Name"
-                                                   placeholder="Enter last name" {...form.getInputProps('lastName')} />
+                                            placeholder="Enter last name" {...form.getInputProps('lastName')} />
                                     </Grid.Col>
                                     <Grid.Col span={6}>
                                         <TextInput label="Mobile Number"
-                                                   placeholder="Enter mobile number" {...form.getInputProps('mobileNo')} />
+                                            placeholder="Enter mobile number" {...form.getInputProps('mobileNo')} />
                                     </Grid.Col>
                                 </Grid>
                             </Grid.Col>
@@ -250,7 +251,7 @@ export function AddEditClient({data = {}, mode = 'add', handleCancel}) {
                         <Grid mt={5} gutter="md">
                             <Grid.Col span={6}>
                                 <TextInput label="Email ID"
-                                           placeholder="Enter email" {...form.getInputProps('emailId')} />
+                                    placeholder="Enter email" {...form.getInputProps('emailId')} />
                             </Grid.Col>
                             <Grid.Col span={6}>
                                 <Select
@@ -268,13 +269,13 @@ export function AddEditClient({data = {}, mode = 'add', handleCancel}) {
                         <Grid gutter="md">
                             <Grid.Col span={6}>
                                 <DateInput label="Date of Birth"
-                                           placeholder="Select date" {...form.getInputProps('dateOfBirth')} />
+                                    placeholder="Select date" {...form.getInputProps('dateOfBirth')} />
                             </Grid.Col>
                             <Grid.Col span={6}>
                                 <NumberInput label="Height"
-                                             hideControls
-                                             placeholder="Enter height"
-                                             {...form.getInputProps('height')}
+                                    hideControls
+                                    placeholder="Enter height"
+                                    {...form.getInputProps('height')}
                                 />
                             </Grid.Col>
                         </Grid>
@@ -293,7 +294,7 @@ export function AddEditClient({data = {}, mode = 'add', handleCancel}) {
                             </Grid.Col>
                             <Grid.Col span={6}>
                                 <TextInput label="Emergency Contact"
-                                           placeholder="Enter emergency contact" {...form.getInputProps('emergencyContactNumber')} />
+                                    placeholder="Enter emergency contact" {...form.getInputProps('emergencyContactNumber')} />
                             </Grid.Col>
                         </Grid>
 
@@ -301,33 +302,37 @@ export function AddEditClient({data = {}, mode = 'add', handleCancel}) {
                         <Grid mt="md">
                             <Grid.Col span={12}>
                                 <Textarea rows={3} label="Address"
-                                          radius={'lg'}
-                                          styles={{
-                                              label: {
-                                                  fontWeight: 'normal',
-                                                  fontSize: '14px'
-                                              },
-                                              input: {
-                                                  paddingLeft: '10px'
-                                              }
-                                          }}
-                                          placeholder="Enter address" {...form.getInputProps('clientAddress')} />
+                                    radius={'lg'}
+                                    styles={{
+                                        label: {
+                                            fontWeight: 'normal',
+                                            fontSize: '14px'
+                                        },
+                                        input: {
+                                            paddingLeft: '10px'
+                                        }
+                                    }}
+                                    placeholder="Enter address" {...form.getInputProps('clientAddress')} />
                             </Grid.Col>
                         </Grid>
                     </Stack>
                     {/* Buttons */}
                     <Group position="right" justify='flex-end' p={isSmallScreen ? 0 : 20}>
-                        <Button variant="outline"
-                                leftSection={<CloseIcon size={16}/>}
-                                onClick={() => handleCancel({refresh: false})}
-                                disabled={loading}
-                        >
-                            Cancel
-                        </Button>
+                        {
+                            showCancel && (
+                                <Button variant="outline"
+                                    leftSection={<CloseIcon size={16} />}
+                                    onClick={() => handleCancel({ refresh: false })}
+                                    disabled={loading}
+                                >
+                                    Cancel
+                                </Button>
+                            )
+                        }
                         <Button
                             type="submit"
                             leftSection={
-                                mode === 'add' ? <Save size={16}/> : <SquarePen size={16}/>
+                                mode === 'add' ? <Save size={16} /> : <SquarePen size={16} />
                             }
                             loading={loading}
                             disabled={loading || !form.isValid()}>

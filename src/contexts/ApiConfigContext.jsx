@@ -19,7 +19,8 @@ const defaultApiConfig = {
         getList: `/ClientPersonalInfo/getClientPersonalInfoList`,
         updateUserImage: (id) => `/ClientPersonalInfo/UpdateProfileImage?ClientId=${id}`,
         save: `/ClientPersonalInfo/saveClientPersonalInfo`,
-        update: (id) => `/ClientPersonalInfo/updateClientPersonalInfo/${id}`
+        update: (id) => `/ClientPersonalInfo/updateClientPersonalInfo/${id}`,
+        clientInfo: (clientId) => `/ClientPersonalInfo/getClientInfoById/${clientId}`
     },
     doctors: {
         getList: `/Doctor/getDoctorList`,

@@ -38,6 +38,10 @@ export function UserMenu({showHideSettingsModel}) {
             case 'admin':
                 break;
             case 'user':
+                const { firstName, lastName, emailId, mobileNo } = user;
+                _userDetails.username = `${firstName} ${lastName}`;
+                _userDetails.email = emailId;
+                _userDetails.mobileNumber = mobileNo;
                 break;
             case 'doctor': {
                 const {doctorName, emailId, mobileNo} = user;
