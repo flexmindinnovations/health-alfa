@@ -5,14 +5,15 @@ import {
     Group,
     Loader,
     SegmentedControl,
-    TextInput,
+    Text,
     Tooltip,
-    useMantineTheme
+    useMantineTheme,
+    Tabs
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { useApiConfig } from "@contexts/ApiConfigContext.jsx";
 import { useDocumentTitle } from "@hooks/DocumentTitle.jsx";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, createElement } from "react";
 import { DoctorCard } from "@components/DoctorCard.jsx";
 import { BookAppointments } from "@components/BookAppointment.jsx";
 import { useModal } from "@hooks/AddEditModal.jsx";
@@ -28,6 +29,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { UploadPrescription } from "@components/UploadPrescription.jsx";
 import { AppointmentFilter } from "@components/AppointmentFilter.jsx";
 import { utils } from "@config/utils.js";
+import { CheckCircle, CalendarCheck, XCircle } from 'lucide-react';
 
 export default function Appointments() {
     const { t } = useTranslation();
@@ -70,19 +72,26 @@ export default function Appointments() {
         }
     ];
 
-    const getEndpoint = () => {
+    const appointmentItems = [
+        { id: 1, key: 'completed', title: t('completed'), icon: CheckCircle },
+        { id: 2, key: 'booked', title: t('booked'), icon: CalendarCheck },
+        { id: 3, key: 'cancelled', title: t('cancelled'), icon: XCircle },
+    ];
+
+    const [activeTab, setActiveTab] = useState('completed');
+
+    const getEndpoint = (status = utils.appointmentStatus.COMPLETED) => {
         const user = getEncryptedData('user');
         const role = getEncryptedData('roles')?.toLocaleLowerCase();
         let endpoint = apiConfig.doctors.getList;
         switch (role) {
             case 'doctor':
-                endpoint = apiConfig.appointment.getAppointmentListByDoctorId(user);
+                endpoint = apiConfig.appointment.getAppointmentByStatusAndDoctorId(user, status);
                 break;
             case 'patient':
             case 'client':
             case 'user':
-                // endpoint = apiConfig.appointment.getAppointmentListByPatientIdId(user);
-                endpoint = apiConfig.doctors.getList;
+                endpoint = apiConfig.appointment.getAppointmentByStatusAndPatientId(user, status);
                 break;
             case 'admin':
                 endpoint = apiConfig.doctors.getList;
@@ -97,10 +106,10 @@ export default function Appointments() {
         setUserType(role);
     }, []);
 
-    const getAppointmentList = async () => {
+    const getAppointmentList = async (status = utils.appointmentStatus.COMPLETED) => {
         setLoading(true);
         try {
-            const response = await http.get(getEndpoint());
+            const response = await http.get(getEndpoint(status));
             if (response?.status === 200) {
                 setDataSource(response.data);
                 setFilteredDataSource(response.data);
@@ -120,7 +129,7 @@ export default function Appointments() {
             setLoading(false);
         }
     }
-    const getUserCard = (row) => {
+    const getUserCard = (row, index) => {
         const role = getEncryptedData('roles')?.toLocaleLowerCase();
         // setUserType(role);
         let cardComponent = apiConfig.doctors.getList;
@@ -131,7 +140,7 @@ export default function Appointments() {
             case 'patient':
             case 'client':
             case 'user':
-                cardComponent = doctorCard(row);
+                cardComponent = doctorCard(row, index);
                 break;
             case 'admin':
                 cardComponent = doctorCard(row);
@@ -139,9 +148,10 @@ export default function Appointments() {
         }
         return cardComponent;
     }
-    const doctorCard = (row) => (
+    const doctorCard = (row, index) => (
         <DoctorCard onClick={(data, rect) => handleCardClick(data, rect)}
             data={row}
+            key={row.appointmentId}
             layoutId={`card-${row.doctorId}`}
             isDetailsCard={false}
             loading={loading} />
@@ -273,6 +283,11 @@ export default function Appointments() {
         filterData(value);
     }
 
+    const onTabChange = (tab) => {
+        setActiveTab(tab);
+        getAppointmentList(tab);
+    }
+
     const handleDateClick = (arg) => {
         // alert(arg.dateStr)
     }
@@ -287,79 +302,105 @@ export default function Appointments() {
     }
 
     return (
-        <div className="h-full w-full relative !overflow-hidden flex items-center justify-center">
-            {loading ? (
-                <Loader />
+        <Container fluid styles={{
+            root: {
+                display: 'flex',
+                flexDirection: 'column'
+            }
+        }}>
+            {/* Top Controls */}
+            <Group py={20} position="apart">
+                <Group>
+                    {/* Uncomment if needed */}
+                    {/* {view === 'card' && (
+          <TextInput
+            placeholder={t('search')}
+            ref={searchInputRef}
+            value={searchText}
+            leftSection={<SearchIcon size={16} />}
+            onInput={handleFilterTextChange}
+            rightSection={
+              searchText && (
+                <ComboboxClearButton onClear={handleClearInput} />
+              )
+            }
+            className="w-full md:w-96"
+          />
+        )} */}
+                </Group>
+
+                <Group>
+                    <SegmentedControl
+                        onChange={setView}
+                        data={segmentedItems}
+                        transitionDuration={200}
+                        transitionTimingFunction="linear"
+                    />
+                </Group>
+            </Group>
+
+            {/* Conditional Views */}
+            {view === 'timeline' ? (
+                <motion.div className="w-full">
+                    <AppointmentsCalendarView
+                        events={dataSource}
+                        loading={loading}
+                        handleEventClick={handleEventClick}
+                        handleDateClick={handleDateClick}
+                    />
+                </motion.div>
             ) : (
-                <Container fluid styles={{
-                    root: {
-                        overflow: 'auto',
-                    }
+                <Tabs value={activeTab} onChange={onTabChange} styles={{
+                    root: { flex: '1', display: 'flex', flexDirection: 'column' },
+                    panel: { height: '100%', flex: '1' }
                 }}>
-                    <Group py={20} items={'center'} justify={'space-between'}>
-                        <Group>
+                    <Tabs.List>
+                        {appointmentItems.map((item) => (
+                            <Tabs.Tab
+                                key={item.id}
+                                value={item.key}
+                                leftSection={createElement(item.icon, { size: 16 })}
+                            >
+                                {t(item.key)}
+                            </Tabs.Tab>
+                        ))}
+                    </Tabs.List>
+
+                    {appointmentItems.map((item) => (
+                        <Tabs.Panel key={item.id} value={item.key} py={20}>
                             {
-                                view === 'card' && (
-                                    <TextInput
-                                        placeholder={t('search')}
-                                        ref={searchInputRef}
-                                        value={searchText}
-                                        leftSection={<SearchIcon size={16} />}
-                                        onInput={handleFilterTextChange}
-                                        rightSection={
-                                            searchText &&
-                                            <ComboboxClearButton onClear={() => handleClearInput()} />
-                                        }
-                                        className={'w-full md:w-96 lg:w-96 xl:w-96'}
-                                    />
-                                )
-                            }
-                        </Group>
-                        <Group>
-                            {
-                                <SegmentedControl
-                                    onChange={setView}
-                                    data={segmentedItems}
-                                    transitionDuration={200}
-                                    transitionTimingFunction="linear"
-                                />
-                            }
-                        </Group>
-                    </Group>
-                    {
-                        view === 'timeline' ? (
-                            <motion.div className={`w-full`}>
-                                <AppointmentsCalendarView
-                                    events={dataSource}
-                                    loading={loading}
-                                    handleEventClick={handleEventClick}
-                                    handleDateClick={handleDateClick}
-                                />
-                            </motion.div>
-                        )
-                            :
-                            (
-                                <div>
-                                    {userType !== 'doctor' && (
-                                        <AppointmentFilter onFilterChange={handleFilterChange} />
-                                    )}
-                                    <motion.div
-                                        variants={utils.parentVariants}
-                                        initial={'hidden'}
-                                        animate={'visible'}
-                                        className={`mt-4 ${getGridLayout()}`}>
-                                        {filteredDataSource.map((row, index) => (
-                                            <motion.div variants={utils.childVariants}
-                                                key={row.doctorId + index}>
-                                                {getUserCard(row)}
-                                            </motion.div>
-                                        ))}
+                                loading ? (
+                                    <motion.div className="h-full w-full flex items-center justify-center">
+                                        <Loader />
                                     </motion.div>
-                                </div>
-                            )
-                    }
-                </Container>
+                                ) :
+                                    (
+                                        <motion.div className="h-full w-full">
+                                            {
+                                                filteredDataSource.length ? (
+                                                    <motion.div className={`mt-4 ${getGridLayout()}`}>
+                                                        {
+                                                            filteredDataSource.map((row, index) => getUserCard(row))
+
+                                                        }
+                                                    </motion.div>
+                                                )
+                                                    : (
+                                                        <motion.div className="flex items-center justify-center h-full">
+                                                            <Text size="xl" opacity={0.5}>
+                                                                {t('noDataFound')}
+                                                            </Text>
+                                                        </motion.div>
+                                                    )
+                                            }
+                                        </motion.div>
+                                    )
+
+                            }
+                        </Tabs.Panel>
+                    ))}
+                </Tabs>
             )}
-        </div>
+        </Container>
     );
 }

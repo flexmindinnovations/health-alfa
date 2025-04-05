@@ -1,19 +1,19 @@
-import {Avatar, Card, CloseButton, Group, Loader, Stack, Text, Title, Tooltip} from "@mantine/core";
-import {useEffect, useRef, useState} from "react";
-import {useTranslation} from "react-i18next";
-import {Mail, Smartphone} from 'lucide-react';
-import {motion} from "framer-motion";
+import { Avatar, Card, CloseButton, Group, Loader, Stack, Text, Title, Tooltip, ActionIcon } from "@mantine/core";
+import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Mail, Smartphone, CalendarClock, XCircle } from 'lucide-react';
+import { motion } from "framer-motion";
 
 export function DoctorCard({
-                               data = {},
-                               loading = false,
-                               handleCloseModal,
-                               isDetailsCard = false,
-                               onClick,
-                               layoutId,
-                           } = {}) {
+    data = {},
+    loading = false,
+    handleCloseModal,
+    isDetailsCard = false,
+    onClick,
+    layoutId,
+} = {}) {
     const [profileImage, setProfileImage] = useState(null);
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const cardRef = useRef(null);
     const [isOpen, setIsOpen] = useState(handleCloseModal);
 
@@ -64,37 +64,91 @@ export function DoctorCard({
             {
                 loading ?
                     (
-                        <Loader/>) :
+                        <Loader />) :
                     (
                         <motion.div
-                            layout
                             ref={cardRef}
-                            whileTap={{y: 5}}
+                            whileTap={{ y: 5 }}
                             className={`p-0 relative w-full cursor-pointer overflow-auto rounded-2xl`}
                             onClick={handleClick}
                         >
-                            {isDetailsCard && <CloseButton
-                                onClick={handleCloseModal}
-                                className="!absolute !top-2 !right-2 text-gray-500 hover:text-gray-700"
-                            />}
+                            {data?.appointmentStatus && (
+                                <div
+                                    className={`absolute top-0 right-0 z-10 flex min-h-10 pl-2 ${data?.appointmentStatus === 'Booked'
+                                            ? 'bg-blue-100 text-blue-800'
+                                            : data?.appointmentStatus === 'Completed'
+                                                ? 'bg-green-100 text-green-800'
+                                                : 'bg-red-100 text-red-800'
+                                            }`}
+                                >
+                                    <motion.div>
+                                        {data?.appointmentStatus === 'Booked' && (
+                                            <div className="py-1 flex gap-2">
+                                                <Tooltip label={t('reschedule')}>
+                                                    <ActionIcon
+                                                        variant="transparent"
+                                                        color="blue"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            console.log("Reschedule clicked");
+                                                        }}
+                                                    >
+                                                        <CalendarClock size={22} />
+                                                    </ActionIcon>
+                                                </Tooltip>
+                                                <Tooltip label={t('cancelAppointment')}>
+                                                    <ActionIcon
+                                                        variant="transparent"
+                                                        color="red"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            console.log("Cancel clicked");
+                                                        }}
+                                                    >
+                                                        <XCircle size={22} />
+                                                    </ActionIcon>
+                                                </Tooltip>
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                    <motion.div
+                                        className={`px-3 py-1 text-xs flex items-center justify-center font-semibold rounded-br-none shadow-none ${data?.appointmentStatus === 'Booked'
+                                            ? 'bg-blue-100 text-blue-800'
+                                            : data?.appointmentStatus === 'Completed'
+                                                ? 'bg-green-100 text-green-800'
+                                                : 'bg-red-100 text-red-800'
+                                            }`}
+                                    >
+                                        <Text size="sm" fw={'bold'}>
+                                            {data?.appointmentStatus}
+                                        </Text>
+                                    </motion.div>
+                                </div>
+                            )}
+                            {isDetailsCard && (
+                                <CloseButton
+                                    onClick={handleCloseModal}
+                                    className="!absolute !top-2 !right-2 text-gray-500 hover:text-gray-700 z-20"
+                                />
+                            )}
+
                             <Card shadow={"none"} withBorder>
                                 <Stack>
                                     <Group align={'center'} justify={'start'} gap={40}>
-                                        <Avatar size={"lg"} radius={"xl"} src={profileImage}/>
+                                        <Avatar size={"lg"} radius={"xl"} src={profileImage} />
                                         <Stack gap={5}>
                                             <Title size={'md'}>{data?.doctorName}</Title>
                                             <Stack>
                                                 <Group gap={0}>
-                                                    <Smartphone size={14}/>:&nbsp;
+                                                    <Smartphone size={14} />:&nbsp;
                                                     <Text size={"sm"}>{formatMobileNumber(data?.mobileNo)}</Text>
                                                 </Group>
-                                                {
-                                                    data?.emailId &&
+                                                {data?.emailId && (
                                                     <Group>
-                                                        <Mail size={14}/>:&nbsp;
+                                                        <Mail size={14} />:&nbsp;
                                                         <Text size={"sm"}>{data?.emailId}</Text>
                                                     </Group>
-                                                }
+                                                )}
                                             </Stack>
                                         </Stack>
                                     </Group>
@@ -110,8 +164,9 @@ export function DoctorCard({
                                         <Group gap={10}>
                                             <Text size={"xs"}>{t('speciality')}:</Text>
                                             <Tooltip label={stringFormatting(data?.speciality)}>
-                                                <Text
-                                                    size={"xs"}>{truncateText(stringFormatting(data?.speciality), 40)}</Text>
+                                                <Text size={"xs"}>
+                                                    {truncateText(stringFormatting(data?.speciality), 40)}
+                                                </Text>
                                             </Tooltip>
                                         </Group>
                                         <Group gap={10}>

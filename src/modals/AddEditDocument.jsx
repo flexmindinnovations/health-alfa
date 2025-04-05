@@ -18,18 +18,18 @@ export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
     const http = useHttp();
     const theme = useMantineTheme();
     const [disableFormField, setDisableFormField] = useState({
-        documentNameEnglish: false,
-        documentNameArabic: false
+        DocumentTypeEnglish: false,
+        DocumentTypeArabic: false
     })
 
     const addEditDocumentSchema = z.object({
-        documentNameEnglish: z.string().min(1, {message: t('englishNameIsRequired')}),
-        documentNameArabic: z.string().min(1, {message: t('arabicNameIsRequired')}),
+        DocumentTypeEnglish: z.string().min(1, {message: t('englishNameIsRequired')}),
+        DocumentTypeArabic: z.string().min(1, {message: t('arabicNameIsRequired')}),
     });
     const form = useForm({
         initialValues: {
-            documentNameEnglish: data?.documentTypeEnglish || '',
-            documentNameArabic: data?.documentTypeArabic || '',
+            DocumentTypeEnglish: data?.documentTypeEnglish || '',
+            DocumentTypeArabic: data?.documentTypeArabic || '',
         },
         validate: zodResolver(addEditDocumentSchema),
         validateInputOnBlur: true,
@@ -95,11 +95,11 @@ export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
     useEffect(() => {
         setTitle(mode === "edit" ? `${t("edit")} ${t("document")}` : `${t("add")} ${t("document")}`);
 
-        const {documentNameEnglish, documentNameArabic} = form.values;
+        const {DocumentTypeEnglish, DocumentTypeArabic} = form.values;
         const lng = i18n.language;
-        const sourceText = lng === 'en' ? documentNameEnglish : documentNameArabic;
+        const sourceText = lng === 'en' ? DocumentTypeEnglish : DocumentTypeArabic;
         const targetLanguage = lng === 'en' ? 'ar' : 'en';
-        const disabledKey = lng === 'en' ? 'documentNameArabic' : 'documentNameEnglish';
+        const disabledKey = lng === 'en' ? 'DocumentTypeArabic' : 'DocumentTypeEnglish';
         setDisableFormField((val) => ({
             ...val,
             [disabledKey]: true,
@@ -129,16 +129,16 @@ export function AddEditDocument({data, mode = "add", handleCancel, onAddEdit}) {
         // <ModalWrapper isOpen={open} toggle={handleOnClose} title={title} size="md">
         <Stack className="flex flex-col gap-2" p={20}>
             <TextInput
-                {...form.getInputProps("documentNameEnglish")}
+                {...form.getInputProps("DocumentTypeEnglish")}
                 label={`${t("documentName")} ${t("english")}`}
                 withAsterisk
-                // disabled={disableFormField.documentNameEnglish}
+                // disabled={disableFormField.DocumentTypeEnglish}
             />
             <TextInput
-                {...form.getInputProps("documentNameArabic")}
+                {...form.getInputProps("DocumentTypeArabic")}
                 label={`${t("documentName")} ${t("arabic")}`}
                 withAsterisk
-                // disabled={disableFormField.documentNameArabic}
+                // disabled={disableFormField.DocumentTypeArabic}
                 styles={{
                     input: {
                         textAlign: 'right',

@@ -153,5 +153,11 @@
   "doctorSuggestion": "Doctor Suggestion",
   "searchValue": "Search value",
   "termsAndConditions": "Terms And Conditions",
-  "privacyPolicy": "Privacy Policy"
+  "privacyPolicy": "Privacy Policy",
+  "completed": "Completed",
+  "cancelled": "Cancelled",
+  "booked": "Upcoming",
+  "noDataFound": "No Data Found",
+  "reschedule": "Reschedule",
+  "cancelAppointment": "Cancel Appointment"
 }

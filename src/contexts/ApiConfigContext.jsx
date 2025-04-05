@@ -1,6 +1,8 @@
 import { createContext, useContext } from 'react'
 import { useDirection } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
+import { utils } from '@config/utils';
+
 
 const defaultApiConfig = {
     appConfig: {
@@ -59,6 +61,8 @@ const defaultApiConfig = {
         getAppointmentListByPatientIdId: (patientId) => `/Appointment/GetAppointmentListByPatientIdWise/${patientId}`,
         getAppointmentListByDoctorId: (doctorId) => `/Appointment/GetAppointmentListByDoctorIdWise/${doctorId}`,
         bookAppointment: `/Appointment/BookAppointment`,
+        getAppointmentByStatusAndPatientId: (patientId, status = utils.appointmentStatus.COMPLETED) => `Appointment/GetAppointmentListByPatientAndAppointmentStatusWise/${patientId}/${status}`,
+        getAppointmentByStatusAndDoctorId: (doctorId, status = utils.appointmentStatus.COMPLETED) => `/api/Appointment/GetAppointmentListByDoctorAndAppointStatusWise/${doctorId}/${status}`
     },
     medicine: {
         getList: (pageNumber = 1, pageSize = 10, query = '') => `/Medicine/getMedicineList?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${query}`,

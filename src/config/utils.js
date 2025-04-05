@@ -22,5 +22,11 @@ export const utils = {
             return text;
         }
         return text.substring(0, maxLength) + '...';
+    },
+    appointmentStatus: {
+        BOOKED: 'Booked',
+        PENDING: 'Pending',
+        COMPLETED: 'Completed',
+        CANCELLED: 'Cancelled',
     }
 }
