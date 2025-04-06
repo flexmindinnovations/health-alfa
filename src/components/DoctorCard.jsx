@@ -74,7 +74,7 @@ export function DoctorCard({
                         >
                             {data?.appointmentStatus && (
                                 <div
-                                    className={`absolute top-0 right-0 z-10 flex min-h-10 pl-2 ${data?.appointmentStatus === 'Booked'
+                                    className={`absolute top-0 right-0 z-10 flex rounded-bl-2xl min-h-10 pl-2 ${data?.appointmentStatus === 'Booked'
                                             ? 'bg-blue-100 text-blue-800'
                                             : data?.appointmentStatus === 'Completed'
                                                 ? 'bg-green-100 text-green-800'
@@ -112,7 +112,7 @@ export function DoctorCard({
                                         )}
                                     </motion.div>
                                     <motion.div
-                                        className={`px-3 py-1 text-xs flex items-center justify-center font-semibold rounded-br-none shadow-none ${data?.appointmentStatus === 'Booked'
+                                        className={`px-3 py-1 text-xs flex items-center justify-center font-semibold rounded-bl-full shadow-none ${data?.appointmentStatus === 'Booked'
                                             ? 'bg-blue-100 text-blue-800'
                                             : data?.appointmentStatus === 'Completed'
                                                 ? 'bg-green-100 text-green-800'

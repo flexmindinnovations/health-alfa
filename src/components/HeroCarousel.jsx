@@ -6,41 +6,70 @@ import { Mousewheel, Virtual, EffectFade, Autoplay } from "swiper/modules";
 import { CarouselCard } from "@components/CarouselCard.jsx";
 import { ActionIcon, useMantineTheme } from '@mantine/core';
 import heroImage from "../assets/images/hero.webp";
+import healthSimplified from "../assets/images/hero/health_simplified.jpg";
+import carePets from "../assets/images/hero/care_pets.jpg";
+import care from "../assets/images/hero/care.jpg";
+import criticalInfo from "../assets/images/hero/critical_info.jpg";
+import manageHealth from "../assets/images/hero/manage_health.jpg";
+import queue from "../assets/images/hero/queue.jpg";
+import safeInformation from "../assets/images/hero/safe_information.jpg";
+import smarterLive from "../assets/images/hero/smarter_live.jpg";
 import { ChevronsDown } from 'lucide-react';
 import { motion } from "framer-motion";
+import { AspectRatio, Image } from '@mantine/core';
 
 const data = [
   {
-    image: heroImage,
+    image: healthSimplified,
     title: "Your Health, Simplified with Health Alpha",
     category:
       "Simplifying your health journey with Health Alpha, offering easy access to all your medical documents, reminders, and wellness tools, so you can focus on what matters most—your health.",
   },
   {
-    image: heroImage,
+    image: carePets,
     title: "A Personal Health Partner You Can Count On",
     category:
       "Health Alpha is your trusted personal health companion, providing the tools and support you need to manage your health and stay on top of important appointments and health goals.",
   },
   {
-    image: heroImage,
+    image: care,
     title: "Stay Organized, Stay Healthy",
     category:
       "With Health Alpha, you can stay organized by storing and tracking your health data in one place, making it easy to manage your wellness and stay healthy.",
   },
   {
-    image: heroImage,
+    image: criticalInfo,
     title: "For You and Your Loved Ones",
     category:
       "Health Alpha is designed not only for you but for your entire family, helping you manage health records, appointments, and more to ensure everyone stays healthy and safe.",
   },
   {
-    image: heroImage,
+    image: manageHealth,
+    title: "Take Control of Your Health Today",
+    category:
+      "Take charge of your health with Health Alpha. Set personalized goals, track your progress, and manage your health effortlessly, all at your fingertips.",
+  },
+  {
+    image: queue,
+    title: "Take Control of Your Health Today",
+    category:
+      "Take charge of your health with Health Alpha. Set personalized goals, track your progress, and manage your health effortlessly, all at your fingertips.",
+  },
+  {
+    image: safeInformation,
+    title: "Take Control of Your Health Today",
+    category:
+      "Take charge of your health with Health Alpha. Set personalized goals, track your progress, and manage your health effortlessly, all at your fingertips.",
+  },
+  {
+    image: smarterLive,
     title: "Take Control of Your Health Today",
     category:
       "Take charge of your health with Health Alpha. Set personalized goals, track your progress, and manage your health effortlessly, all at your fingertips.",
   },
 ];
+
+const images = [healthSimplified, care, criticalInfo, manageHealth, queue, safeInformation, smarterLive, carePets];
 
 export function HeroCarousel() {
   const swiperRef = useRef(null);
@@ -74,12 +103,15 @@ export function HeroCarousel() {
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
         style={{ height: "100%", width: "100%", backgroundColor: "transparent", zIndex: 10 }}
       >
-        {data.map((slide, index) => (
+        {images.map((slide, index) => (
           <SwiperSlide key={index} virtualIndex={index}>
             <div
               className="w-full h-full flex items-center justify-center bg-transparent"
             >
-              <CarouselCard {...slide} isActive={index === activeIndex} />
+              <CarouselCard slide={slide} isActive={index === activeIndex} />
+              {/* <AspectRatio ratio={16 / 9} w={'100%'}>
+                <Image src={slide} styles={{ root: { objectFit: 'fill' } }} />
+              </AspectRatio> */}
             </div>
           </SwiperSlide>
         ))}

@@ -1,6 +1,6 @@
 import {
     Center,
-    ComboboxClearButton,
+    Button,
     Container,
     Group,
     Loader,
@@ -309,7 +309,7 @@ export default function Appointments() {
             }
         }}>
             {/* Top Controls */}
-            <Group py={20} position="apart">
+            <Group py={20} justify="space-between">
                 <Group>
                     {/* Uncomment if needed */}
                     {/* {view === 'card' && (
@@ -330,12 +330,15 @@ export default function Appointments() {
                 </Group>
 
                 <Group>
-                    <SegmentedControl
+                    {/* <SegmentedControl
                         onChange={setView}
                         data={segmentedItems}
                         transitionDuration={200}
                         transitionTimingFunction="linear"
-                    />
+                    /> */}
+                    <Button disabled>
+                        {t('bookAppointment')}
+                    </Button>
                 </Group>
             </Group>
 

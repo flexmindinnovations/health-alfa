@@ -62,7 +62,7 @@ const defaultApiConfig = {
         getAppointmentListByDoctorId: (doctorId) => `/Appointment/GetAppointmentListByDoctorIdWise/${doctorId}`,
         bookAppointment: `/Appointment/BookAppointment`,
         getAppointmentByStatusAndPatientId: (patientId, status = utils.appointmentStatus.COMPLETED) => `Appointment/GetAppointmentListByPatientAndAppointmentStatusWise/${patientId}/${status}`,
-        getAppointmentByStatusAndDoctorId: (doctorId, status = utils.appointmentStatus.COMPLETED) => `/api/Appointment/GetAppointmentListByDoctorAndAppointStatusWise/${doctorId}/${status}`
+        getAppointmentByStatusAndDoctorId: (doctorId, status = utils.appointmentStatus.COMPLETED) => `/Appointment/GetAppointmentListByDoctorAndAppointStatusWise/${doctorId}/${status}`
     },
     medicine: {
         getList: (pageNumber = 1, pageSize = 10, query = '') => `/Medicine/getMedicineList?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${query}`,
