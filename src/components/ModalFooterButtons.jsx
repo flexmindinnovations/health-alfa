@@ -1,19 +1,20 @@
-import {Button, Group, Text} from "@mantine/core";
-import {Save, SquarePen} from "lucide-react";
-import {useTranslation} from "react-i18next";
+import { Button, Group, Text } from "@mantine/core";
+import { Save, SquarePen } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export function ModalFooterButtons({
-                                       mode = null,
-                                       loading = true,
-                                       disabled = true,
-                                       title = null | '',
-                                       handleCancel,
-                                       handleSaveUpdate,
-                                       showCount = false,
-                                       selectedRows = [],
-                                   }) {
+    mode = null,
+    loading = true,
+    disabled = true,
+    title = null | '',
+    showCancel = true,
+    handleCancel,
+    handleSaveUpdate,
+    showCount = false,
+    selectedRows = [],
+}) {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     return (
         <Group className={`w-full !flex items-center !justify-between`}>
@@ -36,16 +37,20 @@ export function ModalFooterButtons({
                 }
             </Group>
             <Group>
-                <Button variant="outline" onClick={handleCancel}>
-                    {t('cancel')}
-                </Button>
+                {
+                    showCancel && (
+                        <Button variant="outline" onClick={handleCancel}>
+                            {t('cancel')}
+                        </Button>
+                    )
+                }
                 <Button
                     loading={loading}
                     disabled={loading || disabled}
                     leftSection={
                         mode ? (
-                            mode === 'add' ? <Save size={16}/> : <SquarePen size={16}/>
-                        ) : <Save size={16}/>
+                            mode === 'add' ? <Save size={16} /> : <SquarePen size={16} />
+                        ) : <Save size={16} />
                     }
                     onClick={handleSaveUpdate}
                 >

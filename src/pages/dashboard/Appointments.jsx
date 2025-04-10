@@ -205,7 +205,7 @@ export default function Appointments() {
     const handleCardClick = (data, rect) => {
         const role = getEncryptedData('roles')?.toLocaleLowerCase();
         if (role !== 'doctor') {
-            openAddEditModal(data, rect);
+            // openAddEditModal(data, rect);
         } else {
             navigate(`/app/appointments/details/${data.appointmentId}`, { state: { data } })
         }
@@ -292,6 +292,10 @@ export default function Appointments() {
         // alert(arg.dateStr)
     }
 
+    const handleNewAppointment = () => {
+        navigate('/app/book-appointment');
+    }
+
 
     const handleEventClick = (info) => {
         // alert(`Event clicked: ${info.event.title}`);
@@ -336,9 +340,13 @@ export default function Appointments() {
                         transitionDuration={200}
                         transitionTimingFunction="linear"
                     /> */}
-                    <Button disabled>
-                        {t('bookAppointment')}
-                    </Button>
+                    {
+                        (userType === utils.userTypes.CLIENT || userType === utils.userTypes.USER) && (
+                            <Button onClick={handleNewAppointment}>
+                                {t('bookAppointment')}
+                            </Button>
+                        )
+                    }
                 </Group>
             </Group>
 

@@ -101,6 +101,7 @@ const SlotCard = ({ slot, isSelected, onClick, disabled }) => {
 
 export function BookAppointments({
     data = {},
+    showCancel = true,
     onClose,
     handleCancel
 }) {
@@ -286,7 +287,7 @@ export function BookAppointments({
     }
 
     return (
-        <div className={`min-h-[inherit] relative`}>
+        <div className={`relative min-h-96 py-4`} style={{height: 'calc(100% - 20vh)'}}>
             <Stack>
                 <Tabs
                     keepMounted={false}
@@ -377,7 +378,7 @@ export function BookAppointments({
                                                         ))}
                                                 </div>
                                             </motion.div>
-                                            <Group w={'100%'} px={40}>
+                                            <Group w={'100%'} px={40} py={20}>
                                                 <div className={`w-full min-h-[5.5rem]`}>
                                                     <AnimatePresence>
                                                         {selectedSlots.length > 0 && (
@@ -391,8 +392,9 @@ export function BookAppointments({
                                                             >
                                                                 <Textarea
                                                                     disabled={isBooking}
+                                                                    rows={4}
                                                                     ref={notesRef}
-                                                                    minRows={3}
+                                                                    minRows={5}
                                                                     style={{
                                                                         width: '100%'
                                                                     }}
@@ -426,6 +428,7 @@ export function BookAppointments({
                 <ModalFooterButtons
                     loading={isBooking}
                     disabled={isBooking || !selectedSlots.length}
+                    showCancel={showCancel}
                     handleCancel={handleModalClose}
                     title={t('bookSlot')}
                     showCount={false}

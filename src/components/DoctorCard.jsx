@@ -9,8 +9,10 @@ export function DoctorCard({
     loading = false,
     handleCloseModal,
     isDetailsCard = false,
+    truncateTextLength = true,
     onClick,
     layoutId,
+    border = true
 } = {}) {
     const [profileImage, setProfileImage] = useState(null);
     const { t } = useTranslation();
@@ -56,7 +58,7 @@ export function DoctorCard({
         if (text.length <= maxLength) {
             return text;
         }
-        return text.substring(0, maxLength) + '...';
+        return truncateTextLength ? text.substring(0, maxLength) + '...' : text;
     }
 
     return (
@@ -84,7 +86,7 @@ export function DoctorCard({
                                     <motion.div>
                                         {data?.appointmentStatus === 'Booked' && (
                                             <div className="py-1 flex gap-2">
-                                                <Tooltip label={t('reschedule')}>
+                                                {/* <Tooltip label={t('reschedule')}>
                                                     <ActionIcon
                                                         variant="transparent"
                                                         color="blue"
@@ -95,7 +97,7 @@ export function DoctorCard({
                                                     >
                                                         <CalendarClock size={22} />
                                                     </ActionIcon>
-                                                </Tooltip>
+                                                </Tooltip> */}
                                                 <Tooltip label={t('cancelAppointment')}>
                                                     <ActionIcon
                                                         variant="transparent"
@@ -132,7 +134,7 @@ export function DoctorCard({
                                 />
                             )}
 
-                            <Card shadow={"none"} withBorder>
+                            <Card shadow={"none"} withBorder={border}>
                                 <Stack>
                                     <Group align={'center'} justify={'start'} gap={40}>
                                         <Avatar size={"lg"} radius={"xl"} src={profileImage} />
