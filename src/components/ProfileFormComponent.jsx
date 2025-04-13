@@ -35,7 +35,7 @@ export function ProfileFormComponent(props) {
     }
 
     return (
-        <Container className={`max-h-[calc(100vh-220px)] overflow-y-auto`}>
+        <Container className={`overflow-y-auto`}>
             {getFormComponent()}
         </Container>
     )

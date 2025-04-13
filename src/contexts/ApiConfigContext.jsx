@@ -62,7 +62,9 @@ const defaultApiConfig = {
         getAppointmentListByDoctorId: (doctorId) => `/Appointment/GetAppointmentListByDoctorIdWise/${doctorId}`,
         bookAppointment: `/Appointment/BookAppointment`,
         getAppointmentByStatusAndPatientId: (patientId, status = utils.appointmentStatus.COMPLETED) => `Appointment/GetAppointmentListByPatientAndAppointmentStatusWise/${patientId}/${status}`,
-        getAppointmentByStatusAndDoctorId: (doctorId, status = utils.appointmentStatus.COMPLETED) => `/Appointment/GetAppointmentListByDoctorAndAppointStatusWise/${doctorId}/${status}`
+        getAppointmentByStatusAndDoctorId: (doctorId, status = utils.appointmentStatus.COMPLETED) => `/Appointment/GetAppointmentListByDoctorAndAppointStatusWise/${doctorId}/${status}`,
+        getAppointmentListByDoctorAndPatientIdWise: (doctorId = 1, patientId = 1) => `/Appointment/GetAppointmentListByDoctorAndPatientIdWise/${doctorId}/${patientId}`,
+
     },
     medicine: {
         getList: (pageNumber = 1, pageSize = 10, query = '') => `/Medicine/getMedicineList?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${query}`,
@@ -78,7 +80,8 @@ const defaultApiConfig = {
         getList: `/MedicineType/GetMedicineTypeList`,
     },
     prescription: {
-        savePrescription: `/DoctorPrescription/saveDoctorPrescription`
+        savePrescription: `/DoctorPrescription/saveDoctorPrescription`,
+        getPrescriptionListAppointIdWise: (appointmentId) => `/DoctorPrescription/getPrescriptionListAppointIdWise/${appointmentId}`,
     },
     doctorPrescription: {
         saveDoctorPrescription: `/DoctorPrescription/saveDoctorPrescription`,

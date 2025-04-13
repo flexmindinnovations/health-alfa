@@ -1,12 +1,12 @@
-import {Center, Grid, Group, Stack, Text, Title, useMantineTheme} from "@mantine/core";
-import {ImagePicker} from "@components/ImagePicker.jsx";
-import {useEncrypt} from "@hooks/EncryptData.jsx";
-import {useEffect, useState} from "react";
-import {motion} from "framer-motion";
+import { Center, Grid, Group, Stack, Text, Title, useMantineTheme } from "@mantine/core";
+import { ImagePicker } from "@components/ImagePicker.jsx";
+import { useEncrypt } from "@hooks/EncryptData.jsx";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import dayjs from "dayjs";
 
-export function ProfileView({data = {}}) {
-    const {getEncryptedData} = useEncrypt();
+export function ProfileView({ data = {} }) {
+    const { getEncryptedData } = useEncrypt();
     const [imagePath, setImagePath] = useState('');
     const [userType, setUserType] = useState('admin');
     const theme = useMantineTheme();
@@ -17,7 +17,7 @@ export function ProfileView({data = {}}) {
 
     const getProfileImagePath = () => {
         const userType = getEncryptedData('roles').toLowerCase();
-        setUserType(userType);        
+        setUserType(userType);
         let path = '';
         switch (userType) {
             case 'admin':
@@ -100,27 +100,20 @@ export function ProfileView({data = {}}) {
     }
 
     return (
-        <motion.div initial={{opacity: 0, y: 50}} animate={{opacity: 1, y: 0}} exit={{opacity: 0, y: 50}}>
-            <Stack gap={0} p={20}
-            styles={{
-                root: {
-                    maxHeight: '70vh',
-                    overflowX: 'hidden',
-                    overflowY: 'auto',
-                }
-            }}
-            >
+        <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }}
+            className='h-full overflow-y-auto max-h-96'>
+            <Stack gap={0} p={20}>
                 <Group>
                     <Center styles={{
                         root: {
                             width: '100%',
                         }
                     }}>
-                        <ImagePicker value={imagePath} disableForm={true}/>
+                        <ImagePicker value={imagePath} disableForm={true} />
                     </Center>
                 </Group>
                 <Group my={'md'}>
-                    <Title size="h5" style={{fontWeight: '400'}}>
+                    <Title size="h5" style={{ fontWeight: '400' }}>
                         {userType.charAt(0).toUpperCase() + userType.slice(1)} Details
                     </Title>
                 </Group>

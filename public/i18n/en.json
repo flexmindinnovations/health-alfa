@@ -166,5 +166,18 @@
   "selectDuration": "Select Duration",
   "searchDoctor": "Search Doctor",
   "searchPatient": "Search Patient",
-  "selectDoctorPrompt": "Select doctor from list"
-}
+  "selectDoctorPrompt": "Select doctor from list",
+  "appointmentDetails": "Appointment Details",
+  "doctorDetails": "Doctor Details",
+  "patientDetails": "Patient Details",
+  "prescriptionDetails": "Prescription Details",
+  "notAvailable": "Not available",
+  "dob": "Date of Birth",
+  "age": "Age",
+  "appointmentInfo": "Appointment Details",
+  "appointmentStatus": "Appointment Status",
+  "prescribingDoctor": "Prescribing Doctor",
+  "prescriptionFor": "Prescription For",
+  "medicineName": "Medicine Name",
+  "frequency": "Frequency"
+  }

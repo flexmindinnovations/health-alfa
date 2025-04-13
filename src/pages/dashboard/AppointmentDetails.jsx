@@ -165,4 +165,4 @@ function AppointmentDetails() {
     )
 }
 
-export default AppointmentDetails
+export default AppointmentDetails;

@@ -40,7 +40,7 @@ export default function Appointments() {
     const [loading, setLoading] = useState(true);
     const [view, setView] = useState('card');
     const { openModal } = useModal();
-    const { getEncryptedData } = useEncrypt();
+    const { setEncryptedData, getEncryptedData } = useEncrypt();
     const theme = useMantineTheme();
     const http = useHttp();
     const [userType, setUserType] = useState('admin');
@@ -193,7 +193,7 @@ export default function Appointments() {
             case 'patient':
             case 'client':
             case 'user':
-                modalComponent = path && path === 'prescription' ? UploadPrescription : BookAppointments;
+                modalComponent = path && path === 'prescription' ? UploadPrescription : activeTab !== 'completed' ? AppointmentDetails : BookAppointments;
                 break;
             case 'admin':
                 modalComponent = path && path === 'prescription' ? UploadPrescription : BookAppointments;
@@ -204,8 +204,17 @@ export default function Appointments() {
 
     const handleCardClick = (data, rect) => {
         const role = getEncryptedData('roles')?.toLocaleLowerCase();
+        const path = location?.pathname && location.pathname?.split('/')[2] || '';
         if (role !== 'doctor') {
-            // openAddEditModal(data, rect);
+            console.log('data: ', data);
+            console.log('activeTab: ', activeTab);
+            if (activeTab !== 'completed') {
+                openAddEditModal(data, rect);
+            } else {
+                const { appointmentId } = data;
+                setEncryptedData('appointmentId', appointmentId);
+                navigate(path === 'prescription' ? `/app/appointments/details/${data.appointmentId}` : `/app/appointments/lookup/${data.doctorId}/${data.patientId}`, { state: { data } })
+            }
         } else {
             navigate(`/app/appointments/details/${data.appointmentId}`, { state: { data } })
         }
@@ -220,6 +229,7 @@ export default function Appointments() {
             },
             props: `min-h-[480px]`,
             size: 'xl',
+            closable: true,
             isAddEdit: false,
             title: getModalTitle(data),
         });
@@ -233,7 +243,7 @@ export default function Appointments() {
                 title = `${t("prescription")} - ${data.doctorName}`;
                 break;
             default:
-                title = `${t("bookAppointment")} - ${data.doctorName}`;
+                title = activeTab !== 'completed' ? `${t('appointmentDetails')} - ${data.patientName}` : `${t("bookAppointment")} - ${data.doctorName}`;
         }
         return title;
     }
@@ -362,7 +372,7 @@ export default function Appointments() {
                 </motion.div>
             ) : (
                 <Tabs value={activeTab} onChange={onTabChange} styles={{
-                    root: { flex: '1', display: 'flex', flexDirection: 'column' },
+                    root: { flex: '1', display: 'flex', flexDirection: 'column', overflow: 'auto' },
                     panel: { height: '100%', flex: '1' }
                 }}>
                     <Tabs.List>

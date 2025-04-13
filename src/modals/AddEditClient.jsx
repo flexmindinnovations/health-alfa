@@ -196,6 +196,7 @@ export function AddEditClient({ data = {}, mode = 'add', showCancel = true, hand
         } finally {
             setLoading(false);
             setDisableForm(false);
+            if(mode !== 'add') window.location.reload();
             handleCancel({ refresh: true });
         }
     }
@@ -205,7 +206,7 @@ export function AddEditClient({ data = {}, mode = 'add', showCancel = true, hand
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className='h-full'
+            className='h-full overflow-y-auto max-h-96'
         >
             <Box sx={{ maxWidth: 900, margin: '0 auto' }}>
                 <motion.form onSubmit={form.onSubmit(handleSubmit)} initial={{ opacity: 0 }}
