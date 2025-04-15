@@ -13,7 +13,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { useApiConfig } from "@contexts/ApiConfigContext.jsx";
 import { useDocumentTitle } from "@hooks/DocumentTitle.jsx";
-import { useEffect, useMemo, useRef, useState, createElement } from "react";
+import React, { useEffect, useMemo, useRef, useState, createElement } from "react";
 import { DoctorCard } from "@components/DoctorCard.jsx";
 import { BookAppointments } from "@components/BookAppointment.jsx";
 import { useModal } from "@hooks/AddEditModal.jsx";
@@ -131,7 +131,6 @@ export default function Appointments() {
     }
     const getUserCard = (row, index) => {
         const role = getEncryptedData('roles')?.toLocaleLowerCase();
-        // setUserType(role);
         let cardComponent = apiConfig.doctors.getList;
         switch (role) {
             case 'doctor':
@@ -205,18 +204,21 @@ export default function Appointments() {
     const handleCardClick = (data, rect) => {
         const role = getEncryptedData('roles')?.toLocaleLowerCase();
         const path = location?.pathname && location.pathname?.split('/')[2] || '';
+        const { appointmentId } = data;
+        setEncryptedData('appointmentId', appointmentId);
         if (role !== 'doctor') {
-            console.log('data: ', data);
-            console.log('activeTab: ', activeTab);
             if (activeTab !== 'completed') {
                 openAddEditModal(data, rect);
             } else {
-                const { appointmentId } = data;
-                setEncryptedData('appointmentId', appointmentId);
                 navigate(path === 'prescription' ? `/app/appointments/details/${data.appointmentId}` : `/app/appointments/lookup/${data.doctorId}/${data.patientId}`, { state: { data } })
             }
         } else {
-            navigate(`/app/appointments/details/${data.appointmentId}`, { state: { data } })
+            if (activeTab === 'completed') {
+                navigate(`/app/appointments/lookup/${data.doctorId}/${data.patientId}`, { state: { data } })
+            } else {
+                openAddEditModal(data, rect);
+                // navigate(`/app/appointments/details/${data.appointmentId}`, { state: { data } })
+            }
         }
     };
 
@@ -401,8 +403,11 @@ export default function Appointments() {
                                                 filteredDataSource.length ? (
                                                     <motion.div className={`mt-4 ${getGridLayout()}`}>
                                                         {
-                                                            filteredDataSource.map((row, index) => getUserCard(row))
-
+                                                            filteredDataSource.map((row, index) => (
+                                                                <React.Fragment key={row.appointmentId || row.doctorId || `appointment-${index}`}>
+                                                                    {getUserCard(row)}
+                                                                </React.Fragment>
+                                                            ))
                                                         }
                                                     </motion.div>
                                                 )

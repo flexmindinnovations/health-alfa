@@ -217,13 +217,13 @@ export function AppointmentRowItem({
                 className={`flex-1`}
                 disabled={!selectedMedicine}
                 data={[
-                    { value: "morning", label: "1--0--0" },
-                    { value: "morningEvening", label: "1--0--1" },
-                    { value: "morningAfternoonEvening", label: "1--1--1" },
-                    { value: "evening", label: "0--0--1" },
-                    { value: "afternoon", label: "0--1--0" },
-                    { value: "morningAfternoon", label: "1--1--0" },
-                    { value: "afternoonEvening", label: "0--1--1" },
+                    { value: "1--0--0", label: "1--0--0" },
+                    { value: "1--0--1", label: "1--0--1" },
+                    { value: "1--1--1", label: "1--1--1" },
+                    { value: "0--0--1", label: "0--0--1" },
+                    { value: "0--1--0", label: "0--1--0" },
+                    { value: "1--1--0", label: "1--1--0" },
+                    { value: "0--1--1", label: "0--1--1" },
                 ]}
                 onChange={(value) => onInputChange('frequency', value)}
                 searchable

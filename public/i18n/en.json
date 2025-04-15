@@ -179,5 +179,7 @@
   "prescribingDoctor": "Prescribing Doctor",
   "prescriptionFor": "Prescription For",
   "medicineName": "Medicine Name",
-  "frequency": "Frequency"
+  "frequency": "Frequency",
+  "showDetails": "Show Details",
+  "registerDate": "Registration Date"
   }
