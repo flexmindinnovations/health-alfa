@@ -1,4 +1,5 @@
 import {
+    ComboboxClearButton,
     Center,
     Button,
     Container,
@@ -6,9 +7,10 @@ import {
     Loader,
     SegmentedControl,
     Text,
+    TextInput,
     Tooltip,
     useMantineTheme,
-    Tabs
+    Tabs, Pagination
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { useApiConfig } from "@contexts/ApiConfigContext.jsx";
@@ -48,6 +50,8 @@ export default function Appointments() {
     const [searchText, setSearchText] = useState('');
     const location = useLocation();
     const navigate = useNavigate();
+    const [activePage, setActivePage] = useState(1);
+    const itemsPerPage = 12;
     const segmentedItems = [
         {
             value: 'card',
@@ -217,6 +221,7 @@ export default function Appointments() {
                 navigate(`/app/appointments/lookup/${data.doctorId}/${data.patientId}`, { state: { data } })
             } else {
                 openAddEditModal(data, rect);
+
                 // navigate(`/app/appointments/details/${data.appointmentId}`, { state: { data } })
             }
         }
@@ -300,6 +305,10 @@ export default function Appointments() {
         getAppointmentList(tab);
     }
 
+    const handlePageChange = (page) => {
+        setActivePage(page);
+    };
+
     const handleDateClick = (arg) => {
         // alert(arg.dateStr)
     }
@@ -328,21 +337,21 @@ export default function Appointments() {
             <Group py={20} justify="space-between">
                 <Group>
                     {/* Uncomment if needed */}
-                    {/* {view === 'card' && (
-          <TextInput
-            placeholder={t('search')}
-            ref={searchInputRef}
-            value={searchText}
-            leftSection={<SearchIcon size={16} />}
-            onInput={handleFilterTextChange}
-            rightSection={
-              searchText && (
-                <ComboboxClearButton onClear={handleClearInput} />
-              )
-            }
-            className="w-full md:w-96"
-          />
-        )} */}
+                    {view === 'card' && (
+                        <TextInput
+                            placeholder={t('search')}
+                            ref={searchInputRef}
+                            value={searchText}
+                            leftSection={<SearchIcon size={16} />}
+                            onInput={handleFilterTextChange}
+                            rightSection={
+                                searchText && (
+                                    <ComboboxClearButton onClear={handleClearInput} />
+                                )
+                            }
+                            className="w-full md:w-96"
+                        />
+                    )}
                 </Group>
 
                 <Group>
@@ -398,16 +407,24 @@ export default function Appointments() {
                                     </motion.div>
                                 ) :
                                     (
-                                        <motion.div className="h-full w-full">
+                                        <motion.div className="h-full w-full flex flex-col">
                                             {
-                                                filteredDataSource.length ? (
-                                                    <motion.div className={`mt-4 ${getGridLayout()}`}>
+                                                filteredDataSource?.length ? (
+                                                    <motion.div className={`mt-4 flex-1 ${getGridLayout()}`}>
                                                         {
-                                                            filteredDataSource.map((row, index) => (
-                                                                <React.Fragment key={row.appointmentId || row.doctorId || `appointment-${index}`}>
-                                                                    {getUserCard(row)}
-                                                                </React.Fragment>
-                                                            ))
+                                                            filteredDataSource
+                                                                .slice(
+                                                                    (activePage - 1) * itemsPerPage,
+                                                                    activePage * itemsPerPage
+                                                                )
+                                                                .map((row, index) => (
+                                                                    <React.Fragment key={row.appointmentId || row.doctorId || `appointment-${index}`}>
+                                                                        {getUserCard(row)}
+                                                                    </React.Fragment>
+
+
+
+                                                                ))
                                                         }
                                                     </motion.div>
                                                 )
@@ -419,9 +436,22 @@ export default function Appointments() {
                                                         </motion.div>
                                                     )
                                             }
+                                            {
+                                                filteredDataSource?.length > itemsPerPage && (
+                                                    <Pagination mt={20} total={Math.ceil(filteredDataSource.length / itemsPerPage)} value={activePage} 
+                                                    onChange={handlePageChange}
+                                                    styles={{
+                                                        root: {
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center'
+                                                        }
+                                                    }}
+                                                    withEdges />
+                                                )
+                                            }
                                         </motion.div>
                                     )
-
                             }
                         </Tabs.Panel>
                     ))}
