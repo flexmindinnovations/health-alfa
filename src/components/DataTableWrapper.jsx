@@ -56,18 +56,18 @@ export function DataTableWrapper({
     const PAGE_SIZES = [10, 15, 20];
     const radius = theme.radius.xl;
 
-    const applyFilters = () => {
+    const applyFilters = useCallback(() => {
         const query = searchQuery.toLowerCase();
-        if (dataSource.length) {
+        if (dataSource?.length) {
             setFilteredData(
                 dataSource.filter((record) =>
                     Object.values(record).some((value) =>
                         String(value).toLowerCase().includes(query)
                     )
-                )
-            );
+                ).slice((pagination.page - 1) * pagination.pageSize, pagination.page * pagination.pageSize)
+            )
         }
-    };
+    }, [searchQuery, dataSource, pagination.page, pagination.pageSize]);
 
     useEffect(applyFilters, [searchQuery, dataSource]);
 
@@ -79,6 +79,10 @@ export function DataTableWrapper({
             setThemeMode(colorScheme);
         }
     }, [colorScheme, i18n]);
+
+    useEffect(() => {
+        applyFilters();
+    }, [pagination.page, pagination.pageSize, applyFilters]);
 
     const handleSortChange = (sortStatus) => {
         const { columnAccessor, direction } = sortStatus;
@@ -94,6 +98,7 @@ export function DataTableWrapper({
                         ? 1
                         : -1;
             })
+                .slice((pagination.page - 1) * pagination.pageSize, pagination.page * pagination.pageSize)
         );
         setPagination((prev) => ({ ...prev, sortStatus }));
     };
@@ -141,11 +146,14 @@ export function DataTableWrapper({
                     {
                         showNavigation && (
                             <Tooltip label={t('showDetails')}>
-                                <ExternalLink
-                                    size={16}
-                                    style={{ cursor: 'pointer' }}
+                                <ActionIcon
+                                    variant="subtle"
+                                    color="blue"
+                                    className="cursor-pointer"
                                     onClick={() => handleOnNavigate(record)}
-                                />
+                                >
+                                    <ExternalLink size={16} />
+                                </ActionIcon>
                             </Tooltip>
                         )
                     }
@@ -307,7 +315,7 @@ export function DataTableWrapper({
                 noRecordsText={t('noRecordsToShow')}
                 recordsPerPageLabel={t('recordsPerPage')}
                 columns={enhancedColumns}
-                totalRecords={filteredData.length}
+                totalRecords={dataSource.length}
                 recordsPerPage={pagination.pageSize}
                 page={pagination.page}
                 onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
@@ -319,7 +327,7 @@ export function DataTableWrapper({
                 onSortStatusChange={handleSortChange}
                 paginationSize="md"
                 paginationText={({ from, to, totalRecords }) =>
-                    `${t('records')} ${from} - ${to} ${t('of')} ${totalRecords}`
+                    `${t('records')} ${from} - ${to} ${t('of')} ${totalRecords || 0}`
                 }
                 rowStyle={(record, index) => ({
                     fontSize: theme.fontSizes.xs,

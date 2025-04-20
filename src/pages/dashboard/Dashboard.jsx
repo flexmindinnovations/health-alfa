@@ -16,8 +16,6 @@ export default function Dashboard() {
 
   useEffect(() => {
     const user = getEncryptedData('roles')?.toLowerCase();
-    console.log('user: ', user);
-
     setUserType(user);
   }, [userType])
 
@@ -26,8 +24,8 @@ export default function Dashboard() {
     <div className='h-full w-full'>
       {
         userType === utils.userTypes.ADMIN ? <AdminDashboard />
-          : userType === utils.userTypes.DOCTOR ? <DoctorDashboard /> 
-          : <PatientDashboard />
+          : userType === utils.userTypes.DOCTOR ? <DoctorDashboard />
+            : <PatientDashboard />
       }
     </div>
   )

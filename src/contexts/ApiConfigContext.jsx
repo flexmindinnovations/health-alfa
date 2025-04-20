@@ -43,7 +43,10 @@ const defaultApiConfig = {
         getPatientVisitInfoByVisitId: (id) => `/PatientVisit/getPatientVisitInfoByVisitId/${id}`,
         getPatientVisitListDoctorWise: (doctorId) => `/PatientVisit/getPatientVisitListDoctorWise/${doctorId}`,
         savePatientVisit: `/PatientVisit/SavePatientVisit`,
-        updatePatientVisit: (visitId) => `/PatientVisit/updatePatientVisit/${visitId}`
+        updatePatientVisit: (visitId) => `/PatientVisit/updatePatientVisit/${visitId}`,
+        getPatientVisitListDoctorAndPatientWise: (doctorId, patientId) => `/PatientVisit/getPatientVisitListDoctorAndPatientWise/${doctorId}/${patientId}`,
+        getPatientVisitInfoByVisitId: (visitId) => `/PatientVisit/getPatientVisitInfoByVisitId/${visitId}`,
+
     },
     testTypes: {
         getList: `/TestType/getTestTypeList`

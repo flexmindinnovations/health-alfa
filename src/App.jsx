@@ -34,6 +34,8 @@ const DoctorPrescription = lazy(() => import('@dashboard/DoctorPrescription'));
 const AddEditAppointment = lazy(() => import('@dashboard/AddEditAppointment'));
 const AppointmentHistory = lazy(() => import('@dashboard/AppointmentHistory'));
 const PrescriptionList = lazy(() => import('@dashboard/PrescriptionList'));
+const PatientDoctorHistory = lazy(() => import('@dashboard/PatientDoctorHistory'));
+const PrescriptionDetails = lazy(() => import('@dashboard/PrescriptionDetails'));
 const AppointmentRowDetails = lazy(() => import('@dashboard/AppointmentRowDetails'));
 
 function App() {
@@ -65,6 +67,8 @@ function App() {
                     <Route path='appointments/details/all/:appointmentId' element={<AppointmentRowDetails />} />
                     <Route path='appointments/lookup/:doctorId/:patientId' element={<AppointmentHistory />} />
                     <Route path='prescription' element={<PrescriptionList />} />
+                    <Route path='prescription/lookup/:doctorId/:patientId' element={<PatientDoctorHistory />} />
+                    <Route path='prescription/details/:visitId' element={<PrescriptionDetails />} />
                     <Route path='tests' element={<TestTypes />} />
                     <Route path='documents' element={<Documents />} />
                     <Route path='medical-tests' element={<MedicalTests />} />

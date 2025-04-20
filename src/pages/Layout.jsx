@@ -1,78 +1,95 @@
-import { Link, Outlet, useLocation } from 'react-router-dom'
-import { AppShell, AspectRatio, Burger, Group, Image, Text, UnstyledButton, useMantineTheme } from '@mantine/core'
-import { useDisclosure, useMediaQuery } from '@mantine/hooks'
-import styles from '@styles/layout.module.css'
-import { createElement, useEffect, useState } from 'react'
-import { MENU_ITEMS } from '@config/MenuItems.js'
-import { Settings } from '@components/Settings.jsx'
-import { useTranslation } from 'react-i18next'
-import { UserMenu } from '@components/UserMenu.jsx'
-import logo from '/images/logo.png'
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import { AppShell, AspectRatio, Breadcrumbs, Burger, Group, Image, Text, UnstyledButton, useMantineTheme, Tooltip } from '@mantine/core';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import styles from '@styles/layout.module.css';
+import { createElement, useEffect, useState, useCallback } from 'react'; // Added useCallback
+import { MENU_ITEMS } from '@config/MenuItems.js';
+import { Settings } from '@components/Settings.jsx';
+import { useTranslation } from 'react-i18next';
+import { UserMenu } from '@components/UserMenu.jsx';
+import logo from '/images/logo.png';
 import { AnimatePresence, motion } from 'framer-motion';
 import { modals } from "@mantine/modals";
+import { ChevronRight, Home } from 'lucide-react';
 import { useEncrypt } from "@hooks/EncryptData.jsx";
 
 export function Layout() {
-    const { t, i18n } = useTranslation()
-    const [menuItems, setMenuItems] = useState([])
-    const [publicItems, setPublicItems] = useState([])
-    const [opened, { toggle }] = useDisclosure()
-    const { pathname } = useLocation()
-    const [showSettingsModel, setShowSettingsModel] = useState(false)
-    const [hoveredIndex, setHoveredIndex] = useState(null);
+    const { t, i18n } = useTranslation();
+    const [menuItems, setMenuItems] = useState([]);
+    const [opened, { toggle }] = useDisclosure();
+    const { pathname } = useLocation();
     const theme = useMantineTheme();
     const isSmallScreen = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
     const { getEncryptedData } = useEncrypt();
+    const [breadcrumbItems, setBreadcrumbItems] = useState([]);
+
+    const filteredMenuItems = useCallback(() => {
+        const userRole = getEncryptedData('roles')?.toUpperCase();
+        if (!userRole) return MENU_ITEMS;
+        return MENU_ITEMS.filter((item) => item.roles.includes(userRole));
+    }, [getEncryptedData]);
 
     useEffect(() => {
-        let activePath = '/app';
-        if (sessionStorage.getItem('currentItem')) activePath = sessionStorage.getItem('currentItem');
+        const currentMenuItems = filteredMenuItems();
+        const activePath = sessionStorage.getItem('currentItem') || pathname;
 
-        const userRole = getEncryptedData('roles')?.toUpperCase();
-        const updatedMenuItems = userRole ?
-            MENU_ITEMS.filter((item) => item.roles.includes(userRole))
-                .map(item => ({
-                    ...item,
-                    active: `/app${item.route}` === activePath
-                }))
-            :
-            MENU_ITEMS.map(item => ({
-                ...item,
-                active: `/app${item.route}` === activePath
-            }))
+        // Update menu items' active state
+        const updatedMenuItems = currentMenuItems.map(item => ({
+            ...item,
+            active: `/app${item.route}` === activePath
+        }));
         setMenuItems(updatedMenuItems);
-    }, [pathname, i18n])
 
-    const handleNavClick = menuItem => {
-        sessionStorage.setItem('currentItem', `/app${menuItem.route}`);
-        const publicLinkItemIndex = publicItems.findIndex(
-            item => item.id === menuItem.id
-        )
-        const isPublicLink = publicLinkItemIndex !== -1
-        const updateMenuItems = menuItems.map(item => ({
+        // --- Breadcrumb Generation Logic ---
+        const pathSegments = pathname.split('/').filter(segment => segment && segment !== 'app'); // Remove 'app' segment
+        const generatedBreadcrumbs = [];
+        let currentCumulativePath = '/app';
+
+        pathSegments.forEach((segment, index) => {
+            currentCumulativePath += `/${segment}`;
+            const isLastSegment = index === pathSegments.length - 1;
+
+            // Find if the *cumulative* path matches a menu item route
+            const matchingMenuItem = currentMenuItems.find(item => `/app${item.route}` === currentCumulativePath);
+
+            if (matchingMenuItem) {
+                // Check if this path is already added to avoid duplicates
+                if (!generatedBreadcrumbs.some(b => b.href === currentCumulativePath)) {
+                    generatedBreadcrumbs.push({
+                        key: matchingMenuItem.key, // Use item key for potential translation
+                        href: currentCumulativePath,
+                        title: t(matchingMenuItem.key), // Translate using item key
+                        active: isLastSegment // Only the last item is active
+                    });
+                }
+            }
+        });
+
+        setBreadcrumbItems(generatedBreadcrumbs);
+        // --- End Breadcrumb Generation ---
+
+    }, [pathname]);
+    // pathname, i18n.language, getEncryptedData, filteredMenuItems
+
+    const handleNavClick = useCallback((menuItem) => {
+        const targetPath = `/app${menuItem.route}`;
+        sessionStorage.setItem('currentItem', targetPath);
+        setMenuItems(prevItems => prevItems.map(item => ({
             ...item,
             active: item.id === menuItem.id
-        }))
-        setMenuItems(updateMenuItems)
-        if (!isPublicLink) toggle()
-    }
+        })));
+        if (window.innerWidth < 768) toggle();
+    }, [toggle]);
 
-    const showHideSettingsModel = () => {
-        setShowSettingsModel(prev => !prev);
-        openSettings();
-    }
-
-    const openSettings = () => {
-        const renderTitle = (tab) => (
-            <Group position="apart" style={{ width: '100%', minHeight: '2rem' }} justify="space-between">
-                <Text size="md" style={{ fontWeight: 600 }}>
-                    {t('settings')}
-                </Text>
-            </Group>
+    const openSettings = useCallback(() => {
+        const renderTitle = () => (
+            <Text size="md" fw={600}>
+                {t('settings')}
+            </Text>
         );
 
         modals.open({
-            title: renderTitle('profile'),
+            title: renderTitle(),
             transitionProps: { duration: 100, timingFunction: 'linear' },
             size: 'xl',
             withCloseButton: true,
@@ -83,12 +100,9 @@ export function Layout() {
                 content: { overflow: 'hidden' },
                 body: { minHeight: '50vh', padding: 0 }
             },
-            children: (
-                <Settings />
-            ),
+            children: <Settings />,
         });
-    };
-
+    }, [t, isSmallScreen]);
 
     return (
         <AppShell
@@ -112,9 +126,44 @@ export function Layout() {
                         size='md'
                     />
                     <Group justify='space-between' style={{ flex: 1 }}>
-                        <div></div>
+                        {/* Breadcrumbs Section */}
+                        <Breadcrumbs
+                            separator={<ChevronRight size={16} />}
+                            styles={{ separator: { color: theme.colors.gray[6] } }}
+                            className="!flex !items-center !gap-2"
+                        >
+                            {/* Fixed Home Link */}
+                            <Tooltip label={t('home')}>
+                                <UnstyledButton
+                                    onClick={() => handleNavClick(MENU_ITEMS[0])}
+                                >
+                                    <Link to={`/app${MENU_ITEMS[0].route}`} >
+                                        <Home size={16} />
+                                    </Link>
+                                </UnstyledButton>
+                            </Tooltip>
+                            {/* Dynamic Breadcrumb Items */}
+                            {breadcrumbItems.map((item) =>
+                                item.active ? (
+                                    // Last item (active) - Render as Text
+                                    <Text key={item.key} size={'sm'} c={theme.primaryColor} fw={500}>
+                                        {item.title}
+                                    </Text>
+                                ) : (
+                                    // Intermediate items - Render as Link
+                                    <Link key={item.key} to={item.href}>
+                                        <Text size={'sm'} c={theme.colors.gray[6]}>
+                                            {item.title}
+                                        </Text>
+                                    </Link>
+                                )
+                            )}
+                        </Breadcrumbs>
+
+                        {/* Right side controls */}
                         <Group pos={'right'}>
-                            <UserMenu showHideSettingsModel={() => showHideSettingsModel()} />
+                            {/* Pass openSettings directly */}
+                            <UserMenu showHideSettingsModel={openSettings} />
                         </Group>
                     </Group>
                 </Group>
@@ -122,50 +171,19 @@ export function Layout() {
 
             <AppShell.Navbar className='px-0'>
                 <Group className='flex !flex-col !items-start !justify-start !gap-2'>
-                    <div
-                        className='header w-full relative h-24 flex items-center justify-center bg-cDefault/50'>
-                        <Link
-                            to={`/app${MENU_ITEMS[0].route}`}
-                            className={`flex items-center py-2 px-6 text-sm gap-2 lg:gap-4 xl:gap-4 2xl:gap-4 !font-medium`}
-                        >
-                            <AspectRatio ratio={16 / 9} maw={'100px'}
-                            h={'80px'}  mx='auto'>
-                                <Image
-                                    src={logo}
-                                    alt='logo'
-                                    className='!object-fill'
-                                    width='100px'
-                                    height={'80px'}
-                                    styles={{
-                                        root: {
-                                            height: '80px',
-                                            width: '100px',
-                                            objectFit: 'fill'
-                                        }
-                                    }}
-                                />
+                    <div className='header w-full relative h-24 flex items-center justify-center bg-cDefault/50'>
+                        {/* Ensure link goes to a valid initial route if needed */}
+                        <Link to={'/app'} className={`flex items-center py-2 px-6 text-sm gap-2 lg:gap-4 xl:gap-4 2xl:gap-4 !font-medium`}>
+                            <AspectRatio ratio={16 / 9} maw={'100px'} h={'80px'} mx='auto'>
+                                <Image src={logo} alt='logo' className='!object-fill' width='100px' height={'80px'} styles={{ root: { height: '80px', width: '100px', objectFit: 'fill' } }} />
                             </AspectRatio>
                         </Link>
-                        <Burger
-                            opened={opened}
-                            className='absolute top-4 right-4'
-                            onClick={toggle}
-                            hiddenFrom='sm'
-                            size='md'
-                        />
+                        <Burger opened={opened} className='absolute top-4 right-4' onClick={toggle} hiddenFrom='sm' size='md' />
                     </div>
+                    {/* Navbar Items */}
                     <motion.ul
                         className={styles.navbarContainer}
-                        variants={{
-                            visible: {
-                                opacity: 1,
-                                transition: {
-                                    when: "beforeChildren",
-                                    staggerChildren: 0.4,
-                                },
-                            },
-                            hidden: { opacity: 0 },
-                        }}
+                        variants={{ visible: { opacity: 1, transition: { when: "beforeChildren", staggerChildren: 0.05 } }, hidden: { opacity: 0 } }} // Adjusted stagger
                         initial="hidden"
                         animate="visible"
                     >
@@ -173,32 +191,16 @@ export function Layout() {
                             <motion.li
                                 key={item.key}
                                 className={styles.navbarItemWrapper}
-                                onMouseEnter={() => setHoveredIndex(index)}
-                                // onMouseLeave={() => setHoveredIndex(null)}
                                 variants={{
-                                    hidden: {
-                                        x: -40,
-                                        opacity: 0,
-                                    },
-                                    visible: {
-                                        x: 0,
-                                        opacity: 1,
-                                        transition: {
-                                            delay: index * 0.03,
-                                        },
-                                    },
+                                    hidden: { x: -40, opacity: 0 },
+                                    visible: { x: 0, opacity: 1, transition: { delay: index * 0.03 } },
                                 }}
                             >
                                 <UnstyledButton
-                                    key={item.key}
                                     onClick={() => handleNavClick(item)}
-                                    className={`${item.active ? styles.activeItem : styles.inactiveItem
-                                        } ${styles.navbarItem}`}
+                                    className={`${item.active ? styles.activeItem : styles.inactiveItem} ${styles.navbarItem}`}
                                 >
-                                    <Link
-                                        to={`/app${item.route}`}
-                                        className={`flex items-center py-2 px-6 text-sm gap-2 lg:gap-4 xl:gap-4 2xl:gap-4 !font-medium`}
-                                    >
+                                    <Link to={`/app${item.route}`} className={`flex items-center py-2 px-6 text-sm gap-2 lg:gap-4 xl:gap-4 2xl:gap-4 !font-medium`}>
                                         <span>{createElement(item.icon, { size: 16 })}</span>
                                         <span>{t(item.key)}</span>
                                     </Link>
@@ -219,7 +221,8 @@ export function Layout() {
                                 animate={{ x: 0, opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.2, ease: "easeOut" }}
-                                className='w-full h-full'>
+                                className='w-full h-full'
+                            >
                                 <Outlet />
                             </motion.div>
                         </div>
@@ -227,5 +230,5 @@ export function Layout() {
                 </div>
             </AppShell.Main>
         </AppShell>
-    )
+    );
 }

@@ -52,7 +52,6 @@ export default function PatientVisits() {
         if (i18n.isInitialized) {
             setColumns(_columns);
             getPatientVisitList();
-            console.log('called patientVisits');
         }
     }, []);
 
