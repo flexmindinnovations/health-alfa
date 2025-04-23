@@ -28,7 +28,7 @@ export function ProfileFormComponent(props) {
                 formComponent = <AddEditClient data={data} mode={'edit'} showCancel={false} />;
                 break;
             case userTypes.DOCTOR:
-                formComponent = <AddEditDoctor data={data} showCancel={false} />
+                formComponent = <AddEditDoctor data={data} mode={'edit'} showCancel={false} />
                 break;
         }
         return formComponent;

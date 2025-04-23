@@ -149,7 +149,7 @@ export function AddEditDoctor({ data = {}, mode = 'add', showCancel = true, hand
         } finally {
             setLoading(false);
             if (mode !== 'add') window.location.reload();
-            handleCancel({ refresh: true });
+            if (showCancel) handleCancel({ refresh: true });
         }
     };
 

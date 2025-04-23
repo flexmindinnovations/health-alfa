@@ -203,5 +203,11 @@
   "recentAppointments": "Recent Appointments",
   "recentPrescriptions": "Recent Prescriptions",
   "currentPatient": "Current Patient",
-  "noPatientCurrently": "No patient currently"
+  "noPatientCurrently": "No patient currently",
+  "time": "Time",
+  "duration": "Duration",
+  "noUpcomingAppointments": "No upcoming appointments",
+  "noPendingPrescriptions": "No pending prescriptions",
+  "noRecentPatients": "No recent patients",
+  "noRecentAppointments": "No recent appointments"
   }

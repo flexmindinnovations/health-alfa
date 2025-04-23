@@ -5,10 +5,12 @@ import {
     CloseIcon,
     Group,
     Text,
+    ScrollArea,
     TextInput,
     Tooltip,
     useMantineColorScheme,
-    useMantineTheme
+    useMantineTheme,
+    Stack
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { useCallback, useEffect, useState } from 'react';
@@ -37,7 +39,8 @@ export function DataTableWrapper({
     showEditButton = true,
     showDeleteButton = true,
     showNavigation = false,
-    showActions = true
+    showActions = true,
+    height = '98%'
 }) {
     const [pagination, setPagination] = useState({
         page: 1,
@@ -232,7 +235,7 @@ export function DataTableWrapper({
         : undefined;
 
     return (
-        <div className="h-full w-full flex flex-col items-start justify-start gap-4">
+        <Stack className="w-full flex-1 flex flex-col items-start justify-start gap-4">
             <div className={`${styles.toolbar}`}>
                 <div className="search-filter flex items-center justify-between w-full gap-4">
                     <div style={{ position: 'relative', width: '50%' }}>
@@ -296,11 +299,13 @@ export function DataTableWrapper({
                 }}
                 styles={{
                     root: {
-                        // border: `1px solid var(--mantine-datatable-border-color)`,
                         width: '100%',
-
+                        height: height
                     },
                     header: {
+                        fontSize: theme.fontSizes.xs,
+                    },
+                    body: {
                         fontSize: theme.fontSizes.xs,
                     },
                     pagination: {
@@ -335,6 +340,6 @@ export function DataTableWrapper({
                 paginationWrapBreakpoint="sm"
                 rowExpansion={rowExpansionConfig}
             />
-        </div>
+        </Stack>
     );
 }

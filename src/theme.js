@@ -241,7 +241,8 @@ export const theme = createTheme({
                 w: '100%',
                 h: '100%',
                 size: 'xl'
-            }
+            },
+            styles: (theme) => ({ root: { display: 'flex' } })
         },
         Select: {
             defaultProps: {

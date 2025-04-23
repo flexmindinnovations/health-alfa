@@ -58,7 +58,7 @@ export default function PrescriptionList() {
                     width: "auto",
                     style: { padding: "10px", flex: 1 },
                     render: (record) => (
-                        <Text>{record.patientName}</Text>
+                        <Text size="xs" p={0}>{record.patientName}</Text>
                     )
                 },
                 {
@@ -67,7 +67,7 @@ export default function PrescriptionList() {
                     width: "auto",
                     style: { padding: "10px", flex: 1 },
                     render: (record) => (
-                        <Text>{record.durationInMinutes}</Text>
+                        <Text size="xs" p={0}>{record.durationInMinutes}</Text>
                     )
                 },
                 // {
@@ -118,7 +118,7 @@ export default function PrescriptionList() {
     };
 
     return (
-        <Container>
+        <Container p={0} styles={{root: {display: 'flex'}}}>
             <DataTableWrapper
                 loading={loading}
                 showAddButton={false}
