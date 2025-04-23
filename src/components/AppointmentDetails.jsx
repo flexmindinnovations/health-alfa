@@ -72,8 +72,8 @@ export function AppointmentDetails({ data = {} }) {
     };
 
     return (
-        <motion.div layout>
-            <Card radius="md" p="lg">
+        <motion.div layout className="overflow-auto">
+            <Card radius="md" py="lg" classNames={{root: `max-h-[450px]  !overflow-auto`}}>
                 <Stack gap="lg">
                     <Group justify="flex-end">
                         <Badge

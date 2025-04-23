@@ -209,5 +209,6 @@
   "noUpcomingAppointments": "No upcoming appointments",
   "noPendingPrescriptions": "No pending prescriptions",
   "noRecentPatients": "No recent patients",
-  "noRecentAppointments": "No recent appointments"
+  "noRecentAppointments": "No recent appointments",
+  "doctorAddress": "Doctor Address"
   }
