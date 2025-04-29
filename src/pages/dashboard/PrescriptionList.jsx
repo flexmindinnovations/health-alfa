@@ -1,103 +1,121 @@
-import { Container, useMantineTheme, Text } from "@mantine/core";
+import { Container, useMantineTheme, Text, Badge, Group, Stack, RadioGroup, Radio } from "@mantine/core";
 import { useDocumentTitle } from "@hooks/DocumentTitle";
 import { useTranslation } from "react-i18next";
 import { DataTableWrapper } from "@components/DataTableWrapper";
 import { useApiConfig } from "@contexts/ApiConfigContext.jsx";
 import { useListManager } from "@hooks/ListManager.jsx";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { openNotificationWithSound } from "@config/Notifications.js";
 import { utils } from "@config/utils.js";
-import { useEncrypt } from "@hooks/EncryptData.jsx";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+
+const ALL_STATUS = 'All';
 
 export default function PrescriptionList() {
     const { t } = useTranslation();
     const { apiConfig } = useApiConfig();
     const theme = useMantineTheme();
-    const { getEncryptedData } = useEncrypt();
     useDocumentTitle(t("prescriptionList"));
     const navigate = useNavigate();
 
+    const appointmentStatusOptions = useMemo(() => [
+        { value: ALL_STATUS, label: t('all') },
+        { value: utils.appointmentStatus.BOOKED, label: t(utils.appointmentStatus.BOOKED) },
+        { value: utils.appointmentStatus.COMPLETED, label: t(utils.appointmentStatus.COMPLETED) },
+        { value: utils.appointmentStatus.CANCELLED, label: t(utils.appointmentStatus.CANCELLED) }
+    ], [t]);
+
+    const [selectedStatus, setSelectedStatus] = useState(ALL_STATUS);
+
+    const getStatusColor = (status) => {
+        switch (status) {
+            case utils.appointmentStatus.BOOKED: return 'blue';
+            case utils.appointmentStatus.COMPLETED: return 'green';
+            case utils.appointmentStatus.CANCELLED: return 'red';
+            case utils.appointmentStatus.PENDING: return 'yellow';
+            default: return 'gray';
+        }
+    };
+
     const columns = useMemo(
-        () => {
-            return [
-                // {
-                //     accessor: "appointmentId",
-                //     title: t("id"),
-                //     width: 80,
-                //     style: { padding: "10px" },
-                // },
-                // {
-                //     accessor: 'doctorProgfileImage',
-                //     title: t('profileImagePath'),
-                //     width: 80,
-                //     style: {padding: '10px'},
-                //     render: (record) => {
-                //         const imageEndpoint = record.doctorProfileImagePath;
-                //         const host = import.meta.env.VITE_API_URL;
-                //         const imageUrl = `${host}/${imageEndpoint}`.replace('/api', '');
-                //         return (
-                //             <img
-                //                 src={imageUrl}
-                //                 alt={t('profileImage')}
-                //                 style={{
-                //                     width: '30px',
-                //                     height: '30px',
-                //                     margin: '0 auto',
-                //                     borderRadius: '50%',
-                //                     objectFit: 'cover',
-                //                 }}
-                //             />
-                //         )
-                //     }
-                // },
-                {
-                    accessor: "patientName",
-                    title: t("patientName"),
-                    width: "auto",
-                    style: { padding: "10px", flex: 1 },
-                    render: (record) => (
-                        <Text size="xs" p={0}>{record.patientName}</Text>
-                    )
-                },
-                {
-                    accessor: "durationInMinutes",
-                    title: t("durationInMinutes"),
-                    width: "auto",
-                    style: { padding: "10px", flex: 1 },
-                    render: (record) => (
-                        <Text size="xs" p={0}>{record.durationInMinutes}</Text>
-                    )
-                },
-                // {
-                //     accessor: "mobileNo",
-                //     title: t("mobileNo"),
-                //     width: "auto",
-                //     style: { padding: "10px", flex: 1 },
-                // },
-                // {
-                //     accessor: "speciality",
-                //     title: t("speciality"),
-                //     width: "auto",
-                //     style: { padding: "10px", flex: 1 },
-                // },
-                {
-                    accessor: "appointmentDate",
-                    title: t("appointmentDate"),
-                    width: "auto",
-                    style: { padding: "10px", flex: 1 },
-                    render: (record) =>
-                        record?.appointmentDate
-                            ? dayjs(record.appointmentDate).format('DD/MM/YYYY')
-                            : 'N/A',
-                },
-            ]
-        },
-        [t]
+        () => [
+            {
+                accessor: "doctorName",
+                title: t("doctorName"),
+                width: "auto",
+                style: { padding: "10px", flex: 1 },
+                render: (record) => (
+                    <Text size="xs" p={0}>{record.doctorName}</Text>
+                )
+            },
+            {
+                accessor: "durationInMinutes",
+                title: t("durationInMinutes"),
+                width: "150px",
+                style: { padding: "10px", flex: 1 },
+                render: (record) => (
+                    <Text size="xs" p={0}>{record.durationInMinutes}</Text>
+                )
+            },
+            {
+                accessor: "appointmentDate",
+                title: t("appointmentDate"),
+                width: "auto",
+                style: { padding: "10px", flex: 1 },
+                render: (record) =>
+                    record?.appointmentDate
+                        ? dayjs(record.appointmentDate).format('DD/MM/YYYY')
+                        : 'N/A',
+            },
+            {
+                accessor: "appointmentStatus",
+                title: t("appointmentStatus"),
+                width: 200,
+                style: { padding: "10px", flex: 1 },
+                filter: ({close}) => (
+                    <RadioGroup
+                        value={selectedStatus}
+                        onChange={(value) => {
+                            setSelectedStatus(value);
+                            close();
+                        }}
+                        mt="xs"
+                    >
+                        <Stack spacing="xs" mt="xs">
+                            {
+                                appointmentStatusOptions.map((item) => (
+                                    <Radio
+                                        key={item.value}
+                                        value={item.value}
+                                        label={item.label}
+                                        size="xs"
+                                        styles={{
+                                            label: {
+                                                cursor: 'pointer'
+                                            }
+                                        }}
+                                    />
+                                ))
+                            }
+                        </Stack>
+                    </RadioGroup>
+                ),
+                render: (record) => (
+                    <Badge
+                        color={getStatusColor(record?.appointmentStatus)}
+                        variant="light"
+                        size="sm"
+                    >
+                        {record?.appointmentStatus ? t(record.appointmentStatus) : 'N/A'}
+                    </Badge>
+                )
+            },
+        ],
+        [t, selectedStatus, appointmentStatusOptions]
     );
 
-    const { loading, dataSource, handleRefresh } = useListManager({
+    const { loading, dataSource: rawDataSource, handleRefresh } = useListManager({
         apiEndpoint: apiConfig.appointment.getList,
         onError: (err) => {
             const { name, message } = err;
@@ -112,25 +130,39 @@ export default function PrescriptionList() {
         }
     });
 
+    const filteredData = useMemo(() => {
+        if (selectedStatus === "All") return rawDataSource;
+        return rawDataSource.filter((item) => item.appointmentStatus === selectedStatus);
+    }, [rawDataSource, selectedStatus]);
+
     const handleEventClick = (record) => {
         const { appointmentId, doctorId } = record;
-        navigate(`/app/prescription/lookup/${doctorId}/${appointmentId}`);
+        if (appointmentId && doctorId) {
+            navigate(`/app/prescription/lookup/${doctorId}/${appointmentId}`);
+        } else {
+            console.error("Missing doctorId or appointmentId for navigation", record);
+            openNotificationWithSound({
+                title: t(utils.error),
+                message: t("navigationErrorMissingId"),
+                color: theme.colors.orange[6],
+            }, { withSound: false });
+        }
     };
 
     return (
-        <Container p={0} styles={{root: {display: 'flex'}}}>
+        <Container>
             <DataTableWrapper
-                loading={loading}
+                loading={!filteredData.length || loading}
                 showAddButton={false}
                 id={"appointmentId"}
-                addTitle={t("prescription")}
+                addTitle={t("uploadPrescription")}
                 columns={columns}
-                dataSource={dataSource}
+                dataSource={filteredData}
                 showDeleteButton={false}
                 showEditButton={false}
                 showNavigation={true}
                 onRefresh={handleRefresh}
-                handleOnNavigate={(record) => handleEventClick(record)}
+                handleOnNavigate={handleEventClick}
                 noRecordsText={t('noRecordsToShow')}
             />
         </Container>

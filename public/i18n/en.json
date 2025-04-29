@@ -210,5 +210,14 @@
   "noPendingPrescriptions": "No pending prescriptions",
   "noRecentPatients": "No recent patients",
   "noRecentAppointments": "No recent appointments",
-  "doctorAddress": "Doctor Address"
+  "doctorAddress": "Doctor Address",
+  "all": "All",
+  "filterByStatus": "Filter By Status",
+  "yourAppointments": "Your Appointments",
+  "viewYourUpcomingAppointments": "View Your Upcoming Appointments",
+  "viewAppointments": "View Appointments",
+  "quickActions": "Quick Actions",
+  "bookNewAppointment": "Book New Appointment",
+  "notifications": "Notifications",
+  "noNewNotifications": "No New Notifications"
   }

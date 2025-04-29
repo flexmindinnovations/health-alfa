@@ -16,7 +16,6 @@ dayjs.extend(isBetween);
 
 export function DoctorDashboard() {
     const { t } = useTranslation();
-    const [greeting, setGreeting] = useState('');
     const { user } = useAuth();
     const http = useHttp();
     const { apiConfig } = useApiConfig();
@@ -29,25 +28,6 @@ export function DoctorDashboard() {
     const [appointmentError, setAppointmentError] = useState(null);
     const [ongoingAppointment, setOngoingAppointment] = useState(null);
     const [currentTime, setCurrentTime] = useState(dayjs());
-
-    const MIN_TABLE_AREA_HEIGHT = 300;
-    const UPCOMING_APPOINTMENTS_HEIGHT = 300;
-
-    useEffect(() => {
-        const currentHour = dayjs().hour();
-        let _greeting = '';
-        if (currentHour >= 5 && currentHour < 12) {
-            _greeting = 'goodMorning';
-        } else if (currentHour >= 12 && currentHour < 18) {
-            _greeting = 'goodAfternoon';
-        } else {
-            _greeting = 'goodEvening';
-        }
-        setGreeting(_greeting);
-        return () => {
-            setGreeting('');
-        }
-    }, [t]);
 
     useEffect(() => {
         const now = dayjs();
@@ -209,7 +189,7 @@ export function DoctorDashboard() {
                 }
             }}
         >
-            <DashboardGreeting greeting={greeting} name={user?.doctorName} t={t} />
+            <DashboardGreeting name={user?.doctorName} />
 
             <Grid>
                 <Grid.Col span={{ base: 12, lg: 8 }}>

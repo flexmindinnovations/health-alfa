@@ -14,8 +14,9 @@ import { utils } from "@config/utils.js";
 import { openNotificationWithSound } from "@config/Notifications.js";
 import { useParams, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import { ExternalLink } from 'lucide-react';
+import { UploadPrescription } from "@components/UploadPrescription";
 import { useListManager } from "@hooks/ListManager.jsx";
+import { useModal } from "@hooks/AddEditModal.jsx";
 
 export default function PatientDoctorHistory() {
     const { t } = useTranslation();
@@ -23,6 +24,7 @@ export default function PatientDoctorHistory() {
     const theme = useMantineTheme();
     const params = useParams();
     const navigate = useNavigate();
+    const { openModal } = useModal();
 
     const apiEndpoint = useMemo(() => {
         const { doctorId, patientId } = params;
@@ -107,17 +109,30 @@ export default function PatientDoctorHistory() {
         );
     }
 
+    const openAddEditModal = ({ data = {}, mode = 'add' }) => {
+        openModal({
+            Component: UploadPrescription,
+            data: { ...data, doctorId: params.doctorId, patientId: params.patientId },
+            mode,
+            title: t("prescription"),
+            handleRefresh: handleRefresh
+        });
+    }
+
     return (
         <Container>
             <DataTableWrapper
                 loading={loading}
-                showAddButton={false}
-                id={'visitId'}
+                showAddButton={true}
+                showAddPrefix={false}
+                addTitle={t('uploadPrescription')}
+                id={'patientVisitId'}
                 columns={columns}
                 dataSource={processedDataSource}
                 showDeleteButton={false}
                 showEditButton={false}
                 showNavigation={true}
+                handleOnAdd={() => openAddEditModal({ mode: 'add' })}
                 onRefresh={handleRefresh}
                 handleOnNavigate={(record) => {
                     const { patientVisitId } = record;

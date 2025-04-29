@@ -25,6 +25,7 @@ export function DataTableWrapper({
     dataSource = [],
     showAddButton = false,
     addTitle = '',
+    showAddPrefix = true,
     id,
     handleOnAdd,
     handleOnEdit,
@@ -55,6 +56,8 @@ export function DataTableWrapper({
     const { t, i18n } = useTranslation();
     const [rowData, setRowData] = useState({});
     const [expandedRowIds, setExpandedRowIds] = useState([]);
+
+    const addButtonTitle = showAddPrefix ? `${t('add')} ${addTitle}` : addTitle;
 
     const PAGE_SIZES = [10, 15, 20];
     const radius = theme.radius.xl;
@@ -269,7 +272,7 @@ export function DataTableWrapper({
                             </ActionIcon>
                         </Tooltip>
                         {showAddButton && (
-                            <Tooltip label={`${t('add')} ${addTitle}`}>
+                            <Tooltip label={addButtonTitle}>
                                 <ActionIcon
                                     onClick={handleOnAdd}
                                     disabled={loading}

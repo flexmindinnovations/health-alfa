@@ -51,7 +51,7 @@ export default function Appointments() {
     const location = useLocation();
     const navigate = useNavigate();
     const [activePage, setActivePage] = useState(1);
-    const itemsPerPage = 12;
+    const [itemsPerPage, setItemsPerPage] = useState(12);
     const segmentedItems = [
         {
             value: 'card',
@@ -86,6 +86,8 @@ export default function Appointments() {
 
     const getEndpoint = (status = utils.appointmentStatus.COMPLETED) => {
         const user = getEncryptedData('user');
+        const _itemsPerPage = user === 'doctor' ? 12 : 6;
+        setItemsPerPage(_itemsPerPage);
         const role = getEncryptedData('roles')?.toLocaleLowerCase();
         let endpoint = apiConfig.doctors.getList;
         switch (role) {
@@ -172,15 +174,15 @@ export default function Appointments() {
         let gridLayout = 'grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3';
         switch (role) {
             case 'doctor':
-                gridLayout = 'grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4';
+                gridLayout = 'grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 auto-rows-[150px]';
                 break;
             case 'patient':
             case 'client':
             case 'user':
-                gridLayout = 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3';
+                gridLayout = 'grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-3 2xl:grid-cols-3 auto-rows-[230px]';
                 break;
             case 'admin':
-                gridLayout = 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2';
+                gridLayout = 'grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-3 2xl:grid-cols-4';
                 break;
         }
         return gridLayout;
@@ -257,28 +259,33 @@ export default function Appointments() {
 
     const filterData = useMemo(() => {
         return (query) => {
+            let filteredData;
             if (!query.trim()) {
-                setFilteredDataSource(dataSource);
-                return;
+                filteredData = dataSource;
+            } else {
+                filteredData = dataSource.filter((item) =>
+                    Object.values(item).some((value) =>
+                        String(value).toLowerCase().includes(query.toLowerCase())
+                    )
+                );
             }
-            const filteredData = dataSource.filter((item) =>
-                Object.values(item).some((value) =>
-                    String(value).toLowerCase().includes(query.toLowerCase())
-                )
-            );
             setFilteredDataSource(filteredData);
+            setActivePage(1);
         };
     }, [dataSource]);
+
 
     const dropdownDataFilter = useMemo(() => {
         return (filters) => {
             const { qualification, speciality, gender } = filters;
-            const filteredData = dataSource.filter((item) => {
+            const hasFilters = qualification || speciality || gender;
+
+            const filteredData = !hasFilters ? dataSource : dataSource.filter((item) => {
                 const matchesQualification = qualification
-                    ? item.qualification.includes(qualification)
+                    ? item.qualification?.includes(qualification)
                     : true;
                 const matchesSpeciality = speciality
-                    ? item.speciality.includes(speciality)
+                    ? item.speciality?.includes(speciality)
                     : true;
                 const matchesGender = gender
                     ? item.gender === gender
@@ -286,8 +293,10 @@ export default function Appointments() {
                 return matchesQualification && matchesSpeciality && matchesGender;
             });
             setFilteredDataSource(filteredData);
+            setActivePage(1);
         };
     }, [dataSource]);
+
 
     const handleClearInput = () => {
         setSearchText('');
@@ -336,7 +345,6 @@ export default function Appointments() {
             {/* Top Controls */}
             <Group py={20} justify="space-between">
                 <Group>
-                    {/* Uncomment if needed */}
                     {view === 'card' && (
                         <TextInput
                             placeholder={t('search')}
@@ -397,7 +405,6 @@ export default function Appointments() {
                             </Tabs.Tab>
                         ))}
                     </Tabs.List>
-
                     {appointmentItems.map((item) => (
                         <Tabs.Panel key={item.id} value={item.key} py={20}>
                             {
@@ -421,9 +428,6 @@ export default function Appointments() {
                                                                     <React.Fragment key={row.appointmentId || row.doctorId || `appointment-${index}`}>
                                                                         {getUserCard(row)}
                                                                     </React.Fragment>
-
-
-
                                                                 ))
                                                         }
                                                     </motion.div>
@@ -438,16 +442,16 @@ export default function Appointments() {
                                             }
                                             {
                                                 filteredDataSource?.length > itemsPerPage && (
-                                                    <Pagination mt={20} total={Math.ceil(filteredDataSource.length / itemsPerPage)} value={activePage} 
-                                                    onChange={handlePageChange}
-                                                    styles={{
-                                                        root: {
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center'
-                                                        }
-                                                    }}
-                                                    withEdges />
+                                                    <Pagination mt={20} total={Math.ceil(filteredDataSource.length / itemsPerPage)} value={activePage}
+                                                        onChange={handlePageChange}
+                                                        styles={{
+                                                            root: {
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center'
+                                                            }
+                                                        }}
+                                                        withEdges />
                                                 )
                                             }
                                         </motion.div>

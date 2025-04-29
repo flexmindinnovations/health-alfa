@@ -1,20 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Title } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 import classes from '@styles/Dashboard.module.css';
 
-/**
- * A reusable component to display a time-based greeting with a user's name.
- *
- * @param {object} props - Component props.
- * @param {string} props.greeting - The translation key for the greeting (e.g., 'goodMorning').
- * @param {string} [props.name] - The formatted name of the user to display (optional).
- * @param {function} props.t - The translation function.
- * @returns {React.ReactElement} The rendered greeting component.
- */
-export const DashboardGreeting = React.memo(({ greeting, name, t }) => {
-    // Basic validation for required props
-    if (!greeting || !t) {
-        console.warn("DashboardGreeting: 'greeting' and 't' props are required.");
+export const DashboardGreeting = React.memo(({ name }) => {
+    const { t } = useTranslation();
+    const [greetingKey, setGreetingKey] = useState('');
+
+    useEffect(() => {
+        const currentHour = dayjs().hour();
+        let key = 'goodMorning';
+        if (currentHour >= 5 && currentHour < 12) {
+            key = 'goodMorning';
+        } else if (currentHour >= 12 && currentHour < 18) {
+            key = 'goodAfternoon';
+        }
+        setGreetingKey(key);
+    }, []);
+
+    if (!greetingKey) {
         return null;
     }
 
@@ -22,10 +27,11 @@ export const DashboardGreeting = React.memo(({ greeting, name, t }) => {
         <Title
             order={2}
             mb="lg"
-            className={classes.animatedGradientTitle} // Keep relevant styling
+            className={classes.animatedGradientTitle}
         >
-            {/* Display the translated greeting. Add the name if provided. */}
-            {t(greeting)}{name ? `, ${name}` : ''}
+            {t(greetingKey)}{name ? `, ${name}` : ''}
         </Title>
     );
 });
+
+DashboardGreeting.displayName = 'DashboardGreeting';
