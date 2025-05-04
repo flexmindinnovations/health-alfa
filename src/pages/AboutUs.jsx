@@ -1,12 +1,12 @@
 import { useDocumentTitle } from "@hooks/DocumentTitle";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState, useRef } from "react";
-import { Container, Text, Title, useMantineTheme } from '@mantine/core'
-import { motion } from 'framer-motion'
+import { Container, Text, Title, useMantineTheme, Divider, Stack } from '@mantine/core';
+import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-fade";
-import { Mousewheel, Virtual, EffectFade, Autoplay } from "swiper/modules";
+import { EffectFade, Autoplay } from "swiper/modules";
 import { useMediaQuery } from '@mantine/hooks';
 
 const slidesContent = [
@@ -36,7 +36,6 @@ const slidesContent = [
   }
 ];
 
-
 export default function AboutUs() {
   const { t } = useTranslation();
   useDocumentTitle(t("aboutUs"));
@@ -45,64 +44,76 @@ export default function AboutUs() {
   const [activeIndex, setActiveIndex] = useState(0);
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
 
-  // Reset body styles for consistent centering
-  useEffect(() => {
-    document.body.style.margin = "0";
-    document.body.style.padding = "0";
-    document.body.style.height = "100vh";
-    document.body.style.display = "flex";
-    document.body.style.justifyContent = "center";
-    document.body.style.alignItems = "center";
-  }, []);
+  // useEffect(() => {
+  //   document.body.style.margin = "0";
+  //   document.body.style.padding = "0";
+  //   document.body.style.height = "100vh";
+  //   document.body.style.display = "flex";
+  //   document.body.style.justifyContent = "center";
+  //   document.body.style.alignItems = "center";
+  // }, []);
 
   return (
-    <Container fluid p={0} mx={'auto'}>
-      <div className="swiper w-full h-[500px]" ref={swiperRef}>
+    <Stack p={0} mx="auto"
+      gap={20}
+      className="relative overflow-y-auto bg-gradient-to-b from-white to-[#f4fdfc] overflow-hidden"
+      styles={{
+        root: {
+          height: '100%',
+          overflowY: 'auto',
+          backgroundColor: '#f4fdfc',
+          backgroundImage: 'radial-gradient(circle, #e0e0e0 1px, rgba(0,0,0,0) 1px)',
+          backgroundSize: '20px 20px 20px 20px',
+          backgroundPosition: '0 0, 10px 10px, 5px 5px, 15px 15px',
+        },
+      }}
+    >
+      <div className="w-full !flex-1 min-h-[60vh] md:min-h-[60vh] lg:min-h-[50vh] xl:min-h-[50vh] relative">
         <Swiper
           slidesPerView={1}
           loop={true}
           modules={[Autoplay, EffectFade]}
           allowTouchMove={false}
           effect='fade'
-          fadeEffect={{
-            crossFade: true,
-          }}
-          keyboard={{
-            enabled: true,
-            onlyInViewport: true,
-          }}
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-          }}
+          fadeEffect={{ crossFade: true }}
+          autoplay={{ delay: 5000, disableOnInteraction: false }}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-          style={{ height: "100%", width: "100%", backgroundColor: "transparent", zIndex: 10 }}
+          className="absolute inset-0 h-full w-full"
         >
-          {
-            slidesContent.map((slide, index) => (
-              <SwiperSlide key={index} virtualIndex={index}>
-                <motion.div className="h-full flex flex-col items-center justify-center bg-tb-900 gap-5">
-                  <Title c={theme.white}>{slide.title}</Title>
-                  <Text c={theme.white} size="lg">{slide.description}</Text>
-                </motion.div>
-              </SwiperSlide>
-            ))
-          }
+          {slidesContent.map((slide, index) => (
+            <SwiperSlide key={index} virtualIndex={index}>
+              <motion.div
+                className="h-full flex flex-col items-center justify-center px-4 md:px-10 text-center bg-gradient-to-r from-teal-500 to-cyan-600 text-white"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8 }}
+              >
+                <Title order={1} size="h2" className="font-bold drop-shadow-md mb-4">
+                  {slide.title}
+                </Title>
+                <Text size="lg" className="max-w-3xl mx-auto drop-shadow-sm">
+                  {slide.description}
+                </Text>
+              </motion.div>
+            </SwiperSlide>
+          ))}
         </Swiper>
       </div>
 
-      <motion.div className="my-4" style={{ maxWidth: isMobile ? '100%' : '80%', margin: '50px auto' }}>
-        <Title className="text-center text-3xl font-extrabold !text-cPrimaryFilled tracking-wide">
+      <motion.div
+        className="relative z-10 py-16 px-6 sm:px-10 max-w-5xl mx-auto"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <Text size={'lg'} fw={700} variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }} className="text-center !text-4xl font-extrabold text-cPrimaryFilled mb-8">
           {t('aboutUs')}
-        </Title>
-
-        <Text size="lg" styles={{ root: { textAlign: 'justify' } }}>
-          At <b>Health Alpha</b>, we understand that managing your health or the health of your loved ones can sometimes feel overwhelming. That’s why we created a platform that makes it easier, simpler, and more intuitive.
-          Our story began with a simple idea: health should be manageable for everyone, no matter who you are or where you live. With Health Alpha, we’ve built a space where all your health needs come together—secure, easy to use, and designed to empower you.
-          We’re not just about technology; we’re about people. Everything we do is aimed at helping you make informed decisions, manage your time better, and focus on what really matters—staying healthy and happy.
-          With features like multilingual support, tools for tracking health goals, and even an emergency info lock screen, Health Alpha isn’t just another app—it’s a thoughtful solution for real-life challenges. We’re here to support you every step of the way because your health deserves the best care possible.
+        </Text>
+        <Divider my="md" variant="dotted" color="cyan" />
+        <Text size="lg" className="text-justify text-gray-700 leading-relaxed">
+          At <strong>Health Alpha</strong>, we understand that managing your health or the health of your loved ones can sometimes feel overwhelming. That’s why we created a platform that makes it easier, simpler, and more intuitive. Our story began with a simple idea: health should be manageable for everyone, no matter who you are or where you live. With Health Alpha, we’ve built a space where all your health needs come together—secure, easy to use, and designed to empower you. We’re not just about technology; we’re about people. Everything we do is aimed at helping you make informed decisions, manage your time better, and focus on what really matters—staying healthy and happy. With features like multilingual support, tools for tracking health goals, and even an emergency info lock screen, Health Alpha isn’t just another app—it’s a thoughtful solution for real-life challenges. We’re here to support you every step of the way because your health deserves the best care possible.
         </Text>
       </motion.div>
-    </Container>
+    </Stack>
   );
 }

@@ -34,5 +34,11 @@ export const utils = {
         PENDING: 'Pending',
         COMPLETED: 'Completed',
         CANCELLED: 'Cancelled',
+    },
+    dotsBackground: {
+        backgroundColor: '#f8f9fa',
+        backgroundImage: 'radial-gradient(circle, #e0e0e0 1px, rgba(0,0,0,0) 1px)',
+        backgroundSize: '20px 20px 20px 20px',
+        backgroundPosition: '0 0, 10px 10px, 5px 5px, 15px 15px'
     }
 }

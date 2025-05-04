@@ -125,9 +125,9 @@ export function DoctorCard({
                 </Badge>
             )}
 
-            <Card shadow={isDetailsCard ? "md" : "sm"} withBorder={border} padding="lg" radius="xl">
+            <Card shadow={isDetailsCard ? "md" : "sm"} withBorder={border} padding="sm" radius="xl">
                 <Stack gap="md">
-                    <Group wrap="nowrap" align="flex-start" gap="lg">
+                    <Group wrap="nowrap" align="flex-end" gap="sm">
                         <Avatar
                             size={isDetailsCard ? "xl" : "lg"}
                             radius="xl"
@@ -135,7 +135,7 @@ export function DoctorCard({
                             alt={`${data?.doctorName || 'Doctor'}'s profile picture`}
                         />
                         <Stack gap={2} style={{ flex: 1 }}>
-                            <Title order={4} lineClamp={1}>Dr. {data?.doctorName || t('notAvailable')}</Title>
+                            <Title size={'xs'} lineClamp={2}>Dr. {data?.doctorName || t('notAvailable')}</Title>
                             <Tooltip
                                 label={formattedSpeciality}
                                 disabled={formattedSpeciality.length <= 40}
@@ -143,7 +143,7 @@ export function DoctorCard({
                                 w={220}
                                 withArrow
                             >
-                                <Text size="sm" c="dimmed" lineClamp={1}>
+                                <Text size="xs" c="dimmed" lineClamp={1}>
                                     {truncatedSpeciality || t('noSpeciality')}
                                 </Text>
                             </Tooltip>

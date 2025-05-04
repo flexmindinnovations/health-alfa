@@ -1,127 +1,150 @@
-import {Container} from "@mantine/core";
-import {useDocumentTitle} from "@hooks/DocumentTitle";
-import {useTranslation} from "react-i18next";
-import {Edit3, Handshake, Mail, MessageCircle} from "lucide-react";
+import { Container, Title, Text, SimpleGrid, Card, Group, ThemeIcon, Stack, Anchor, Space } from "@mantine/core";
+import { useDocumentTitle } from "@hooks/DocumentTitle"; // Assuming this hook exists
+import { useTranslation } from "react-i18next";
+import { Edit3, Handshake, Mail, MessageCircle } from "lucide-react"; // Keep lucide icons
+
+// --- Data remains the same ---
+const contactDetails = [
+    {
+        title: "generalInquiries",
+        email: "info@healthalpha.ae",
+        icon: Mail,
+        description: "generalInquiriesDescription"
+    },
+    {
+        title: "customerSupport",
+        email: "support@healthalpha.ae",
+        icon: MessageCircle,
+        description:
+            "Need assistance? Our dedicated customer support team is here to help you with any questions or issues you may have. Whether it's about your account, our services, or technical support, we're just an email away.",
+    },
+    {
+        title: "feedbackAndSuggestions",
+        email: "feedback@healthalpha.ae",
+        icon: Edit3,
+        description:
+            "We value your feedback! If you have suggestions or ideas on how we can improve our services, please share them with us. Your insights are crucial in helping us enhance your experience and better serve your needs.",
+    },
+    {
+        title: "partnerships",
+        email: "partnerships@healthalpha.ae",
+        icon: Handshake,
+        description:
+            "Join us in creating meaningful collaborations! If you're a healthcare provider, organization, or innovator, connect with us to explore partnership opportunities aimed at improving healthcare accessibility.",
+    },
+];
+
+// --- Redesigned Contact Card Component ---
+// Moved outside ContactUs component as it's self-contained
+const ContactCard = ({ title, icon: Icon, email, description }) => (
+    <Card
+        shadow="sm"
+        padding="lg"
+        radius="md"
+        withBorder
+        h="100%" // Make card fill the grid cell height
+        sx={(theme) => ({
+            transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+            '&:hover': {
+                transform: 'translateY(-3px)',
+                boxShadow: theme.shadows.md,
+            },
+        })}
+    >
+        <Stack justify="space-between" h="100%" w={'100%'}>
+            {/* Top section: Icon, Title */}
+            <Stack gap="md">
+                <Stack gap="md" align="center">
+                    <ThemeIcon size={44} radius="xl" variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }}> {/* Or "filled" */}
+                        <Icon size={24} /> {/* Render the passed icon component */}
+                    </ThemeIcon>
+                    <Text size="lg" fw={700} variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }} className="text-center !text-xl mb-8" c="primary" ta="center">
+                        {title}
+                    </Text>
+                </Stack>
+
+                {/* Description */}
+                <Text size="sm" c="dimmed" style={{ lineHeight: 1.6 }}>
+                    {description}
+                </Text>
+            </Stack>
+
+            {/* Bottom section: Email Link */}
+            <Anchor
+                href={`mailto:${email}`}
+                size="sm"
+                fw={500}
+                ta={'center'}
+            >
+                {email}
+            </Anchor>
+        </Stack>
+    </Card>
+);
+
 
 export default function ContactUs() {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     useDocumentTitle(t("contactUs"));
 
-    const gridClasses = [
-        "col-span-1 row-span-2",
-        "col-span-1 row-span-1",
-        "col-span-1 row-span-2",
-        "col-span-1 row-span-1",
-    ];
-    const baseCardClasses = "rounded-3xl shadow-xl p-3 border-solid border-1 border-gray-200";
-
-    const contactDetails = [
-        {
-            title: "General Inquiries",
-            email: "info@healthalpha.ae",
-            icon: <Mail className="h-7 w-7 text-cPrimaryFilled"/>,
-            description:
-                "For any general information about Health Alpha, our mission, services, or platform features, feel free to reach out. We're here to guide you in understanding how we simplify health management for everyone. Whether you're a new user exploring our platform or an organization seeking more details about our offerings, our team is happy to assist you.",
-        },
-        {
-            title: "Customer Support",
-            email: "support@healthalpha.ae",
-            icon: <MessageCircle className="h-7 w-7 text-cPrimaryFilled"/>,
-            description:
-                "Facing issues with our app? Whether it’s account setup, troubleshooting, or feature-related questions, our dedicated support team is here to help you navigate seamlessly through Health Alpha.",
-        },
-        {
-            title: "Feedback & Suggestions",
-            email: "feedback@healthalpha.ae",
-            icon: <Edit3 className="h-7 w-7 text-cPrimaryFilled"/>,
-            description:
-                "Your input matters! Share your feedback and suggestions to help us refine our platform, add new features, and ensure Health Alpha meets the needs of our users. We welcome all ideas, whether it's about improving user experience, adding new health-tracking features, or expanding our services. Together, let’s create a more user-friendly and innovative health management solution.",
-        },
-        {
-            title: "Partnerships",
-            email: "partnerships@healthalpha.ae",
-            icon: <Handshake className="h-7 w-7 text-cPrimaryFilled"/>,
-            description:
-                "Join us in creating meaningful collaborations! If you're a healthcare provider, organization, or innovator, connect with us to explore partnership opportunities aimed at improving healthcare accessibility.",
-        },
-    ];
-
     return (
-        <Container
-            m={0}
-            p={0}
-            size="lg"
-            w="100%"
-            maw="100%"
-            h="100%"
-            style={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: 'column',
-                justifyContent: "center",
-                padding: 0,
-                paddingTop: "32px",
+        <Container fluid>
+            <Stack align="center" gap={20} h={"100%"} w={"100%"} pb={30}
+            styles={{
+                root: {
+                    height: '100%',
+                    overflowY: 'auto',
+                    backgroundColor: '#f4fdfc',
+                    backgroundImage: 'radial-gradient(circle, #e0e0e0 1px, rgba(0,0,0,0) 1px)',
+                    backgroundSize: '20px 20px 20px 20px',
+                    backgroundPosition: '0 0, 10px 10px, 5px 5px, 15px 15px',
+                },
+                inner: {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                },
             }}
-        >
-            <div
-                className="max-w-5xl px-4"
-                style={{
-                    maxHeight: "75vh",
-                }}
             >
-                <div className="text-center mb-4">
-                    <h1 className="text-3xl !text-cPrimaryFilled font-bold mb-4">
-                        {t('contactUs')}
-                    </h1>
-                    <p className="text-base leading-relaxed">
-                        We&#39;re here to assist you. If you have any questions or feedback,
-                        please feel free to reach out to us.
-                    </p>
+                <div className="w-full !flex-1 min-h-[50vh] md:min-h-[40vh] lg:min-h-[40vh] xl:min-h-[40vh] relative flex items-end justify-center bg-gradient-to-b from-white to-[#f4fdfc] overflow-hidden">
+                    {/* Introductory Text */}
+                    <Stack align="center" gap={4}
+                        styles={{
+                            root: {
+                                width: '100%',
+                                margin: '0 auto',
+                            }
+                        }}
+                    > {/* Constrain width of intro text */}
+                        <Text size="xl" fw={700} mb={20} variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }} className="text-center !text-4xl mb-8" c="primary" ta="center">
+                            {t('contactUs')}
+                        </Text>
+                        <Text maw={'60%'} ta="center" size="xs" c="dimmed" fz="md">
+                            {t('contactUsIntroduction')}
+                        </Text>
+                    </Stack>
                 </div>
-                <div
-                    className="grid grid-cols-1 h-screen md:grid-cols-2 gap-5 w-full p-5 md:grid-rows-[repeat(6,minmax(auto,300px))]">
+
+                {/* Grid of Contact Cards */}
+                <SimpleGrid
+                    cols={{ base: 1, sm: 2 }} // Responsive columns
+                    spacing="md" // Spacing between grid items
+                    verticalSpacing="md"
+                    maw={'80%'}
+                    w="100%"
+                >
                     {contactDetails.map((contact, index) => (
-                        <div
+                        <ContactCard
                             key={index}
-                            className={`card item${index + 1} ${gridClasses[index]} ${baseCardClasses}`}
-                        >
-                            <ContactCard
-                                title={contact.title}
-                                icon={contact.icon}
-                                email={contact.email}
-                                description={contact.description}
-                            />
-                        </div>
+                            title={t(contact.title)}
+                            icon={contact.icon}
+                            email={contact.email}
+                            description={t(contact.description)} // Translate description
+                        />
                     ))}
-                </div>
-            </div>
+                </SimpleGrid>
+            </Stack>
         </Container>
     );
 }
-
-const ContactCard = ({title, icon, email, description}) => (
-    <div>
-        <div className="flex flex-col items-start gap-4 p-4">
-            {/* Icon */}
-            <div className="flex items-center justify-center gap-4">
-                <div
-                    className="flex items-center justify-center overflow-hidden transform hover:scale-110 transition-all duration-300 ease-in-out">
-                    <span className="text-xl">{icon}</span>
-                </div>
-                <h3 className="text-xl !text-cPrimaryFilled font-bold tracking-tight transition-transform duration-300 ease-in-out transform hover:translate-x-1">
-                    {title}
-                </h3>
-            </div>
-            {/* Content */}
-            <div className="flex flex-col gap-2 justify-center">
-                <p className="text-sm text-gray-600">{description}</p>
-                <a
-                    href={`mailto:${email}`}
-                    className="text-sm text-indigo-500 font-bold hover:text-indigo-700"
-                >
-                    {email}
-                </a>
-            </div>
-        </div>
-    </div>
-);

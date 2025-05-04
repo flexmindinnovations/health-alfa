@@ -1,142 +1,102 @@
 import { useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import "swiper/css/effect-fade";
-import { Mousewheel, Virtual, EffectFade, Autoplay } from "swiper/modules";
-import { CarouselCard } from "@components/CarouselCard.jsx";
+import "swiper/css/effect-fade"; // Ensure fade effect CSS is imported
+import { Autoplay, EffectFade } from "swiper/modules";
 import { ActionIcon, useMantineTheme } from '@mantine/core';
-import heroImage from "../assets/images/hero.webp";
-import healthSimplified from "../assets/images/hero/health_simplified.jpg";
-import carePets from "../assets/images/hero/care_pets.jpg";
-import care from "../assets/images/hero/care.jpg";
-import criticalInfo from "../assets/images/hero/critical_info.jpg";
-import manageHealth from "../assets/images/hero/manage_health.jpg";
-import queue from "../assets/images/hero/queue.jpg";
-import safeInformation from "../assets/images/hero/safe_information.jpg";
-import smarterLive from "../assets/images/hero/smarter_live.jpg";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronsDown } from 'lucide-react';
-import { motion } from "framer-motion";
-import { AspectRatio, Image } from '@mantine/core';
+import { CarouselCard } from "@components/CarouselCard.jsx";
+import healthSimplified from '@assets/images/hero/health_simplified.jpg';
+import carePets from "@assets/images/hero/care_pets.jpg";
+import care from "@assets/images/hero/care.jpg";
+import criticalInfo from "@assets/images/hero/critical_info.jpg";
+import manageHealth from "@assets/images/hero/manage_health.jpg";
+import queue from "@assets/images/hero/queue.jpg";
+import safeInformation from "@assets/images/hero/safe_information.jpg";
+import smarterLive from "@assets/images/hero/smarter_live.jpg";
 
-const data = [
+// Structure slide data
+const slidesData = [
   {
     image: healthSimplified,
-    title: "Your Health, Simplified with Health Alpha",
-    category:
-      "Simplifying your health journey with Health Alpha, offering easy access to all your medical documents, reminders, and wellness tools, so you can focus on what matters most—your health.",
-  },
-  {
-    image: carePets,
-    title: "A Personal Health Partner You Can Count On",
-    category:
-      "Health Alpha is your trusted personal health companion, providing the tools and support you need to manage your health and stay on top of important appointments and health goals.",
-  },
-  {
-    image: care,
-    title: "Stay Organized, Stay Healthy",
-    category:
-      "With Health Alpha, you can stay organized by storing and tracking your health data in one place, making it easy to manage your wellness and stay healthy.",
-  },
-  {
-    image: criticalInfo,
-    title: "For You and Your Loved Ones",
-    category:
-      "Health Alpha is designed not only for you but for your entire family, helping you manage health records, appointments, and more to ensure everyone stays healthy and safe.",
+    heading: "Your Health, Simplified",
+    subheading: "Smart. Secure. Always accessible.",
   },
   {
     image: manageHealth,
-    title: "Take Control of Your Health Today",
-    category:
-      "Take charge of your health with Health Alpha. Set personalized goals, track your progress, and manage your health effortlessly, all at your fingertips.",
+    heading: "Manage Your Health Effortlessly",
+    subheading: "Track records, appointments, and wellness goals in one place.",
   },
   {
-    image: queue,
-    title: "Take Control of Your Health Today",
-    category:
-      "Take charge of your health with Health Alpha. Set personalized goals, track your progress, and manage your health effortlessly, all at your fingertips.",
+    image: criticalInfo,
+    heading: "Critical Info When It Matters",
+    subheading: "Emergency details accessible right from your lock screen.",
+  },
+  {
+    image: care,
+    heading: "Comprehensive Care Tools",
+    subheading: "From finding doctors to managing prescriptions.",
+  },
+  {
+    image: carePets,
+    heading: "Care for Your Loved Ones Too",
+    subheading: "Manage health records for family members and even pets.",
   },
   {
     image: safeInformation,
-    title: "Take Control of Your Health Today",
-    category:
-      "Take charge of your health with Health Alpha. Set personalized goals, track your progress, and manage your health effortlessly, all at your fingertips.",
+    heading: "Your Information, Secured",
+    subheading: "Built with privacy and security at its core.",
   },
   {
     image: smarterLive,
-    title: "Take Control of Your Health Today",
-    category:
-      "Take charge of your health with Health Alpha. Set personalized goals, track your progress, and manage your health effortlessly, all at your fingertips.",
+    heading: "Live Smarter, Live Healthier",
+    subheading: "Personalized insights to guide your wellness journey.",
   },
+  // Add more slides if needed, like the 'queue' image
 ];
 
-const images = [healthSimplified, care, criticalInfo, manageHealth, queue, safeInformation, smarterLive, carePets];
-
 export function HeroCarousel() {
-  const swiperRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(0);
   const theme = useMantineTheme();
-
   return (
-    <div
-      ref={swiperRef}
-      className="w-full h-[calc(100vh-100px)] relative"
-      style={{ zIndex: 10 }}
-    >
-
+    <div className="w-full h-screen relative overflow-hidden">
       <Swiper
         slidesPerView={1}
-        loop={true}
+        loop
         modules={[Autoplay, EffectFade]}
+        effect="fade"
+        fadeEffect={{ crossFade: true }}
         allowTouchMove={false}
-        effect='fade'
-        fadeEffect={{
-          crossFade: true,
-        }}
-        keyboard={{
-          enabled: true,
-          onlyInViewport: true,
-        }}
         autoplay={{
-          delay: 5000,
+          delay: 5000, // Adjust timing as needed
           disableOnInteraction: false,
         }}
-        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-        style={{ height: "100%", width: "100%", backgroundColor: "transparent", zIndex: 10 }}
+        className="absolute inset-0 z-0"
       >
-        {images.map((slide, index) => (
-          <SwiperSlide key={index} virtualIndex={index}>
-            <div
-              className="w-full h-full flex items-center justify-center bg-transparent"
-            >
-              <CarouselCard slide={slide} isActive={index === activeIndex} />
-              {/* <AspectRatio ratio={16 / 9} w={'100%'}>
-                <Image src={slide} styles={{ root: { objectFit: 'fill' } }} />
-              </AspectRatio> */}
+        {slidesData.map((slide, index) => (
+          <SwiperSlide key={index}>
+            <div className="w-full h-full">
+              <CarouselCard slide={slide.image} heading={slide.heading} subheading={slide.subheading} />
             </div>
+
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className={`nav-button absolute flex items-center justify-center -bottom-6 z-[9999] rounded-full left-1/2 -translate-x-1/2`}
-        style={{
-          backgroundColor: theme.colors.secondary[9]
-        }}
+
+      <motion.div
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
+        animate={{ y: [-4, 4, -4] }}
+        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
       >
-        <ActionIcon h={50} w={50} variant="transparent" c={theme.white}>
-          <motion.div
-            animate={{
-              y: [-3, 3, -3],
-            }}
-            transition={{
-              repeat: Infinity,
-              repeatType: "loop",
-              duration: 1,
-              ease: "easeInOut",
-            }}
-          >
-            <ChevronsDown size={24} />
-          </motion.div>
+        <ActionIcon
+          size={50}
+          variant="gradient"
+          gradient={{ from: 'teal', to: 'blue', deg: 60 }}
+          radius="xl"
+        >
+          <ChevronsDown size={24} />
         </ActionIcon>
-      </div>
-    </div >
+      </motion.div>
+    </div>
   );
 }

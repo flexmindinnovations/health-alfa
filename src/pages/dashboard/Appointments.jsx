@@ -179,7 +179,7 @@ export default function Appointments() {
             case 'patient':
             case 'client':
             case 'user':
-                gridLayout = 'grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-3 2xl:grid-cols-3 auto-rows-[230px]';
+                gridLayout = 'grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 auto-rows-[230px]';
                 break;
             case 'admin':
                 gridLayout = 'grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-3 2xl:grid-cols-4';

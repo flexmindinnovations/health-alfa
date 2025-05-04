@@ -219,5 +219,12 @@
   "quickActions": "Quick Actions",
   "bookNewAppointment": "Book New Appointment",
   "notifications": "Notifications",
-  "noNewNotifications": "No New Notifications"
-  }
+  "noNewNotifications": "No New Notifications",
+  "generalInquiries": "General Inquiries",
+  "customerSupport": "Customer Support",
+  "feedbackAndSuggestions": "Feedback & Suggestions",
+  "partnerships": "Partnerships",
+  "generalInquiriesDescription": "For any general information about Health Alpha, our mission, services, or platform features, feel free to reach out. We're here to guide you in understanding how we simplify health management for everyone. Whether you're a new user exploring our platform or an organization seeking more details about our offerings, our team is happy to assist you.",
+  "customerSupportDescription": "Facing issues with our app? Whether it’s account setup, troubleshooting, or feature-related questions, our dedicated support team is here to help you navigate seamlessly through Health Alpha.",
+  "contactUsIntroduction": "We're here to help and answer any questions you might have. Whether you need support, want to share feedback, or explore partnership opportunities, we look forward to hearing from you. Reach out through the appropriate channel below, and we'll get back to you as soon as possible."
+}
