@@ -62,7 +62,7 @@ export function Layout() {
         });
 
         setBreadcrumbItems(generatedBreadcrumbs);
-    }, [pathname, filteredMenuItems, t]);
+    }, [pathname, t]);
 
     const handleNavClick = useCallback((menuItem) => {
         const targetPath = `/app${menuItem.route}`;
