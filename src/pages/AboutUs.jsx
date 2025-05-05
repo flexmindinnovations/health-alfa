@@ -67,6 +67,7 @@ export default function AboutUs() {
         style={{
           background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0px, #f4fdfc 300px, #f4fdfc 100%)',
           minHeight: '100vh',
+          width: '100%',
           padding: '2rem',
         }}
       >
