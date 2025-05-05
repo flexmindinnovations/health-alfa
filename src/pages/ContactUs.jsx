@@ -1,4 +1,4 @@
-import { Container, Title, Text, SimpleGrid, Card, Group, ThemeIcon, Stack, Anchor, Space } from "@mantine/core";
+import { Container, Title, Text, SimpleGrid, Card, Box, ThemeIcon, Stack, Anchor, Space } from "@mantine/core";
 import { useDocumentTitle } from "@hooks/DocumentTitle"; // Assuming this hook exists
 import { useTranslation } from "react-i18next";
 import { Edit3, Handshake, Mail, MessageCircle } from "lucide-react"; // Keep lucide icons
@@ -88,26 +88,21 @@ export default function ContactUs() {
     useDocumentTitle(t("contactUs"));
 
     return (
-        <Container fluid>
-            <Stack align="center" gap={20} h={"100%"} w={"100%"} pb={30}
-                styles={{
-                    root: {
-                        height: '100%',
-                        overflowY: 'auto',
-                        backgroundColor: '#f4fdfc',
-                        backgroundImage: 'radial-gradient(circle, #e0e0e0 1px, rgba(0,0,0,0) 1px)',
-                        backgroundSize: '20px 20px 20px 20px',
-                        backgroundPosition: '0 0, 10px 10px, 5px 5px, 15px 15px',
-                    },
-                    inner: {
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    },
+        <Container fluid
+            style={{
+                backgroundColor: '#f8f9fa',
+                backgroundImage: 'radial-gradient(#ccc 1px, transparent 1px)',
+                backgroundSize: '3px 3px',
+            }}
+        >
+            <Stack align="center" gap={20} h={"100%"} w={"100%"}
+                className="relative overflow-y-auto bg-gradient-to-b from-white to-[#f4fdfc]"
+                style={{
+                    background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0px, #f4fdfc 300px, #f4fdfc 100%)',
+                    minHeight: '100vh'
                 }}
             >
-                <div className="w-full !flex-1 min-h-[50vh] md:min-h-[40vh] lg:min-h-[40vh] xl:min-h-[40vh] relative flex items-end justify-center bg-gradient-to-b from-white to-[#f4fdfc] overflow-hidden">
+                <div className="w-full !flex-1 min-h-[50vh] md:min-h-[40vh] lg:min-h-[40vh] xl:min-h-[40vh] relative flex items-end justify-center overflow-hidden">
                     {/* Introductory Text */}
                     <Stack align="center" gap={4}
                         styles={{
@@ -144,6 +139,17 @@ export default function ContactUs() {
                         />
                     ))}
                 </SimpleGrid>
+                <Box component="section" className="relative w-full bg-gradient-to-r from-tb-900 to-tb-600 text-white py-20 px-6 text-center">
+                    <Stack gap={20} align="center" justify="center">
+                        <Title order={2} className="text-3xl sm:text-4xl font-bold">Join Our Health Community</Title>
+                        <Text size="xl" mt="md" className="max-w-xl mx-auto opacity-90">
+                            Take charge of your well-being with tools that are built for your lifestyle.
+                        </Text>
+                        {/* <Button mt="xl" size="lg" radius="xl" variant="white" color="blue" component="a" href="/register">
+                                    Get Started Today
+                                </Button> */}
+                    </Stack>
+                </Box>
             </Stack>
         </Container>
     );

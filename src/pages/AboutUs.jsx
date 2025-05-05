@@ -1,7 +1,7 @@
 import { useDocumentTitle } from "@hooks/DocumentTitle";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState, useRef } from "react";
-import { Container, Text, Title, useMantineTheme, Divider, Stack } from '@mantine/core';
+import { Container, Text, Title, useMantineTheme, Divider, Stack, Box } from '@mantine/core';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -55,30 +55,24 @@ export default function AboutUs() {
 
   return (
     <Container fluid
-      styles={{
-        root: {
-          height: '100%',
-          overflowY: 'auto',
-          backgroundColor: '#f4fdfc',
-          backgroundImage: 'radial-gradient(circle, #e0e0e0 1px, rgba(0,0,0,0) 1px)',
-          backgroundSize: '20px 20px 20px 20px',
-          backgroundPosition: '10px 10px, 10px 10px, 5px 5px, 15px 15px',
-        },
-        inner: {
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
+      style={{
+        backgroundColor: '#f8f9fa',
+        backgroundImage: 'radial-gradient(#ccc 1px, transparent 1px)',
+        backgroundSize: '3px 3px',
       }}
     >
       <Stack p={0} mx="auto"
         gap={20}
-        className="relative overflow-y-auto overflow-hidden"
+        className="relative overflow-auto bg-gradient-to-b from-white to-[#f4fdfc]"
+        style={{
+          background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0px, #f4fdfc 300px, #f4fdfc 100%)',
+          minHeight: '100vh',
+          padding: '2rem',
+        }}
       >
-        <div className="w-full !flex-1 min-h-[40vh] md:min-h-[40vh] lg:min-h-[30vh] xl:min-h-[30vh]
-        bg-gradient-to-b from-white to-[#f4fdfc]
-         relative">
+        <div className="w-full min-h-[300px] md:h-[300px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] overflow-hidden mx-auto relative"
+          ref={swiperRef}
+        >
           <Swiper
             slidesPerView={1}
             loop={true}
@@ -124,6 +118,17 @@ export default function AboutUs() {
             At <strong>Health Alpha</strong>, we understand that managing your health or the health of your loved ones can sometimes feel overwhelming. That’s why we created a platform that makes it easier, simpler, and more intuitive. Our story began with a simple idea: health should be manageable for everyone, no matter who you are or where you live. With Health Alpha, we’ve built a space where all your health needs come together—secure, easy to use, and designed to empower you. We’re not just about technology; we’re about people. Everything we do is aimed at helping you make informed decisions, manage your time better, and focus on what really matters—staying healthy and happy. With features like multilingual support, tools for tracking health goals, and even an emergency info lock screen, Health Alpha isn’t just another app—it’s a thoughtful solution for real-life challenges. We’re here to support you every step of the way because your health deserves the best care possible.
           </Text>
         </motion.div>
+      <Box component="section" className="relative w-full bg-gradient-to-r from-tb-900 to-tb-600 text-white py-20 px-6 text-center">
+        <Stack gap={20} align="center" justify="center">
+          <Title order={2} className="text-3xl sm:text-4xl font-bold">Join Our Health Community</Title>
+          <Text size="xl" mt="md" className="max-w-xl mx-auto opacity-90">
+            Take charge of your well-being with tools that are built for your lifestyle.
+          </Text>
+          {/* <Button mt="xl" size="lg" radius="xl" variant="white" color="blue" component="a" href="/register">
+                              Get Started Today
+                          </Button> */}
+        </Stack>
+      </Box>
       </Stack>
     </Container>
   );

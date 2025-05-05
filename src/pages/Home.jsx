@@ -16,7 +16,7 @@ const ServiceCard = ({ service, index }) => {
             transition={{ duration: 0.6, ease: "easeOut" }}
             viewport={{ once: true, amount: 0.2 }}
             // Use Grid for better layout control
-            className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-8 md:gap-12 p-6 md:p-10 my-4`}
+            className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-8 md:gap-12 px-6 py-2 md:px-10`}
         >
             {/* Image Section */}
             <Box className="w-full md:w-1/2">
@@ -61,25 +61,25 @@ export default function Home() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
             >
-                {/* HeroCarousel now contains the text via CarouselCard */}
                 <HeroCarousel />
             </motion.section>
 
             {/* Services Section */}
             <Box component="section"
-                className="bg-gray-50 py-16 md:py-24"
+                className="pt-16 md:pt-24 min-h-96"
                 style={{
                     backgroundColor: '#f8f9fa',
-                    backgroundImage: 'radial-gradient(circle, #e0e0e0 1px, rgba(0,0,0,0) 1px)',
-                    backgroundSize: '20px 20px 20px 20px',
-                    backgroundPosition: '0 0, 10px 10px, 5px 5px, 15px 15px',
+                    backgroundImage: 'radial-gradient(#ccc 1px, transparent 1px)',
+                    backgroundSize: '3px 3px',
                 }}
-            // style={{
-            //     backgroundColor: '#f8f9fa',
-            //     backgroundImage: 'repeating-linear-gradient(45deg, #ededed, #ededed 1px, transparent 1px, transparent 15px)', // Light grey lines, adjust thickness/spacing
-            // }}
             >
-                <Stack gap={20}>
+                <Stack gap={20} className="bg-gradient-to-b from-white to-[#f4fdfc]"
+                    style={{
+                        background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0px, #f4fdfc 200px, #f4fdfc 100%)',
+                        minHeight: '100vh',
+                        padding: '2rem',
+                    }}
+                >
                     <Stack align="center" gap={10}>
                         <Text
                             variant={"gradient"}

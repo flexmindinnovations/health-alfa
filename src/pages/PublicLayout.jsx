@@ -97,10 +97,10 @@ export default function PublicLayout() {
                 style={{
                     backgroundColor: scrolled ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.7)',
                     margin: scrolled ? "0px" : "20px",
-                    borderRadius: scrolled ? "0px" : "20px",
+                    borderRadius: scrolled ? "0px" : "999px",
                     transition: "margin 0.3s ease-in-out, background-color 0.3s ease-in-out, border-radius 0.3s ease-in-out",
                 }}
-                className={`transition-colors duration-300 backdrop-blur-sm ${scrolled ? '' : '!border-none rounded-xl'}`}>
+                className={`transition-colors duration-300 backdrop-blur-sm ${scrolled ? '' : '!border-none rounded-full'}`}>
                 <Group h="100%" px="md">
                     <Burger
                         opened={opened}
@@ -111,12 +111,12 @@ export default function PublicLayout() {
                     <Group justify="space-between" style={{ flex: 1 }}>
                         {/* Top Navbar Items */}
                         <div className="flex md:hidden"></div>
-                        <Group>
+                        <Group px={20}>
                             <AspectRatio ratio={900 / 720} mx='auto'>
                                 <Image
                                     src={logo}
                                     alt='logo'
-                                    className='!object-fill h-[60px]'
+                                    className='!object-fill h-[40px]'
                                 />
                             </AspectRatio>
                         </Group>
