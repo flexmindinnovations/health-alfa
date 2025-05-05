@@ -54,9 +54,7 @@ export default function AboutUs() {
   // }, []);
 
   return (
-    <Stack p={0} mx="auto"
-      gap={20}
-      className="relative overflow-y-auto bg-gradient-to-b from-white to-[#f4fdfc] overflow-hidden"
+    <Container fluid
       styles={{
         root: {
           height: '100%',
@@ -64,56 +62,69 @@ export default function AboutUs() {
           backgroundColor: '#f4fdfc',
           backgroundImage: 'radial-gradient(circle, #e0e0e0 1px, rgba(0,0,0,0) 1px)',
           backgroundSize: '20px 20px 20px 20px',
-          backgroundPosition: '0 0, 10px 10px, 5px 5px, 15px 15px',
+          backgroundPosition: '10px 10px, 10px 10px, 5px 5px, 15px 15px',
+        },
+        inner: {
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
         },
       }}
     >
-      <div className="w-full !flex-1 min-h-[60vh] md:min-h-[60vh] lg:min-h-[50vh] xl:min-h-[50vh] relative">
-        <Swiper
-          slidesPerView={1}
-          loop={true}
-          modules={[Autoplay, EffectFade]}
-          allowTouchMove={false}
-          effect='fade'
-          fadeEffect={{ crossFade: true }}
-          autoplay={{ delay: 5000, disableOnInteraction: false }}
-          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-          className="absolute inset-0 h-full w-full"
-        >
-          {slidesContent.map((slide, index) => (
-            <SwiperSlide key={index} virtualIndex={index}>
-              <motion.div
-                className="h-full flex flex-col items-center justify-center px-4 md:px-10 text-center bg-gradient-to-r from-teal-500 to-cyan-600 text-white"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8 }}
-              >
-                <Title order={1} size="h2" className="font-bold drop-shadow-md mb-4">
-                  {slide.title}
-                </Title>
-                <Text size="lg" className="max-w-3xl mx-auto drop-shadow-sm">
-                  {slide.description}
-                </Text>
-              </motion.div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-
-      <motion.div
-        className="relative z-10 py-16 px-6 sm:px-10 max-w-5xl mx-auto"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+      <Stack p={0} mx="auto"
+        gap={20}
+        className="relative overflow-y-auto overflow-hidden"
       >
-        <Text size={'lg'} fw={700} variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }} className="text-center !text-4xl font-extrabold text-cPrimaryFilled mb-8">
-          {t('aboutUs')}
-        </Text>
-        <Divider my="md" variant="dotted" color="cyan" />
-        <Text size="lg" className="text-justify text-gray-700 leading-relaxed">
-          At <strong>Health Alpha</strong>, we understand that managing your health or the health of your loved ones can sometimes feel overwhelming. That’s why we created a platform that makes it easier, simpler, and more intuitive. Our story began with a simple idea: health should be manageable for everyone, no matter who you are or where you live. With Health Alpha, we’ve built a space where all your health needs come together—secure, easy to use, and designed to empower you. We’re not just about technology; we’re about people. Everything we do is aimed at helping you make informed decisions, manage your time better, and focus on what really matters—staying healthy and happy. With features like multilingual support, tools for tracking health goals, and even an emergency info lock screen, Health Alpha isn’t just another app—it’s a thoughtful solution for real-life challenges. We’re here to support you every step of the way because your health deserves the best care possible.
-        </Text>
-      </motion.div>
-    </Stack>
+        <div className="w-full !flex-1 min-h-[40vh] md:min-h-[40vh] lg:min-h-[30vh] xl:min-h-[30vh]
+        bg-gradient-to-b from-white to-[#f4fdfc]
+         relative">
+          <Swiper
+            slidesPerView={1}
+            loop={true}
+            modules={[Autoplay, EffectFade]}
+            allowTouchMove={false}
+            effect='fade'
+            fadeEffect={{ crossFade: true }}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+            className="absolute inset-0 h-full w-full"
+          >
+            {slidesContent.map((slide, index) => (
+              <SwiperSlide key={index} virtualIndex={index}>
+                <motion.div
+                  className="h-full flex flex-col items-center justify-end px-4 md:px-10 text-center "
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8 }}
+                >
+                  <Text size="lg" fw={700} mb={20} variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }} className="text-center !text-2xl mb-8" c="primary" ta="center">
+                    {slide.title}
+                  </Text>
+                  <Text maw={'60%'} ta="center" size="xs" c="dimmed" fz="md">
+                    {slide.description}
+                  </Text>
+                </motion.div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+
+        <motion.div
+          className="relative z-10 py-16 px-6 sm:px-10 max-w-5xl mx-auto"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <Text size={'xl'} fw={700} variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }} className="text-center !text-4xl mb-8">
+            {t('aboutUs')}
+          </Text>
+          <Divider my="md" variant="dotted" color="cyan" />
+          <Text size="md" c="dimmed" className="text-justify leading-relaxed">
+            At <strong>Health Alpha</strong>, we understand that managing your health or the health of your loved ones can sometimes feel overwhelming. That’s why we created a platform that makes it easier, simpler, and more intuitive. Our story began with a simple idea: health should be manageable for everyone, no matter who you are or where you live. With Health Alpha, we’ve built a space where all your health needs come together—secure, easy to use, and designed to empower you. We’re not just about technology; we’re about people. Everything we do is aimed at helping you make informed decisions, manage your time better, and focus on what really matters—staying healthy and happy. With features like multilingual support, tools for tracking health goals, and even an emergency info lock screen, Health Alpha isn’t just another app—it’s a thoughtful solution for real-life challenges. We’re here to support you every step of the way because your health deserves the best care possible.
+          </Text>
+        </motion.div>
+      </Stack>
+    </Container>
   );
 }

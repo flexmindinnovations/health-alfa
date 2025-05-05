@@ -45,12 +45,12 @@ export default function PublicLayout() {
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
-        const updatedMenuItems = links.map((item) => ({
+        const activePath = sessionStorage.getItem('currentItem') || pathname;
+        const updatedMenuItems = links.map(item => ({
             ...item,
-            active: item.link === pathname,
+            active: `${item.link}` === activePath
         }));
         setMenuItems(updatedMenuItems);
-
         const updatedAuthItems = authItems.map((item) => ({
             ...item,
             active:
@@ -61,6 +61,8 @@ export default function PublicLayout() {
     }, [pathname, isAuthenticated]);
 
     const handleNavClick = (menuItem) => {
+        const targetPath = menuItem.link;
+        sessionStorage.setItem('currentItem', targetPath);
         const updatedMenuItems = menuItems.map((item) => ({
             ...item,
             active: item.key === menuItem.key,

@@ -174,7 +174,7 @@ export default function Appointments() {
         let gridLayout = 'grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3';
         switch (role) {
             case 'doctor':
-                gridLayout = 'grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 auto-rows-[150px]';
+                gridLayout = 'grid grid-cols-1 p-4 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 auto-rows-[150px]';
                 break;
             case 'patient':
             case 'client':

@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const pathname = location.pathname.split('/')[1];
-        const publicPaths = ['login', 'register'];
+        const publicPaths = ['about-us', 'contact-us', 'login', 'register'];
         if (!isAuthenticated() && !publicPaths.includes(pathname)) {
             navigate('/');
         }

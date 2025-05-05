@@ -14,6 +14,9 @@ import { DashboardGreeting } from '@components/DashboardGreeting.jsx';
 
 dayjs.extend(isBetween);
 
+const UPCOMING_APPOINTMENTS_HEIGHT = 300;
+const MIN_TABLE_AREA_HEIGHT = 300;
+
 export function DoctorDashboard() {
     const { t } = useTranslation();
     const { user } = useAuth();

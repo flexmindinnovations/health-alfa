@@ -90,22 +90,22 @@ export default function ContactUs() {
     return (
         <Container fluid>
             <Stack align="center" gap={20} h={"100%"} w={"100%"} pb={30}
-            styles={{
-                root: {
-                    height: '100%',
-                    overflowY: 'auto',
-                    backgroundColor: '#f4fdfc',
-                    backgroundImage: 'radial-gradient(circle, #e0e0e0 1px, rgba(0,0,0,0) 1px)',
-                    backgroundSize: '20px 20px 20px 20px',
-                    backgroundPosition: '0 0, 10px 10px, 5px 5px, 15px 15px',
-                },
-                inner: {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                },
-            }}
+                styles={{
+                    root: {
+                        height: '100%',
+                        overflowY: 'auto',
+                        backgroundColor: '#f4fdfc',
+                        backgroundImage: 'radial-gradient(circle, #e0e0e0 1px, rgba(0,0,0,0) 1px)',
+                        backgroundSize: '20px 20px 20px 20px',
+                        backgroundPosition: '0 0, 10px 10px, 5px 5px, 15px 15px',
+                    },
+                    inner: {
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    },
+                }}
             >
                 <div className="w-full !flex-1 min-h-[50vh] md:min-h-[40vh] lg:min-h-[40vh] xl:min-h-[40vh] relative flex items-end justify-center bg-gradient-to-b from-white to-[#f4fdfc] overflow-hidden">
                     {/* Introductory Text */}

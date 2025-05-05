@@ -115,9 +115,11 @@ export function AppointmentCard({
                                                     color={theme.colorScheme === 'dark' ? 'gray' : theme.colors.brand[9]} />
                                             </Tooltip> &nbsp;
                                             <Tooltip label={data?.patientName}>
-                                                <p>
-                                                    {utils.truncateText(data?.patientName, 12)}
-                                                </p>
+                                                <Text
+                                                    fw={600}
+                                                    size={'lg'}>
+                                                    {data?.patientName}
+                                                </Text>
                                             </Tooltip>
                                         </Title>
                                     </Group>
