@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { HeroCarousel } from "@components/HeroCarousel.jsx";
 import { services } from '@assets/data/services.js';
 import { createElement } from 'react';
+import { utils } from "@config/utils";
 
 const ServiceCard = ({ service, index }) => {
     const theme = useMantineTheme();
@@ -65,7 +66,9 @@ export default function Home() {
             </motion.section>
 
             {/* Services Section */}
-            <Container fluid component="section"
+            <Container fluid
+                style={{ ...utils.dotsBackground }}
+                component="section"
                 className="pt-16 md:pt-24 min-h-96"
             >
                 <Stack gap={20} className="w-full bg-gradient-to-b from-white to-[#f4fdfc]"
