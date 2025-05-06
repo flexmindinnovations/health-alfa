@@ -64,6 +64,7 @@ export const AuthProvider = ({ children }) => {
     const fetchUserDetails = async () => {
         try {
             const userId = await getEncryptedData('user');
+            console.log('Retrieved user ID:', userId); // Debug log
             const role = userRole || (await getEncryptedData('roles'))?.toLowerCase();
             if (role) {
                 const userRoles = ['admin', 'doctor', 'client', 'user', 'User'];
@@ -82,16 +83,18 @@ export const AuthProvider = ({ children }) => {
                 const response = await http.get(endpoint);
                 if (response?.data) {
                     const { data } = response;
+                    console.log('Fetched user details:', data); // Debug log
                     setUser(data);
                     return data;
                 }
             } else {
-                toast.error('Unauthorized')
+                toast.error('Unauthorized');
             }
         } catch (error) {
-            const errorMessage = error.message
-            toast.error(errorMessage)
-            return null
+            console.error('Error fetching user details:', error); // Debug log
+            const errorMessage = error.message;
+            toast.error(errorMessage);
+            return null;
         }
     }
 

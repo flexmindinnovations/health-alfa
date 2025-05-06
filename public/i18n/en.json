@@ -231,5 +231,14 @@
   "email": "Email",
   "password": "Password",
   "resetPassword": "Reset Password",
-  "enterEmailForPasswordReset": "Enter Email For Password Reset"
+  "enterEmailForPasswordReset": "Enter Email For Password Reset",
+  "analytics": "Analytics",
+  "analyticsDescription": "Gain insights into your health data with our analytics feature. Track your progress, monitor trends, and make informed decisions about your health. Our user-friendly interface provides a comprehensive overview of your health metrics, empowering you to take charge of your well-being.",
+  "healthRecords": "Health Records",
+  "totalAppointments": "Total Appointments",
+  "totalPatients": "Total Patients",
+  "viewMedicines": "View Medicines",
+  "medicines": "Medicines",
+  "name": "Name",
+  "date": "Date"
 }

@@ -41,7 +41,10 @@ export function DataTableWrapper({
     showDeleteButton = true,
     showNavigation = false,
     showActions = true,
-    height = '98%'
+    height = '98%',
+    showPagination = true,
+    showSearch = true,
+    showRefresh = true,
 }) {
     const [pagination, setPagination] = useState({
         page: 1,
@@ -210,6 +213,18 @@ export function DataTableWrapper({
         handleOnDelete(data);
     }
 
+    const paginationProps = showPagination ? {
+        page: pagination.page,
+        onPageChange: (page) => setPagination((prev) => ({ ...prev, page })),
+        totalRecords: dataSource.length,
+        recordsPerPage: pagination.pageSize,
+        recordsPerPageOptions: PAGE_SIZES,
+        onRecordsPerPageChange: (pageSize) => setPagination((prev) => ({ ...prev, pageSize })),
+        paginationSize: "md",
+        paginationText: ({ from, to, totalRecords }) =>
+            `${t('showing')} ${from} - ${to} ${t('of')} ${totalRecords || 0}`,
+    } : {};
+
     const rowExpansionConfig = hasNestedTable
         ? {
             allowMultiple: false,
@@ -242,35 +257,43 @@ export function DataTableWrapper({
             <div className={`${styles.toolbar}`}>
                 <div className="search-filter flex items-center justify-between w-full gap-4">
                     <div style={{ position: 'relative', width: '50%' }}>
-                        <TextInput
-                            type="text"
-                            leftSection={<Search size={16} />}
-                            disabled={loading || !dataSource.length}
-                            rightSection={searchQuery && <Tooltip label={t('clearSearch')}><CloseButton
-                                onClick={() => setSearchQuery('')} /></Tooltip>}
-                            rightSectionWidth={40}
-                            placeholder={t('search')}
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            style={{ width: '100%' }}
-                        />
+                        {
+                            showSearch && (
+                                <TextInput
+                                    type="text"
+                                    leftSection={<Search size={16} />}
+                                    disabled={loading || !dataSource.length}
+                                    rightSection={searchQuery && <Tooltip label={t('clearSearch')}><CloseButton
+                                        onClick={() => setSearchQuery('')} /></Tooltip>}
+                                    rightSectionWidth={40}
+                                    placeholder={t('search')}
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    style={{ width: '100%' }}
+                                />
+                            )
+                        }
                     </div>
                     <Group gap={1}>
-                        <Tooltip label={t('refreshData')}>
-                            <ActionIcon
-                                onClick={onRefresh}
-                                loading={loading}
-                                style={{
-                                    borderRadius: showAddButton
-                                        ? i18n.dir() === 'ltr' ? `${radius} 0 0 ${radius}` : `0 ${radius} ${radius} 0`
-                                        : radius,
-                                    width: 60,
-                                    height: 38,
-                                }}
-                            >
-                                {<RefreshCcw size={16} />}
-                            </ActionIcon>
-                        </Tooltip>
+                        {
+                            showRefresh && (
+                                <Tooltip label={t('refreshData')}>
+                                    <ActionIcon
+                                        onClick={onRefresh}
+                                        loading={loading}
+                                        style={{
+                                            borderRadius: showAddButton
+                                                ? i18n.dir() === 'ltr' ? `${radius} 0 0 ${radius}` : `0 ${radius} ${radius} 0`
+                                                : radius,
+                                            width: 60,
+                                            height: 38,
+                                        }}
+                                    >
+                                        {<RefreshCcw size={16} />}
+                                    </ActionIcon>
+                                </Tooltip>
+                            )
+                        }
                         {showAddButton && (
                             <Tooltip label={addButtonTitle}>
                                 <ActionIcon
@@ -323,20 +346,13 @@ export function DataTableWrapper({
                 noRecordsText={t('noRecordsToShow')}
                 recordsPerPageLabel={t('recordsPerPage')}
                 columns={enhancedColumns}
-                totalRecords={dataSource.length}
-                recordsPerPage={pagination.pageSize}
-                page={pagination.page}
-                onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
+                {...paginationProps}
                 recordsPerPageOptions={PAGE_SIZES}
                 onRecordsPerPageChange={(pageSize) =>
                     setPagination((prev) => ({ ...prev, pageSize }))
                 }
                 sortStatus={pagination.sortStatus}
                 onSortStatusChange={handleSortChange}
-                paginationSize="md"
-                paginationText={({ from, to, totalRecords }) =>
-                    `${t('records')} ${from} - ${to} ${t('of')} ${totalRecords || 0}`
-                }
                 rowStyle={(record, index) => ({
                     fontSize: theme.fontSizes.xs,
                 })}
