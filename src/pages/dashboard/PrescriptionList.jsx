@@ -150,7 +150,7 @@ export default function PrescriptionList() {
     };
 
     return (
-        <Container>
+        <Container p={15}>
             <DataTableWrapper
                 loading={!filteredData.length || loading}
                 showAddButton={false}

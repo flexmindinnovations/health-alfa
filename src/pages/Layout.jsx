@@ -106,7 +106,7 @@ export function Layout() {
                 collapsed: { mobile: !opened }
             }}
             styles={{ main: { height: '100vh', display: 'flex', flexDirection: 'column' } }}
-            padding='sm'
+            padding='0'
             layout='alt'
             pl={0}
         >

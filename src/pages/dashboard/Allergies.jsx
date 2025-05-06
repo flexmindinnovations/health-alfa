@@ -5,7 +5,7 @@ export default function Allergies() {
     const { t } = useTranslation();
     useDocumentTitle(t("allergies"));
     return (
-        <Container m={0}>
+        <Container p={15}>
             <h1>Allergies Page</h1>
         </Container>
     )

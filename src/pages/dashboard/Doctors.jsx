@@ -65,7 +65,7 @@ export default function Doctors() {
     }
 
     return (
-        <Container>
+        <Container p={15}>
             <DataTableWrapper
                 loading={loading}
                 showAddButton={false}

@@ -43,7 +43,7 @@ export default function Roles() {
     }
 
     return (
-        <Container>
+        <Container p={15}>
             <DataTableWrapper
                 loading={loading}
                 showAddButton={true}

@@ -8,6 +8,7 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import { EffectFade, Autoplay } from "swiper/modules";
 import { useMediaQuery } from '@mantine/hooks';
+import { utils } from "@config/utils";
 
 const slidesContent = [
   {
@@ -54,13 +55,7 @@ export default function AboutUs() {
   // }, []);
 
   return (
-    <Container fluid
-      style={{
-        backgroundColor: '#f8f9fa',
-        backgroundImage: 'radial-gradient(#ccc 1px, transparent 1px)',
-        backgroundSize: '3px 3px',
-      }}
-    >
+    <Container fluid style={{...utils.dotsBackground}}> 
       <Stack p={0} mx="auto"
         gap={20}
         className="relative overflow-auto bg-gradient-to-b from-white to-[#f4fdfc]"
@@ -111,7 +106,7 @@ export default function AboutUs() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}
         >
-          <Text size={'xl'} fw={700} variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }} className="text-center !text-4xl mb-8">
+          <Text fw={700} c={"primar"} ta={"center"} variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }} className="text-center !text-4xl mb-8">
             {t('aboutUs')}
           </Text>
           <Divider my="md" variant="dotted" color="cyan" />

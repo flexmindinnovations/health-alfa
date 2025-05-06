@@ -8,7 +8,7 @@ import {
     Grid,
     Group,
     Image,
-    Overlay,
+    Card,
     PasswordInput,
     Stack,
     Text,
@@ -35,6 +35,7 @@ import { GlobalPhoneInput } from "@components/PhoneInput.jsx";
 import { useModal } from "@hooks/AddEditModal.jsx";
 import { TermsAndConditions } from '@modals/TermsAndConditions';
 import { PrivacyPolicy } from '@modals/PrivacyPolicy';
+import { utils } from '@config/utils';
 
 const emailSchema = z.string().min(3, { message: "Atleast 3 chars" });
 const phoneNumberSchema = z.string().refine(
@@ -192,15 +193,15 @@ export default function Login() {
     }
 
     return (
-        <Container fluid className={classes.loginPage}>
-            <Overlay className={`h-full w-full flex items-center justify-center !backdrop-blur-lg`}>
-                <Center p={20}>
+        <Container fluid className={`flex items-center justify-center`} style={{ ...utils.dotsBackground }}>
+            <div className='h-screen w-screen flex items-center justify-center bg-black/10 backdrop-blur-lg'>
+                <Center p={0}>
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         onAnimationComplete={() => setIsCardLoaded(true)}
-                        className={`bg-tb-700 max-w-sm p-4 relative rounded-3xl`}
+                        className={`bg-tb-700 rounded-3xl shadow-lg max-w-sm p-4 relative`}
                     >
                         <motion.div>
                             <Grid>
@@ -210,8 +211,8 @@ export default function Login() {
                                             <motion.div
                                                 className={`
                                                 absolute -top-16
-                                                mb-4
-                                            h-36 w-36 bg-white p-2 
+                                                mb-4 z-10
+                                            h-36 w-36 bg-primary-100 p-2 
                                             flex items-center justify-center rounded-full
                                             `}>
                                                 {
@@ -320,7 +321,7 @@ export default function Login() {
                                                         </Anchor>
                                                         &nbsp; and &nbsp;
                                                         <Anchor
-                                                            onClick={openConditionModals.bind(this, 'policy')} underline='always' c={theme.colors.brand[1]} size='xs'>
+                                                            onClick={openConditionModals.bind(this, 'policy')} underline='always' c="dimmed" size='xs'>
                                                             Privacy Policy
                                                         </Anchor>
                                                     </Text>
@@ -333,7 +334,7 @@ export default function Login() {
                         </motion.div>
                     </motion.div>
                 </Center>
-            </Overlay>
+            </div>
         </Container>
     )
 }

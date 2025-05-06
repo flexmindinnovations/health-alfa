@@ -1,5 +1,6 @@
 import { createTheme, Loader } from '@mantine/core';
-import RingLoader from '@components/RingLoader'
+import RingLoader from '@components/RingLoader';
+import { utils } from '@config/utils';
 
 const defaultSize = '12px';
 const defaultRadius = 'lg';

@@ -5,7 +5,7 @@ export default function Medications() {
     const { t } = useTranslation();
     useDocumentTitle(t("medications"));
     return (
-        <Container m={0}>
+        <Container p={15}>
             <h1>Medications Page</h1>
         </Container>
     )

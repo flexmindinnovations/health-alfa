@@ -166,7 +166,7 @@ export default function AppointmentHistory() {
     }
 
     return (
-        <Container fluid className="flex flex-col">
+        <Container fluid p={15} className="flex flex-col">
             <Group py={5} justify="space-between">
                 {
                     loading ? (

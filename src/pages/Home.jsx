@@ -65,15 +65,10 @@ export default function Home() {
             </motion.section>
 
             {/* Services Section */}
-            <Box component="section"
+            <Container fluid component="section"
                 className="pt-16 md:pt-24 min-h-96"
-                style={{
-                    backgroundColor: '#f8f9fa',
-                    backgroundImage: 'radial-gradient(#ccc 1px, transparent 1px)',
-                    backgroundSize: '3px 3px',
-                }}
             >
-                <Stack gap={20} className="bg-gradient-to-b from-white to-[#f4fdfc]"
+                <Stack gap={20} className="w-full bg-gradient-to-b from-white to-[#f4fdfc]"
                     style={{
                         background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0px, #f4fdfc 200px, #f4fdfc 100%)',
                         minHeight: '100vh',
@@ -103,7 +98,7 @@ export default function Home() {
                         ))}
                     </div>
                 </Stack>
-            </Box>
+            </Container>
 
             {/* Community CTA */}
             <Box component="section" className="relative bg-gradient-to-r from-tb-900 to-tb-600 text-white py-20 px-6 text-center">

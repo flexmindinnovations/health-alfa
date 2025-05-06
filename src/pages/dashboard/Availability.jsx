@@ -89,7 +89,7 @@ export default function Availability() {
         });
     }
 
-    return (<Container>
+    return (<Container p={15}>
         <DataTableWrapper
             loading={loading}
             showAddButton={userType === 'doctor'}

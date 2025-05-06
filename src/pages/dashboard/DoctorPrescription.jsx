@@ -125,7 +125,7 @@ function DoctorPrescription() {
     }
 
     return (
-        <Container fluid className={`relative`}>
+        <Container fluid className={`relative`} p={15}>
             <Group py={5} className={`w-full flex items-center !justify-between`}>
                 <Title size={'lg'}>{state?.patientName}</Title>
                 <Text className={`flex items-center`} size={"sm"}

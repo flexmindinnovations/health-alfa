@@ -1,7 +1,8 @@
 import { Container, Title, Text, SimpleGrid, Card, Box, ThemeIcon, Stack, Anchor, Space } from "@mantine/core";
 import { useDocumentTitle } from "@hooks/DocumentTitle"; // Assuming this hook exists
 import { useTranslation } from "react-i18next";
-import { Edit3, Handshake, Mail, MessageCircle } from "lucide-react"; // Keep lucide icons
+import { Edit3, Handshake, Mail, MessageCircle } from "lucide-react";
+import { utils } from "@config/utils";
 
 // --- Data remains the same ---
 const contactDetails = [
@@ -88,13 +89,7 @@ export default function ContactUs() {
     useDocumentTitle(t("contactUs"));
 
     return (
-        <Container fluid
-            style={{
-                backgroundColor: '#f8f9fa',
-                backgroundImage: 'radial-gradient(#ccc 1px, transparent 1px)',
-                backgroundSize: '3px 3px',
-            }}
-        >
+        <Container fluid style={{...utils.dotsBackground}}>
             <Stack align="center" gap={20} h={"100%"} w={"100%"}
                 className="relative overflow-y-auto bg-gradient-to-b from-white to-[#f4fdfc]"
                 style={{

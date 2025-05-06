@@ -336,7 +336,7 @@ export default function Appointments() {
     }
 
     return (
-        <Container fluid styles={{
+        <Container fluid p={15} styles={{
             root: {
                 display: 'flex',
                 flexDirection: 'column'

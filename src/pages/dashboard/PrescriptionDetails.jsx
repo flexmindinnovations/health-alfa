@@ -116,7 +116,7 @@ export default function PrescriptionDetails() {
     };
 
     return (
-        <Container fluid className="flex flex-col h-full">
+        <Container fluid p={15} className="flex flex-col h-full">
             {/* --- Header Section --- */}
             <Group py="md" justify="space-between" align="center">
                 {/* Title */}

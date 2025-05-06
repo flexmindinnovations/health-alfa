@@ -61,7 +61,7 @@ export default function TestTypes() {
 
 
     return (
-        <Container>
+        <Container p={15}>
             <DataTableWrapper
                 loading={loading}
                 showAddButton={true}
